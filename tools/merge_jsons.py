@@ -8,7 +8,26 @@ def load_json(path):
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    df = pd.DataFrame.from_dict(data)
+    # ルート構造を確認し、各種データを取得
+
+    # list - "items" - list - 内容 の場合
+    if isinstance(data, list) and len(data) > 0 and isinstance(data[0], dict) and "items" in data[0]:
+        items = data[0]["items"]
+
+    # "items" - list - 内容 の場合
+    elif isinstance(data, dict) and "items" in data:
+        items = data["items"]
+
+    # list - 内容 の場合
+    elif isinstance(data, list):
+        items = data
+
+    # その他：error
+    else:
+        raise ValueError(f"Unexpected JSON structure: {path}")
+
+    # DataFrameに変換
+    df = pd.DataFrame(items)
     return df
 
 
