@@ -10,7 +10,7 @@ def load_json(path):
 
     # ルート構造を確認し、各種データを取得
 
-    # list - "items" - list - 内容 の場合
+    # list[0] - "items" - list - 内容 の場合
     if isinstance(data, list) and len(data) > 0 and isinstance(data[0], dict) and "items" in data[0]:
         items = data[0]["items"]
 
