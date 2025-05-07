@@ -52,33 +52,39 @@ class GeminiClient:
 # 期待するデータ形式
 
 {
-    "items": [
-        {
-            "flow_type": "",
-            "category": "",
-            "name": "",
-            "date": "",
-            "value": 0,
-            "handwritten": bool,
-            "fullData": {
-                # その項目から読み取れる全データを任意のkey-valueで構造化したもの
-                # keyは記載の通りの漢字でも問題なし。（例: "寄附者の氏名": "田中太郎"）
-            }
-        },
-        ...
-    ]
+  "year": 2025,
+  "categories": [
+    {
+      "id": "xxx1",
+      "name": "個人からの寄付",
+      "parent": "xxx66",
+      "direction": "income"
+    },
+    ...
+  ],
+  "transactions": [
+    {
+      "id": "xxx1",
+      "category_id": "xxxcc",
+      "name": "飲食代",
+      "date": "R5/6/28",
+      "value": 10200
+    },
+    ...
+  ]
 }
 
 # 抽出時の注意事項
 
-## flow_typeについて
+## directionについて
 
-flow_typeは "income", "expense" のどちらかを指定してください。
+directionは "income", "expense" のどちらかを指定してください。
 
-## handwrittenについて
+## categoriesについて
 
-手書き文字だと思われる場合、または手書き文字や印鑑が邪魔で読み取りにくい場合はTrueを選択してください。
-そうでない場合はFalseを選択してください。
+- idは任意の文字列で構いません（例: "xxx1", "xxx2"など）
+- parentは親カテゴリのidを指定します。最上位カテゴリの場合はnullを指定してください
+- nameは以下のカテゴリから選んでください。ただし、当てはまるものがなく、明らかにカテゴリとして適切な物があった場合は、その他（{{読み取れたカテゴリ}}）として立項して構いません。
 
 ## categoryについて
 
@@ -108,47 +114,41 @@ categoryの候補
 - その他の経費
 - その他（{{読み取れたカテゴリ}}）
 
-## dateについて
+## transactionsについて
 
-年月日という項目に 6 9 30 などの区分で入っています。
-これは令和6年9月30日を示すので、 R6.9.30 という文字列に変換してください。
-
-### その他の項目について
-"name", "value" はより具体的な項目を、画像に記載の通り入力してください。
-
+- idは任意の文字列で構いません（例: "xxx1", "xxx2"など）
+- category_idは、categoriesで定義したidのいずれかを指定してください
+- dateは年月日という項目に 6 9 30 などの区分で入っています。これは令和6年9月30日を示すので、 R6.9.30 という文字列に変換してください
+- nameは具体的な項目を、画像に記載の通り入力してください
+- valueは金額を数値で入力してください
 
 # 具体例
 
 {
-    "items": [
-        {
-            "flow_type": "income",
-            "category": "個人からの寄附",
-            "name": "田中太郎",
-            "date": "R6.6.29",
-            "value": 10000,
-            "handwritten": False,
-            "fullData": {
-                "住所": "東京都港区赤坂1-1-1",
-                "職業（又は代表者の氏名）": "会社役員",
-                "寄附者の氏名": "田中太郎"
-            }
-        },
-        {
-            "flow_type": "expense",
-            "category": "宣伝事業費",
-            "name": "発送費",
-            "date": "R6.9.30",
-            "value": 1300000,
-            "handwritten": True,
-            "fullData": {
-                "支出を受けたものの氏名（又は名称）": "株式会社エックス",
-                "支出を受けたものの住所（又は所在地）": "東京都港区赤坂1-1-1"
-            }
-
-        }
-        ...
-    ]
+  "year": 2025,
+  "categories": [
+    {
+      "id": "xxx1",
+      "name": "個人からの寄付",
+      "parent": "xxx66",
+      "direction": "income"
+    },
+    {
+      "id": "xxx66",
+      "name": "総収入",
+      "parent": null,
+      "direction": "income"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "xxx1",
+      "category_id": "xxx1",
+      "name": "田中太郎",
+      "date": "R6.6.29",
+      "value": 10000
+    }
+  ]
 }
         """
 
