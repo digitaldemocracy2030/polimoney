@@ -12,7 +12,7 @@ OUTPUT_JSON_DIR = "output_json"
 class GeminiClient:
     def __init__(self, key):
         self.key = key
-        self.model_name = 'gemini-2.5-pro-preview-03-25'
+        self.model_name = 'gemini-2.5-pro-preview-05-06'
         self.model = genai.GenerativeModel(self.model_name)
 
 
@@ -40,7 +40,7 @@ class GeminiClient:
             str: Geminiからの解析結果（JSON文字列を想定）。エラーの場合は "エラー:" で始まるメッセージを返します。
         """
         # genai.configure(api_key=api_key)
-        # モデルはgemini-2.5-pro-preview-03-25です。これが現在の最新なのでいじらないでください。
+        # モデルはgemini-2.5-pro-preview-05-06です。これが現在の最新なのでいじらないでください。
 
         prompt = """
 # 依頼内容
