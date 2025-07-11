@@ -51,31 +51,19 @@ export function BoardTransactions({
 
   const renderTooltipIcon = (item: Transaction) => {
     if (!item.tooltip) return null;
-
+    console.log('renderTooltipIcon', item.tooltip);
     return (
-      <>
-        {/* Desktop: Simple title attribute tooltip */}
-        <IconButton
-          variant="ghost"
-          size="xs"
-          ml={1}
-          display={{ base: 'none', lg: 'inline-flex' }}
-          title={item.tooltip}
-        >
-          <Info size={14} />
-        </IconButton>
-
-        {/* Mobile: Click to open dialog */}
-        <IconButton
-          variant="ghost"
-          size="xs"
-          ml={1}
-          display={{ base: 'inline-flex', lg: 'none' }}
-          onClick={() => setSelectedTooltip(item.tooltip || null)}
-        >
-          <Info size={14} />
-        </IconButton>
-      </>
+      <IconButton
+        variant="ghost"
+        size="xs"
+        ml={1}
+        onClick={() => {
+          console.log('IconButton clicked', item.tooltip);
+          setSelectedTooltip(item.tooltip || null);
+        }}
+      >
+        <Info size={14} />
+      </IconButton>
     );
   };
 
@@ -283,7 +271,7 @@ export function BoardTransactions({
         </Pagination.Root>
       </VStack>
 
-      {/* Mobile Dialog */}
+      {/* Tooltip Dialog */}
       <Dialog.Root
         open={selectedTooltip !== null}
         onOpenChange={(e) =>
