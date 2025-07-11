@@ -6,12 +6,14 @@ import {
   Badge,
   Box,
   ButtonGroup,
+  Dialog,
   HStack,
   IconButton,
   Pagination,
   Progress,
   Table,
   Text,
+  Tooltip,
   VStack,
 } from '@chakra-ui/react';
 import {
@@ -19,6 +21,7 @@ import {
   BanknoteArrowUpIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  Info,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -40,10 +43,59 @@ export function BoardTransactions({
   // const [selectedTab, setSelectedTab] = useState('name')
   const [page, setPage] = useState(1);
   const pageSize = 10;
+  const [selectedTooltip, setSelectedTooltip] = useState<string | null>(null);
 
   // 現在のページに表示する transactions を計算
   const sorted = transactions.sort((a, b) => b.amount - a.amount);
   const paginated = sorted.slice((page - 1) * pageSize, page * pageSize);
+
+  const renderTooltipIcon = (item: Transaction) => {
+    if (!item.tooltip) return null;
+
+    return (
+      <>
+        {/* Desktop: Tooltip on hover */}
+        <Tooltip.Root>
+          <Tooltip.Trigger asChild>
+            <IconButton
+              variant="ghost"
+              size="xs"
+              display={{ base: 'none', lg: 'inline-flex' }}
+              ml={1}
+            >
+              <Info size={14} />
+            </IconButton>
+          </Tooltip.Trigger>
+          <Tooltip.Positioner>
+            <Tooltip.Content
+              maxW="400px"
+              p={3}
+              bg="white"
+              border="1px solid"
+              borderColor="gray.200"
+              borderRadius="md"
+              boxShadow="lg"
+              fontSize="sm"
+              whiteSpace="pre-line"
+            >
+              {item.tooltip}
+            </Tooltip.Content>
+          </Tooltip.Positioner>
+        </Tooltip.Root>
+
+        {/* Mobile: Dialog on tap */}
+        <IconButton
+          variant="ghost"
+          size="xs"
+          display={{ base: 'inline-flex', lg: 'none' }}
+          ml={1}
+          onClick={() => setSelectedTooltip(item.tooltip || null)}
+        >
+          <Info size={14} />
+        </IconButton>
+      </>
+    );
+  };
 
   return (
     <BoardContainer id={direction}>
@@ -116,7 +168,10 @@ export function BoardTransactions({
                 </Text>
               )}
               <HStack justifyContent={'space-between'} mb={1}>
-                <Text fontWeight={'bold'}>{item.name}</Text>
+                <HStack>
+                  <Text fontWeight={'bold'}>{item.name}</Text>
+                  {renderTooltipIcon(item)}
+                </HStack>
                 <Text fontWeight={'bold'}>{item.amount.toLocaleString()}</Text>
               </HStack>
               <Progress.Root
@@ -174,7 +229,12 @@ export function BoardTransactions({
                 {direction === 'expense' && showPurpose && (
                   <Table.Cell fontWeight={'bold'}>{item.purpose}</Table.Cell>
                 )}
-                <Table.Cell fontWeight={'bold'}>{item.name}</Table.Cell>
+                <Table.Cell fontWeight={'bold'}>
+                  <HStack>
+                    <Text>{item.name}</Text>
+                    {renderTooltipIcon(item)}
+                  </HStack>
+                </Table.Cell>
                 <Table.Cell>
                   <Badge>
                     {item.category}
@@ -240,6 +300,35 @@ export function BoardTransactions({
           </ButtonGroup>
         </Pagination.Root>
       </VStack>
+
+      {/* Mobile Dialog */}
+      <Dialog.Root
+        open={selectedTooltip !== null}
+        onOpenChange={(e) =>
+          setSelectedTooltip(e.open ? selectedTooltip : null)
+        }
+      >
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content maxW="90vw" p={4}>
+            <Dialog.Header>
+              <Dialog.Title fontSize="lg" fontWeight="bold">
+                詳細説明
+              </Dialog.Title>
+            </Dialog.Header>
+            <Dialog.Body>
+              <Text fontSize="sm" whiteSpace="pre-line">
+                {selectedTooltip}
+              </Text>
+            </Dialog.Body>
+            <Dialog.Footer>
+              <Dialog.CloseTrigger asChild>
+                <IconButton variant="outline">閉じる</IconButton>
+              </Dialog.CloseTrigger>
+            </Dialog.Footer>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Dialog.Root>
     </BoardContainer>
   );
 }
