@@ -54,41 +54,23 @@ export function BoardTransactions({
 
     return (
       <>
-        {/* Desktop: Tooltip on hover */}
-        <Tooltip.Root>
-          <Tooltip.Trigger asChild>
-            <IconButton
-              variant="ghost"
-              size="xs"
-              display={{ base: 'none', lg: 'inline-flex' }}
-              ml={1}
-            >
-              <Info size={14} />
-            </IconButton>
-          </Tooltip.Trigger>
-          <Tooltip.Positioner>
-            <Tooltip.Content
-              maxW="400px"
-              p={3}
-              bg="white"
-              border="1px solid"
-              borderColor="gray.200"
-              borderRadius="md"
-              boxShadow="lg"
-              fontSize="sm"
-              whiteSpace="pre-line"
-            >
-              {item.tooltip}
-            </Tooltip.Content>
-          </Tooltip.Positioner>
-        </Tooltip.Root>
-
-        {/* Mobile: Dialog on tap */}
+        {/* Desktop: Simple title attribute tooltip */}
         <IconButton
           variant="ghost"
           size="xs"
-          display={{ base: 'inline-flex', lg: 'none' }}
           ml={1}
+          display={{ base: 'none', lg: 'inline-flex' }}
+          title={item.tooltip}
+        >
+          <Info size={14} />
+        </IconButton>
+
+        {/* Mobile: Click to open dialog */}
+        <IconButton
+          variant="ghost"
+          size="xs"
+          ml={1}
+          display={{ base: 'inline-flex', lg: 'none' }}
           onClick={() => setSelectedTooltip(item.tooltip || null)}
         >
           <Info size={14} />
