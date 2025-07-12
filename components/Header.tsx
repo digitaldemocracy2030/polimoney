@@ -2,7 +2,6 @@
 import { Box, HStack, Heading, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
 import SNSSharePanel from './SNSSharePanel';
 
 export function Header() {
