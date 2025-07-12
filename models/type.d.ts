@@ -44,6 +44,7 @@ export type Transaction = {
   name: string;
   amount: number;
   date: string;
+  tooltip?: string;
 };
 
 export type AccountingReports = {

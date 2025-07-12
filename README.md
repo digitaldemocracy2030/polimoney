@@ -69,7 +69,7 @@ npx tsx data/converter.ts --ignore-errors -i data/sample_input.json -o data/samp
 
 このプロジェクトはオープンソース(APGLライセンス)であり、誰でも貢献することができます。
 詳細は以下のドキュメントを参照してください。
-- [CONRIBUTING](CONTRIBUTING.md)
+- [CONTRIBUTING](CONTRIBUTING.md)
 - [LICENSE](LICENSE)
 - [CLA](CLA.md)
 - [PROJECTS](PROJECTS.md)
