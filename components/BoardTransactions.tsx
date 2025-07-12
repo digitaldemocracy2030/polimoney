@@ -13,7 +13,6 @@ import {
   Progress,
   Table,
   Text,
-  Tooltip,
   VStack,
 } from '@chakra-ui/react';
 import {
@@ -51,14 +50,12 @@ export function BoardTransactions({
 
   const renderTooltipIcon = (item: Transaction) => {
     if (!item.tooltip) return null;
-    console.log('renderTooltipIcon', item.tooltip);
     return (
       <IconButton
         variant="ghost"
         size="xs"
         ml={1}
         onClick={() => {
-          console.log('IconButton clicked', item.tooltip);
           setSelectedTooltip(item.tooltip || null);
         }}
       >
