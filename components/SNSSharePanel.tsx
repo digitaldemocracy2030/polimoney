@@ -17,7 +17,9 @@ const titleMap: Record<string, string> = {
 
 export default function SNSSharePanel({
   className = '',
-}: { className?: string }) {
+}: {
+  className?: string;
+}) {
   const pathname = usePathname();
   const [origin, setOrigin] = useState('');
 
@@ -107,7 +109,7 @@ export default function SNSSharePanel({
       await navigator.clipboard.writeText(url);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
-    } catch (e) {
+    } catch (_e) {
       // エラー時は何もしない
     }
   };

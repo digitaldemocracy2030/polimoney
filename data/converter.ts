@@ -8,13 +8,6 @@ import type {
   TransactionDirection,
 } from '@/models/type';
 
-// import { Summary, Flow, Transaction } from '../type';
-type Summary = {
-  income: number;
-  expense: number;
-  balance: number;
-  year: number;
-};
 type Flow = {
   id: string;
   name: string;
@@ -41,13 +34,6 @@ type InputData = {
   basic_info: BasicInfo;
   categories: InputCategory[];
   transactions: InputTransaction[];
-};
-
-type OutputDataOld = {
-  summary: Summary;
-  flows: Flow[];
-  incomeTransactions: Transaction[];
-  expenseTransactions: Transaction[];
 };
 
 type BasicInfo = {
@@ -92,12 +78,6 @@ function convert(data: InputData, outputId = 'converted-data'): OutputData {
   const balanceTransaction = data.transactions.find(
     (t: InputTransaction) => t.category_id === nextYearCategory?.id,
   );
-  const summary = {
-    income: totalIncome,
-    expense: totalExpense - (balanceTransaction ? balanceTransaction.value : 0),
-    balance: balanceTransaction ? balanceTransaction.value : 0,
-    year: data.year,
-  };
 
   const categoryIdToName = data.categories.reduce(
     (acc: Record<string, string>, c: InputCategory) => {

@@ -1,8 +1,8 @@
 'use client';
 
-import { BoardContainer } from '@/components/BoardContainer';
 import { Text } from '@chakra-ui/react';
 import Link from 'next/link';
+import { BoardContainer } from '@/components/BoardContainer';
 
 export function Footer() {
   return (

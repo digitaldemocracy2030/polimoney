@@ -1,7 +1,4 @@
 'use client';
-import { BoardChart } from '@/components/BoardChart';
-import { BoardContainer } from '@/components/BoardContainer';
-import type { Flow, Profile, Report } from '@/models/type';
 import {
   Avatar,
   Badge,
@@ -17,6 +14,9 @@ import html2canvas from 'html2canvas';
 import { LandmarkIcon } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { BoardChart } from '@/components/BoardChart';
+import { BoardContainer } from '@/components/BoardContainer';
+import type { Flow, Profile, Report } from '@/models/type';
 import { BoardChartFixed } from './BoardChartFixed';
 
 type Props = {
@@ -62,7 +62,7 @@ export function BoardSummary({
           ]);
           setCopied(true);
           setTimeout(() => setCopied(false), 3000);
-        } catch (e) {
+        } catch (_e) {
           alert('コピーに失敗しました');
         }
       }

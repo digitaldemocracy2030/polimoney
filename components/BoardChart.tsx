@@ -1,12 +1,12 @@
 'use client';
 
-import type { Flow } from '@/models/type';
 import { Box } from '@chakra-ui/react';
 import {
   ResponsiveSankey,
   type SankeyLayerId,
   type SankeyNodeDatum,
 } from '@nivo/sankey';
+import type { Flow } from '@/models/type';
 
 type Props = {
   flows: Flow[];

@@ -1,5 +1,5 @@
 'use client';
-import { Box, HStack, Heading, Text } from '@chakra-ui/react';
+import { Box, Heading, HStack, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import SNSSharePanel from './SNSSharePanel';

@@ -24,7 +24,7 @@
     "react-share": "^5.2.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.1.1",
     "@eslint/eslintrc": "^3",
     "@types/node": "^22",
     "@types/react": "^19",

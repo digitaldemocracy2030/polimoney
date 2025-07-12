@@ -1,6 +1,6 @@
-import { Provider } from '@/components/ui/provider';
 import { Box } from '@chakra-ui/react';
 import type { Metadata } from 'next';
+import { Provider } from '@/components/ui/provider';
 import './global.css';
 
 export const metadata: Metadata = {
@@ -55,14 +55,14 @@ export default function RootLayout({
       <head>
         <script
           type="application/ld+json"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: ハードコードのため問題なし
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(structuredWebSite),
           }}
         />
         <script
           type="application/ld+json"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: ハードコードのため問題なし
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(structuredDataOrganization),
           }}
