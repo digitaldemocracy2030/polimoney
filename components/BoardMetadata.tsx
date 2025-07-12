@@ -1,6 +1,6 @@
+import { HStack, SimpleGrid, Text } from '@chakra-ui/react';
 import { BoardContainer } from '@/components/BoardContainer';
 import type { Report } from '@/models/type';
-import { HStack, SimpleGrid, Text } from '@chakra-ui/react';
 
 type Props = {
   report: Report;

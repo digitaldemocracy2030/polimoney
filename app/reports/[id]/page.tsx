@@ -1,20 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { Box } from '@chakra-ui/react';
+import { notFound } from 'next/navigation';
 import { BoardMetadata } from '@/components/BoardMetadata';
 import { BoardSummary } from '@/components/BoardSummary';
 import { BoardTransactions } from '@/components/BoardTransactions';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
-import type {
-  AccountingReports,
-  Flow,
-  Profile,
-  Report,
-  Transaction,
-} from '@/models/type';
-import { Box } from '@chakra-ui/react';
-import { notFound } from 'next/navigation';
+import type { AccountingReports } from '@/models/type';
 
 async function getAccountingReports(
   id: string,

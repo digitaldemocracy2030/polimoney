@@ -1,7 +1,5 @@
 'use client';
 
-import { BoardContainer } from '@/components/BoardContainer';
-import type { Transaction } from '@/models/type';
 import {
   Badge,
   Box,
@@ -23,6 +21,8 @@ import {
   Info,
 } from 'lucide-react';
 import { useState } from 'react';
+import { BoardContainer } from '@/components/BoardContainer';
+import type { Transaction } from '@/models/type';
 
 type Props = {
   direction: 'income' | 'expense';

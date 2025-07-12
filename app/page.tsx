@@ -1,3 +1,14 @@
+import {
+  Badge,
+  Box,
+  Card,
+  HStack,
+  Image,
+  SimpleGrid,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
+import Link from 'next/link';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
@@ -10,17 +21,6 @@ import demoKokiFujisaki from '@/data/demo-kokifujisaki';
 import demoRyosukeIdei from '@/data/demo-ryosukeidei';
 import demoTakahiroAnno from '@/data/demo-takahiroanno';
 import type { ProfileList } from '@/models/type';
-import {
-  Badge,
-  Box,
-  Card,
-  HStack,
-  Image,
-  SimpleGrid,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
-import Link from 'next/link';
 
 type Entry = {
   id: string;

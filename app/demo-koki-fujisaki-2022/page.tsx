@@ -1,3 +1,4 @@
+import { Box } from '@chakra-ui/react';
 import { BoardMetadata } from '@/components/BoardMetadata';
 import { BoardSummary } from '@/components/BoardSummary';
 import { BoardTransactions } from '@/components/BoardTransactions';
@@ -5,7 +6,6 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
 import data, { getDataByYear } from '@/data/demo-kokifujisaki';
-import { Box } from '@chakra-ui/react';
 
 export default async function Page() {
   // 2022年のデータを取得
