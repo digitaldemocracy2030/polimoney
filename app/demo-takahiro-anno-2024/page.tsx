@@ -1,4 +1,5 @@
 import { Box } from '@chakra-ui/react';
+import type { Metadata } from 'next';
 import { BoardMetadata } from '@/components/BoardMetadata';
 import { BoardSummary } from '@/components/BoardSummary';
 import { BoardTransactions } from '@/components/BoardTransactions';
@@ -6,6 +7,12 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
 import data from '@/data/demo-takahiroanno';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: `${data.profile.name} | Polimoney (ポリマネー)`,
+  };
+}
 
 export default async function Page() {
   const reportData = data.datas[0];
