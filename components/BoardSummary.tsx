@@ -43,11 +43,11 @@ export function BoardSummary({
     ? pathname.slice(1)
     : pathname;
 
-  // 全てのレポート（現在のレポートと他のレポート）を結合（重複除去）
+  // 全てのレポート（現在のレポートと他のレポート）を結合（重複除去）し、年で降順ソート
   const allReports = [
     report,
     ...otherReports.filter((r) => r.id !== report.id),
-  ];
+  ].sort((a, b) => b.year - a.year);
   const handleCopyImage = async () => {
     const button = document.getElementById('copy-image-btn');
     if (button) button.style.display = 'none'; // ボタンを非表示
