@@ -1,4 +1,5 @@
 import { Box } from '@chakra-ui/react';
+import type { Metadata } from 'next';
 import { BoardMetadata } from '@/components/BoardMetadata';
 import { BoardSummary } from '@/components/BoardSummary';
 import { BoardTransactions } from '@/components/BoardTransactions';
@@ -6,6 +7,13 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
 import data, { getDataByYear } from '@/data/demo-kokifujisaki';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const yearData = getDataByYear(2023);
+  return {
+    title: `${yearData.profile.name} | Polimoney (ポリマネー)`,
+  };
+}
 
 export default async function Page() {
   // 2023年のデータを取得
