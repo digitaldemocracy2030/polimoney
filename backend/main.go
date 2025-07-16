@@ -1,10 +1,18 @@
 package main
 
 import (
-    "github.com/gin-gonic/gin"
+	"log"
+	"os"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080"
+    }
+
 	// ルーターを作成
     r := gin.Default()
 
@@ -20,5 +28,8 @@ func main() {
 	// 収入・支出の図の作成はreact側でやる
 
 	// サーバーを起動
-    r.Run(":8080")
+	log.Printf("Server starting on port %s", port)
+	if err := r.Run(":" + port); err != nil {
+		log.Fatal("Failed to start server:", err)
+	}
 }
