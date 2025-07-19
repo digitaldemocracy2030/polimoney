@@ -1,9 +1,9 @@
 services:
   postgres:
     image: postgres:17
-    container_name: political_funds_db
+    container_name: polimoney_db
     environment:
-      POSTGRES_DB: political_funds
+      POSTGRES_DB: polimoney
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres123
     ports:
@@ -11,16 +11,16 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d political_funds"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d polimoney"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - political_funds_network
+      - polimoney_network
 
   app:
     build: .
-    container_name: political_funds_api
+    container_name: polimoney_api
     depends_on:
       postgres:
         condition: service_healthy
@@ -30,17 +30,17 @@ services:
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: postgres123
-      DB_NAME: political_funds
+      DB_NAME: polimoney
       DB_SSLMODE: disable
     ports:
       - "8080:8080"
     networks:
-      - political_funds_network
+      - polimoney_network
     restart: unless-stopped
 
 volumes:
   postgres_data:
 
 networks:
-  political_funds_network:
+  polimoney_network:
     driver: bridge
