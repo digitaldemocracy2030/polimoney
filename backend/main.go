@@ -17,13 +17,19 @@ func main() {
     r := gin.Default()
 
 	// ハンドラー
-    r.GET("/api/hello", func(c *gin.Context) {
+	r.GET("/", func(c *gin.Context) {
+		c.String(200, "Welcome to the API")
+	})
+    r.POST("/health", func(c *gin.Context) {
         c.JSON(200, gin.H{
-            "message": "Hello from Go API!",
+            "status": "ok",
         })
     })
 
 	// TODO: データベースの接続
+	// テスト用にdocker-composeで起動しているPostgreSQLに接続する
+	// 本番環境では、Azure Database for PostgreSQLに接続する
+
 	// app/{議員さんid}/page.tsxで表示する前提
 	// 収入・支出の図の作成はreact側でやる
 

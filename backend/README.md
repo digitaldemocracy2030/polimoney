@@ -1,27 +1,56 @@
 # Polimoney バックエンド
 
 - 言語：Go
-- パッケージ：Gin
+- フレームワーク：Gin
+- データベース：PostgreSQL
+- コンテナ化：Docker & docker-compose
 
 ## セットアップ手順
 
+### 前提条件
+
+- Docker
+- Docker Compose
+
+### 実行方法
+
+#### Docker Composeで起動（推奨）
+
+プロジェクトディレクトリで以下のコマンドを実行してください：
+
+```bash
+docker-compose up --build
+```
+
+これで以下のサービスが起動します：
+
+- APIサーバー: `http://localhost:8080`
+- PostgreSQLデータベース: `localhost:5432`
+
+## 開発用（ローカル実行）
+
+Docker Composeを使わずにローカルで実行する場合：
+
 1. **Goのインストール**
-   Go 1.20以上をインストールしてください。
-   [Go公式サイト](https://go.dev/dl/) からダウンロードできます。
+   Go 1.24以上をインストールしてください。
 
 2. **依存パッケージのインストール**
-   プロジェクトディレクトリで以下を実行してください。
 
    ```bash
-   cd backend
    go mod tidy
    ```
 
 3. **サーバーの起動**
-   以下のコマンドでAPIサーバーを起動できます。
 
    ```bash
    go run main.go
    ```
 
-   デフォルトで `http://localhost:8080` で起動します。
+## データベース設定
+
+PostgreSQL 17を使用しています。Docker Composeで自動的にセットアップされる設定：
+
+- データベース名: `political_funds`
+- ユーザー名: `postgres`
+- パスワード: `postgres123`
+- ポート: `5432`
