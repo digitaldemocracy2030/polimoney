@@ -17,9 +17,9 @@ func main() {
     r := gin.Default()
 
 	// ハンドラー
-    r.GET("/api/hello", func(c *gin.Context) {
+    r.GET("/health", func(c *gin.Context) {
         c.JSON(200, gin.H{
-            "message": "Hello from Go API!",
+            "status": "ok",
         })
     })
 
