@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: political_funds_db
+    environment:
+      POSTGRES_DB: political_funds
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d political_funds"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - political_funds_network
+
+  app:
+    build: .
+    container_name: political_funds_api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: 8080
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres123
+      DB_NAME: political_funds
+      DB_SSLMODE: disable
+    ports:
+      - "8080:8080"
+    networks:
+      - political_funds_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  political_funds_network:
+    driver: bridge
