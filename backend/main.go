@@ -56,10 +56,10 @@ func main() {
 	v1 := r.Group("/api/v1")
 	{
 		// ユーザー関連のエンドポイント
-		users := v1.Group("/users")
+		admin := v1.Group("/admin")
 		{
-			users.GET("", userController.GetAllUsers)     // 全ユーザー取得
-			users.GET("/:id", userController.GetUserByID) // 特定ユーザー取得
+			admin.GET("", userController.GetAllUsers)     // 全ユーザー取得
+			admin.GET("/:id", userController.GetUserByID) // 特定ユーザー取得
 		}
 	}
 
