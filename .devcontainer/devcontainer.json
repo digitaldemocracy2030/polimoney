@@ -16,11 +16,7 @@
         "python.formatting.provider": "black",
         "python.linting.enabled": true,
         "python.linting.flake8Enabled": true,
-        "typescript.tsdk": "node_modules/typescript/lib",
-        "go.toolsManagement.checkForUpdates": "local",
-        "go.useLanguageServer": true,
-        "go.gopath": "/go",
-        "go.goroot": "/usr/local/go"
+        "typescript.tsdk": "node_modules/typescript/lib"
       },
       "extensions": [
         "dbaeumer.vscode-eslint",
@@ -28,8 +24,7 @@
         "ms-python.python",
         "ms-python.vscode-pylance",
         "bradlc.vscode-tailwindcss",
-        "github.copilot",
-        "golang.go"
+        "github.copilot"
       ]
     }
   },
@@ -42,17 +37,6 @@
     },
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.10"
-    },
-    "ghcr.io/devcontainers/features/go:1": {
-      "version": "latest"
-    },
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
-      "version": "latest",
-      "enableNonRootDocker": "true"
-    },
-    "ghcr.io/azutake/devcontainer-features/go-packages-install:0": {}
-  },
-  "mounts": [
-    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
-  ]
+    }
+  }
 }
