@@ -32,10 +32,10 @@ func main() {
 	r := gin.Default()
 
 	// ミドルウェアを設定
-	r.Use(middleware.CORS())  // CORSミドルウェアを追加
-	r.Use(middleware.RequestID())  // Request IDミドルウェアを追加
-	r.Use(middleware.DatabaseMiddleware(db))  // データベース接続ミドルウェアを追加
-	r.Use(middleware.ErrorHandler())  // エラーハンドリングミドルウェアを追加
+	r.Use(middleware.CORS())                 // CORSミドルウェアを追加
+	r.Use(middleware.RequestID())            // Request IDミドルウェアを追加
+	r.Use(middleware.DatabaseMiddleware(db)) // データベース接続ミドルウェアを追加
+	r.Use(middleware.ErrorHandler())         // エラーハンドリングミドルウェアを追加
 
 	// コントローラーを初期化
 	userController := controllers.NewUserController(db)
