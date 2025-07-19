@@ -17,8 +17,9 @@ func main() {
 		port = "8080"
 	}
 
-	// サーバー起動時刻を保存
-	startTime := time.Now().Format("2006-01-02 15:04:05")
+	// サーバー起動時刻を日本時間（JST）で保存
+	jst, _ := time.LoadLocation("Asia/Tokyo")
+	startTime := time.Now().In(jst).Format("2006-01-02 15:04:05")
 
 	// データベース接続を確立
 	db, err := config.ConnectDB()
