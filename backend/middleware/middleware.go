@@ -7,34 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Logger はリクエストのログを記録するミドルウェア
-func Logger() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// リクエスト開始時刻を記録
-		start := time.Now()
-
-		// リクエスト処理を実行
-		c.Next()
-
-		// ログを出力
-		latency := time.Since(start)
-		clientIP := c.ClientIP()
-		method := c.Request.Method
-		statusCode := c.Writer.Status()
-		path := c.Request.URL.Path
-		userAgent := c.Request.UserAgent()
-
-		log.Printf("[%s] %s %s %d %v %s",
-			clientIP,
-			method,
-			path,
-			statusCode,
-			latency,
-			userAgent,
-		)
-	}
-}
-
 // CORS はCORSヘッダーを設定するミドルウェア
 func CORS() gin.HandlerFunc {
 	return func(c *gin.Context) {

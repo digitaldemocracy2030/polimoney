@@ -17,9 +17,6 @@ func main() {
 		port = "8080"
 	}
 
-	// ルーターを作成
-    r := gin.Default()
-
 	// サーバー起動時刻を保存
 	startTime := time.Now().Format("2006-01-02 15:04:05")
 
@@ -30,8 +27,10 @@ func main() {
 	}
 	defer db.Close()
 
+	// Ginルーターを作成
+	r := gin.Default()
+
 	// ミドルウェアを設定
-	r.Use(middleware.Logger())
 	r.Use(middleware.CORS())
 	r.Use(middleware.RequestID())
 	r.Use(middleware.DatabaseMiddleware(db))
@@ -42,13 +41,13 @@ func main() {
 
 	// ルートハンドラー
 	r.GET("/", func(c *gin.Context) {
-		c.String(200, "Welcome to the API")
+		c.String(200, "Welcome to the API - Started at "+startTime)
 	})
-    r.POST("/health", func(c *gin.Context) {
-        c.JSON(200, gin.H{
-            "status": "ok",
-        })
-    })
+	r.POST("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status": "ok",
+		})
+	})
 
 	// ヘルスチェックエンドポイント
 	r.GET("/health", userController.HealthCheck)
@@ -66,6 +65,7 @@ func main() {
 
 	// サーバーを起動
 	log.Printf("Server starting on port %s at %s", port, startTime)
+
 	if err := r.Run(":" + port); err != nil {
 		log.Fatalf("サーバー起動エラー: %v", err)
 	}
