@@ -50,7 +50,7 @@ Docker Composeを使わずにローカルで実行する場合：
 
 PostgreSQL 17を使用しています。Docker Composeで自動的にセットアップされる設定：
 
-- データベース名: `political_funds`
+- データベース名: `polimoney`
 - ユーザー名: `postgres`
 - パスワード: `postgres123`
 - ポート: `5432`
