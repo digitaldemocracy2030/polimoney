@@ -1,5 +1,5 @@
 # マルチステージビルド
-FROM golang:1.21-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 # 作業ディレクトリを設定
 WORKDIR /app
@@ -33,7 +33,8 @@ COPY --from=builder /app/main .
 
 # 待機スクリプトをコピー
 COPY wait-for-postgres.sh .
-RUN chmod +x wait-for-postgres.sh
+RUN chmod +x wait-for-postgres.sh && \
+    sed -i 's/\r$//' wait-for-postgres.sh
 
 # ポートを公開
 EXPOSE 8080
