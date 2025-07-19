@@ -25,6 +25,11 @@ FROM alpine:latest
 # 必要なパッケージをインストール
 RUN apk --no-cache add ca-certificates postgresql-client tzdata
 
+# タイムゾーンを日本に設定
+ENV TZ=Asia/Tokyo
+RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
+    echo "Asia/Tokyo" > /etc/timezone
+
 # 作業ディレクトリを作成
 WORKDIR /root/
 
