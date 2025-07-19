@@ -23,7 +23,7 @@ func NewUserController(db *sql.DB) *UserController {
 }
 
 // GetAllUsers は全ユーザーを取得するハンドラー
-// GET /api/users
+// GET /api/v1/admin/users
 func (uc *UserController) GetAllUsers(c *gin.Context) {
 	users, err := uc.userRepo.GetAllUsers()
 	if err != nil {
@@ -43,7 +43,7 @@ func (uc *UserController) GetAllUsers(c *gin.Context) {
 }
 
 // GetUserByID は指定されたIDのユーザーを取得するハンドラー
-// GET /api/users/:id
+// GET /api/v1/admin/users/:id
 func (uc *UserController) GetUserByID(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
@@ -80,7 +80,7 @@ func (uc *UserController) GetUserByID(c *gin.Context) {
 }
 
 // HealthCheck はデータベース接続の健全性をチェックするハンドラー
-// GET /api/health
+// GET /api/v1/health
 func (uc *UserController) HealthCheck(c *gin.Context) {
 	// データベース接続テスト用のシンプルなクエリ
 	_, err := uc.userRepo.DB.Exec("SELECT 1")

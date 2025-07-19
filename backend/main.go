@@ -31,10 +31,10 @@ func main() {
 	r := gin.Default()
 
 	// ミドルウェアを設定
-	r.Use(middleware.CORS())
-	r.Use(middleware.RequestID())
-	r.Use(middleware.DatabaseMiddleware(db))
-	r.Use(middleware.ErrorHandler())
+	r.Use(middleware.CORS())  // CORSミドルウェアを追加
+	r.Use(middleware.RequestID())  // Request IDミドルウェアを追加
+	r.Use(middleware.DatabaseMiddleware(db))  // データベース接続ミドルウェアを追加
+	r.Use(middleware.ErrorHandler())  // エラーハンドリングミドルウェアを追加
 
 	// コントローラーを初期化
 	userController := controllers.NewUserController(db)
@@ -43,23 +43,22 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		c.String(200, "Welcome to the API - Started at "+startTime)
 	})
-	r.POST("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"status": "ok",
-		})
-	})
-
-	// ヘルスチェックエンドポイント
-	r.GET("/health", userController.HealthCheck)
 
 	// API v1 グループ
 	v1 := r.Group("/api/v1")
 	{
-		// ユーザー関連のエンドポイント
+		// ヘルスチェックエンドポイント
+		v1.GET("/health", userController.HealthCheck)
+
+		// 管理者用エンドポイント
 		admin := v1.Group("/admin")
 		{
-			admin.GET("", userController.GetAllUsers)     // 全ユーザー取得
-			admin.GET("/:id", userController.GetUserByID) // 特定ユーザー取得
+			// ユーザー関連のエンドポイント
+			users := admin.Group("/users")
+			{
+				users.GET("", userController.GetAllUsers)     // 全ユーザー取得
+				users.GET("/:id", userController.GetUserByID) // 特定ユーザー取得
+			}
 		}
 	}
 
