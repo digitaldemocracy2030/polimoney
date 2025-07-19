@@ -40,19 +40,7 @@ Docker Composeを使わずにローカルで実行する場合：
    go mod tidy
    ```
 
-3. **環境変数の設定**
-
-   ```bash
-   export PORT=8080
-   export DB_HOST=localhost
-   export DB_PORT=5432
-   export DB_USER=postgres
-   export DB_PASSWORD=postgres123
-   export DB_NAME=political_funds
-   export DB_SSLMODE=disable
-   ```
-
-4. **サーバーの起動**
+3. **サーバーの起動**
 
    ```bash
    go run main.go

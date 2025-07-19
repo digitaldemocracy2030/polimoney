@@ -5,7 +5,7 @@ set -e
 
 host="$1"
 shift
-cmd="$@"
+cmd="$*"
 
 echo "Waiting for postgres..."
 
