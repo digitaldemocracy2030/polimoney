@@ -7,16 +7,16 @@ import (
 
 // User はユーザー情報を表す構造体
 type User struct {
-	ID            int       `json:"id" db:"id"`
-	Username      string    `json:"username" db:"username"`
-	Email         string    `json:"email" db:"email"`
-	PasswordHash  string    `json:"-" db:"password_hash"` // JSONには含めない
-	RoleID        int       `json:"role_id" db:"role_id"`
-	IsActive      bool      `json:"is_active" db:"is_active"`
-	EmailVerified bool      `json:"email_verified" db:"email_verified"`
+	ID            int        `json:"id" db:"id"`
+	Username      string     `json:"username" db:"username"`
+	Email         string     `json:"email" db:"email"`
+	PasswordHash  string     `json:"-" db:"password_hash"` // JSONには含めない
+	RoleID        int        `json:"role_id" db:"role_id"`
+	IsActive      bool       `json:"is_active" db:"is_active"`
+	EmailVerified bool       `json:"email_verified" db:"email_verified"`
 	LastLogin     *time.Time `json:"last_login" db:"last_login"`
-	CreatedAt     time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt     time.Time `json:"updated_at" db:"updated_at"`
+	CreatedAt     time.Time  `json:"created_at" db:"created_at"`
+	UpdatedAt     time.Time  `json:"updated_at" db:"updated_at"`
 }
 
 // Role はロール情報を表す構造体

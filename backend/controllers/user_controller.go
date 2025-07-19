@@ -79,7 +79,6 @@ func (uc *UserController) GetUserByID(c *gin.Context) {
 	})
 }
 
-
 // HealthCheck はデータベース接続の健全性をチェックするハンドラー
 // GET /api/health
 func (uc *UserController) HealthCheck(c *gin.Context) {
