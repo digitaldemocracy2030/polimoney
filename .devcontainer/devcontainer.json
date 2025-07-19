@@ -1,5 +1,5 @@
 {
-  "name": "Polimoney Backend Development Environment",
+  "name": "Polimoney Development Environment",
   "build": {
     "dockerfile": "Dockerfile",
     "context": ".."
@@ -9,13 +9,24 @@
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
         "editor.formatOnSave": true,
-
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "python.defaultInterpreterPath": "/workspace/.venv/bin/python",
+        "python.formatting.provider": "black",
+        "python.linting.enabled": true,
+        "python.linting.flake8Enabled": true,
+        "typescript.tsdk": "node_modules/typescript/lib",
         "go.toolsManagement.checkForUpdates": "local",
         "go.useLanguageServer": true,
         "go.gopath": "/go",
         "go.goroot": "/usr/local/go"
       },
       "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
         "bradlc.vscode-tailwindcss",
         "github.copilot",
         "golang.go"
@@ -23,9 +34,15 @@
     }
   },
   "forwardPorts": [3000],
-  "postCreateCommand": "",
+  "postCreateCommand": "npm install && cd tools && poetry install",
   "remoteUser": "node",
   "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.10"
+    },
     "ghcr.io/devcontainers/features/go:1": {
       "version": "latest"
     },
