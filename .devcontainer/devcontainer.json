@@ -1,5 +1,5 @@
 {
-  "name": "Polimoney Development Environment",
+  "name": "Polimoney Backend Development Environment",
   "build": {
     "dockerfile": "Dockerfile",
     "context": ".."
@@ -19,17 +19,13 @@
         "typescript.tsdk": "node_modules/typescript/lib"
       },
       "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "ms-python.python",
-        "ms-python.vscode-pylance",
         "bradlc.vscode-tailwindcss",
         "github.copilot"
       ]
     }
   },
   "forwardPorts": [3000],
-  "postCreateCommand": "npm install && cd tools && poetry install",
+  "postCreateCommand": "",
   "remoteUser": "node",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
