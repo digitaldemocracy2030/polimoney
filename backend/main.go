@@ -26,7 +26,16 @@ func main() {
 	if err != nil {
 		log.Fatalf("データベース接続エラー: %v", err)
 	}
-	defer db.Close()
+
+	// GORM接続のクリーンアップ
+	defer func() {
+		sqlDB, err := db.DB()
+		if err != nil {
+			log.Printf("データベース接続の取得に失敗: %v", err)
+			return
+		}
+		sqlDB.Close()
+	}()
 
 	// Ginルーターを作成
 	r := gin.Default()

@@ -1,12 +1,12 @@
 package controllers
 
 import (
-	"database/sql"
 	"net/http"
 	"strconv"
 
 	"github.com/digitaldemocracy2030/polimoney/models"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // UserController はユーザー関連のHTTPハンドラーを管理
@@ -15,7 +15,7 @@ type UserController struct {
 }
 
 // NewUserController は新しいUserControllerを作成
-func NewUserController(db *sql.DB) *UserController {
+func NewUserController(db *gorm.DB) *UserController {
 	userRepo := models.NewUserRepository(db)
 	return &UserController{
 		userRepo: userRepo,
@@ -57,7 +57,7 @@ func (uc *UserController) GetUserByID(c *gin.Context) {
 
 	user, err := uc.userRepo.GetUserByID(id)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusNotFound, gin.H{
 				"error":   "ユーザーが見つかりません",
 				"message": "指定されたIDのユーザーは存在しません",
@@ -82,8 +82,19 @@ func (uc *UserController) GetUserByID(c *gin.Context) {
 // HealthCheck はデータベース接続の健全性をチェックするハンドラー
 // GET /api/v1/health
 func (uc *UserController) HealthCheck(c *gin.Context) {
+	// GORMを使用してデータベース接続テスト
+	sqlDB, err := uc.userRepo.DB.DB()
+	if err != nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{
+			"status":  "error",
+			"message": "データベース接続の取得に失敗しました",
+			"details": err.Error(),
+		})
+		return
+	}
+
 	// データベース接続テスト用のシンプルなクエリ
-	_, err := uc.userRepo.DB.Exec("SELECT 1")
+	err = sqlDB.Ping()
 	if err != nil {
 		c.JSON(http.StatusServiceUnavailable, gin.H{
 			"status":  "error",
