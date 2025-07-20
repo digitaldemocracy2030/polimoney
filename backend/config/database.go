@@ -23,12 +23,12 @@ type DatabaseConfig struct {
 // LoadDatabaseConfig は環境変数からデータベース設定を読み込み
 func LoadDatabaseConfig() *DatabaseConfig {
 	return &DatabaseConfig{
-		Host:     getEnvOrDefault("DB_HOST", "localhost"),
-		Port:     getEnvOrDefault("DB_PORT", "5432"),
-		User:     getEnvOrDefault("DB_USER", "postgres"),
-		Password: getEnvOrDefault("DB_PASSWORD", "postgres123"),
-		DBName:   getEnvOrDefault("DB_NAME", "polimoney"),
-		SSLMode:  getEnvOrDefault("DB_SSLMODE", "disable"),
+		Host:     os.Getenv("DB_HOST"),
+		Port:     os.Getenv("DB_PORT"),
+		User:     os.Getenv("DB_USER"),
+		Password: os.Getenv("DB_PASSWORD"),
+		DBName:   os.Getenv("DB_NAME"),
+		SSLMode:  os.Getenv("DB_SSLMODE"),
 	}
 }
 
@@ -67,12 +67,4 @@ func ConnectDB() (*gorm.DB, error) {
 
 	log.Println("データベース接続が成功しました")
 	return db, nil
-}
-
-// getEnvOrDefault は環境変数を取得し、存在しない場合はデフォルト値を返す
-func getEnvOrDefault(key, defaultValue string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
-	}
-	return defaultValue
 }
