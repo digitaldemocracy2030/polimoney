@@ -8,17 +8,19 @@ import (
 
 // User はユーザー情報を表す構造体（GORMモデル）
 type User struct {
-	ID            uint       `json:"id" gorm:"primaryKey"`
-	Username      string     `json:"username" gorm:"uniqueIndex;not null"`
-	Email         string     `json:"email" gorm:"uniqueIndex;not null"`
-	PasswordHash  string     `json:"-" gorm:"column:password_hash;not null"` // JSONには含めない
-	RoleID        uint       `json:"role_id" gorm:"not null"`
-	IsActive      bool       `json:"is_active" gorm:"default:true"`
-	EmailVerified bool       `json:"email_verified" gorm:"default:false"`
-	LastLogin     *time.Time `json:"last_login"`
-	CreatedAt     time.Time  `json:"created_at"`
-	UpdatedAt     time.Time  `json:"updated_at"`
-	Role          Role       `json:"role" gorm:"foreignKey:RoleID"` // リレーション定義
+	ID              uint       `json:"id" gorm:"primaryKey"`
+	Username        string     `json:"username" gorm:"uniqueIndex;not null"`
+	Email           string     `json:"email" gorm:"uniqueIndex;not null"`
+	PasswordHash    string     `json:"-" gorm:"column:password_hash;not null"` // JSONには含めない
+	RoleID          uint       `json:"role_id" gorm:"not null"`
+	IsActive        bool       `json:"is_active" gorm:"default:true"`
+	EmailVerified   bool       `json:"email_verified" gorm:"default:false"`
+	LastLogin       *time.Time `json:"last_login"`
+	CreatedAt       time.Time  `json:"created_at"`
+	UpdatedAt       time.Time  `json:"updated_at"`
+	Role            Role       `json:"role" gorm:"foreignKey:RoleID"` // リレーション定義
+	RoleName        string     `json:"role_name" gorm:"-"`            // DBには保存しない
+	RoleDescription string     `json:"role_description" gorm:"-"`     // DBには保存しない
 }
 
 // Role はロール情報を表す構造体（GORMモデル）
@@ -28,21 +30,6 @@ type Role struct {
 	Description string    `json:"description"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
-}
-
-// UserWithRole はユーザーとロール情報を結合した構造体
-type UserWithRole struct {
-	ID              uint       `json:"id"`
-	Username        string     `json:"username"`
-	Email           string     `json:"email"`
-	RoleID          uint       `json:"role_id"`
-	IsActive        bool       `json:"is_active"`
-	EmailVerified   bool       `json:"email_verified"`
-	LastLogin       *time.Time `json:"last_login"`
-	CreatedAt       time.Time  `json:"created_at"`
-	UpdatedAt       time.Time  `json:"updated_at"`
-	RoleName        string     `json:"role_name"`
-	RoleDescription string     `json:"role_description"`
 }
 
 // TableName はUserテーブル名を指定
@@ -66,8 +53,8 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 }
 
 // GetAllUsers は全ユーザーを取得（ロール情報も含む）
-func (r *UserRepository) GetAllUsers() ([]UserWithRole, error) {
-	var users []UserWithRole
+func (r *UserRepository) GetAllUsers() ([]User, error) {
+	var users []User
 
 	// GORMのJoinを使用してユーザーとロール情報を結合
 	err := r.DB.Table("users u").
@@ -84,8 +71,8 @@ func (r *UserRepository) GetAllUsers() ([]UserWithRole, error) {
 }
 
 // GetUserByID は指定されたIDのユーザーを取得
-func (r *UserRepository) GetUserByID(id int) (*UserWithRole, error) {
-	var user UserWithRole
+func (r *UserRepository) GetUserByID(id int) (User, error) {
+	var user User
 
 	// GORMのJoinを使用してユーザーとロール情報を結合
 	err := r.DB.Table("users u").
@@ -95,10 +82,10 @@ func (r *UserRepository) GetUserByID(id int) (*UserWithRole, error) {
 		First(&user).Error
 
 	if err != nil {
-		return nil, err
+		return User{}, err
 	}
 
-	return &user, nil
+	return user, nil
 }
 
 // CreateUser は新しいユーザーを作成

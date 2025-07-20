@@ -46,10 +46,12 @@ func main() {
 	r.Use(middleware.DatabaseMiddleware(db)) // データベース接続ミドルウェアを追加
 	r.Use(middleware.ErrorHandler())         // エラーハンドリングミドルウェアを追加
 
-	// コントローラーを初期化
+	// コントローラー初期化
 	userController := controllers.NewUserController(db)
+	healthController := controllers.NewHealthController(db)
 
-	// ルートハンドラー
+	// エンドポイントを設定
+	// ルートハンドラー (開発用)
 	r.GET("/", func(c *gin.Context) {
 		c.String(200, "Welcome to the API - Started at "+startTime)
 	})
@@ -57,13 +59,13 @@ func main() {
 	// API v1 グループ
 	v1 := r.Group("/api/v1")
 	{
-		// ヘルスチェックエンドポイント
-		v1.GET("/health", userController.HealthCheck)
+		// ヘルスチェック controllers/health.go
+		v1.GET("/health", healthController.HealthCheck)
 
-		// 管理者用エンドポイント
+		// 以下、管理者用
 		admin := v1.Group("/admin")
 		{
-			// ユーザー関連のエンドポイント
+			// ユーザー関連の controllers/user.go
 			users := admin.Group("/users")
 			{
 				users.GET("", userController.GetAllUsers)     // 全ユーザー取得
