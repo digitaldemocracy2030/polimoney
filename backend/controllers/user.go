@@ -15,9 +15,9 @@ type UserController struct {
 
 // NewUserController は新しいUserControllerを作成
 func NewUserController(db *gorm.DB) *UserController {
-	userRepo := middleware.NewUserMiddleware(db)
+	userMiddleware := middleware.NewUserMiddleware(db)
 	return &UserController{
-		userMiddleware: userRepo,
+		userMiddleware: userMiddleware,
 	}
 }
 

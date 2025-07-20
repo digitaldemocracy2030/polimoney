@@ -8,7 +8,6 @@ import (
 // HealthMiddleware はヘルスチェック関連のミドルウェア機能を提供
 type HealthMiddleware struct {
 	healthRepo *models.HealthRepository
-	db         *gorm.DB
 }
 
 // NewHealthMiddleware は新しいHealthMiddlewareを作成
@@ -16,7 +15,6 @@ func NewHealthMiddleware(db *gorm.DB) *HealthMiddleware {
 	healthRepo := models.NewHealthRepository(db)
 	return &HealthMiddleware{
 		healthRepo: healthRepo,
-		db:         db,
 	}
 }
 
@@ -32,13 +30,13 @@ func (hm *HealthMiddleware) GetHealthStatus() map[string]interface{} {
 	}
 
 	// データベース接続チェック
-	connection := hm.healthRepo.CheckConnection()
-	if connection != nil {
+	err := hm.healthRepo.CheckConnection()
+	if err != nil {
 		result["overall_status"] = "unhealthy"
 		result["message"] = "データベースへの接続に失敗しました。"
 		result["database"] = map[string]interface{}{
 			"status": "disconnected",
-			"details": connection.Error(),
+			"details": err.Error(),
 		}
 		return result
 	}

@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/digitaldemocracy2030/polimoney/models"
@@ -34,10 +35,20 @@ func (um *UserMiddleware) GetAllUsers() ([]models.User, error) {
 func (um *UserMiddleware) GetUserByID(idStr string) (*models.User, error) {
 	// TODO: 必要に応じて認証などの処理を追加
 
+	// 入力値の検証
+	if idStr == "" {
+		return nil, fmt.Errorf("GetUserByID: ユーザーIDが空です")
+	}
+
 	// IDを数値に変換
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("GetUserByID: ユーザーIDが数値ではありません: %w", err)
+	}
+
+	// IDが0以下の場合はエラーを返す
+	if id <= 0 {
+		return nil, fmt.Errorf("GetUserByID: ユーザーIDは正の整数である必要があります")
 	}
 
 	// データベースからユーザー情報を取得
