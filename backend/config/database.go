@@ -1,12 +1,13 @@
 package config
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"os"
 
-	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 // DatabaseConfig はデータベース接続設定を保持
@@ -22,12 +23,12 @@ type DatabaseConfig struct {
 // LoadDatabaseConfig は環境変数からデータベース設定を読み込み
 func LoadDatabaseConfig() *DatabaseConfig {
 	return &DatabaseConfig{
-		Host:     getEnvOrDefault("DB_HOST", "localhost"),
-		Port:     getEnvOrDefault("DB_PORT", "5432"),
-		User:     getEnvOrDefault("DB_USER", "postgres"),
-		Password: getEnvOrDefault("DB_PASSWORD", "postgres123"),
-		DBName:   getEnvOrDefault("DB_NAME", "polimoney"),
-		SSLMode:  getEnvOrDefault("DB_SSLMODE", "disable"),
+		Host:     os.Getenv("DB_HOST"),
+		Port:     os.Getenv("DB_PORT"),
+		User:     os.Getenv("DB_USER"),
+		Password: os.Getenv("DB_PASSWORD"),
+		DBName:   os.Getenv("DB_NAME"),
+		SSLMode:  os.Getenv("DB_SSLMODE"),
 	}
 }
 
@@ -37,31 +38,33 @@ func (c *DatabaseConfig) GetConnectionString() string {
 		c.Host, c.Port, c.User, c.Password, c.DBName, c.SSLMode)
 }
 
-// ConnectDB はデータベースへの接続を確立
-func ConnectDB() (*sql.DB, error) {
+// ConnectDB はGORMを使用してデータベースへの接続を確立
+func ConnectDB() (*gorm.DB, error) {
 	config := LoadDatabaseConfig()
-	connStr := config.GetConnectionString()
+	dsn := config.GetConnectionString()
 
 	log.Printf("データベースに接続中: %s:%s/%s", config.Host, config.Port, config.DBName)
 
-	db, err := sql.Open("postgres", connStr)
+	// GORM設定
+	gormConfig := &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	}
+
+	db, err := gorm.Open(postgres.Open(dsn), gormConfig)
 	if err != nil {
 		return nil, fmt.Errorf("データベースの接続に失敗: %v", err)
 	}
 
 	// 接続テスト
-	if err = db.Ping(); err != nil {
+	sqlDB, err := db.DB()
+	if err != nil {
+		return nil, fmt.Errorf("データベース接続の取得に失敗: %v", err)
+	}
+
+	if err = sqlDB.Ping(); err != nil {
 		return nil, fmt.Errorf("データベースのpingに失敗: %v", err)
 	}
 
 	log.Println("データベース接続が成功しました")
 	return db, nil
-}
-
-// getEnvOrDefault は環境変数を取得し、存在しない場合はデフォルト値を返す
-func getEnvOrDefault(key, defaultValue string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
-	}
-	return defaultValue
 }
