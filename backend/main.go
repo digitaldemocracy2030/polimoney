@@ -9,9 +9,19 @@ import (
 	"github.com/digitaldemocracy2030/polimoney/controllers"
 	"github.com/digitaldemocracy2030/polimoney/middleware"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// .envファイルを読み込む
+	if err := godotenv.Load(); err != nil {
+		log.Println("main: .envファイルが見つかりませんでした。読み込みをスキップします。")
+	}
+
+	// 必須環境変数をチェック
+	config.CheckRequiredEnvVariables()
+
+	// ポート番号を設定
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -24,14 +34,14 @@ func main() {
 	// データベース接続を確立
 	db, err := config.ConnectDB()
 	if err != nil {
-		log.Fatalf("データベース接続エラー: %v", err)
+		log.Fatalf("main: データベース接続エラー: %v", err)
 	}
 
 	// GORM接続のクリーンアップ
 	defer func() {
 		sqlDB, err := db.DB()
 		if err != nil {
-			log.Printf("データベース接続の取得に失敗: %v", err)
+			log.Printf("main: データベース接続の取得に失敗: %v", err)
 			return
 		}
 		sqlDB.Close()
@@ -41,6 +51,10 @@ func main() {
 	r := gin.Default()
 
 	// ミドルウェアを設定
+	env := os.Getenv("ENV")
+	if env == "production" {
+		r.Use(middleware.HTTPSRedirect())
+	}
 	r.Use(middleware.CORS())                 // CORSミドルウェアを追加
 	r.Use(middleware.RequestID())            // Request IDミドルウェアを追加
 	r.Use(middleware.DatabaseMiddleware(db)) // データベース接続ミドルウェアを追加
@@ -49,6 +63,7 @@ func main() {
 	// コントローラー初期化
 	userController := controllers.NewUserController(db)
 	healthController := controllers.NewHealthController(db)
+	authController := controllers.NewAuthController(db)
 
 	// エンドポイントを設定
 	// ルートハンドラー (開発用)
@@ -62,8 +77,13 @@ func main() {
 		// ヘルスチェック controllers/health.go
 		v1.GET("/health", healthController.HealthCheck)
 
+		// ログイン controllers/auth.go
+		v1.POST("/signup", authController.Signup)
+		v1.POST("/login", authController.Login)
+
 		// 以下、管理者用
 		admin := v1.Group("/admin")
+		admin.Use(middleware.JWTAuthMiddleware()) // ValidateJWTをGinのミドルウェアとしてラップした関数を使用
 		{
 			// ユーザー関連の controllers/user.go
 			users := admin.Group("/users")

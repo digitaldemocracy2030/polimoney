@@ -3,7 +3,8 @@ CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) UNIQUE NOT NULL,
     description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- ユーザーテーブルの作成（ロール機能を追加）
@@ -47,6 +48,7 @@ CREATE TABLE password_reset_tokens (
     expires_at TIMESTAMP NOT NULL,
     used BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -54,11 +56,6 @@ CREATE TABLE password_reset_tokens (
 INSERT INTO roles (name, description) VALUES
     ('admin', '管理者権限'),
     ('user', '一般ユーザー');
-
--- テストユーザーの挿入（パスワードは全て "password123" のハッシュ値）
-INSERT INTO users (username, email, password_hash, role_id, email_verified) VALUES
-    ('admin_user', 'admin@example.com', 'TODO:CREATE_HASH', 1, TRUE),
-    ('test_user', 'user@example.com', 'TODO:CREATE_HASH', 2, TRUE);
 
 -- インデックスの作成（パフォーマンス向上）
 CREATE INDEX idx_users_email ON users(email);
@@ -82,5 +79,11 @@ $$ language 'plpgsql';
 -- usersテーブルのupdated_atカラム自動更新トリガー
 CREATE TRIGGER update_users_updated_at
     BEFORE UPDATE ON users
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- rolesテーブルのupdated_atカラム自動更新トリガー
+CREATE TRIGGER update_roles_updated_at
+    BEFORE UPDATE ON roles
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();

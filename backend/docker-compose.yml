@@ -32,6 +32,9 @@ services:
       DB_PASSWORD: postgres123
       DB_NAME: polimoney
       DB_SSLMODE: disable
+      ENV: development
+      PASSWORD_SALT: dev_salt
+      JWT_SECRET: dev_salt
     ports:
       - "8080:8080"
     networks:
