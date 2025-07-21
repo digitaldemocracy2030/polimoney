@@ -23,6 +23,11 @@ func CheckRequiredEnvVariables() {
 	}
 	if !requirementSatisfied {
 		log.Fatalf("config: 以上の環境変数が設定されていません。")
+		log.Println("cp .env.example .env を実行して、環境変数を設定してください。")
+		log.Println("または、以下のコマンドで個別に環境変数を追加できます:")
+		for _, v := range requiredEnvVariables {
+			log.Printf("export %s=your_value", v)
+		}
 		os.Exit(1)
 	}
 }
