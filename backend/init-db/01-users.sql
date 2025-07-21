@@ -3,7 +3,8 @@ CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) UNIQUE NOT NULL,
     description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- ユーザーテーブルの作成（ロール機能を追加）
@@ -78,5 +79,11 @@ $$ language 'plpgsql';
 -- usersテーブルのupdated_atカラム自動更新トリガー
 CREATE TRIGGER update_users_updated_at
     BEFORE UPDATE ON users
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- rolesテーブルのupdated_atカラム自動更新トリガー
+CREATE TRIGGER update_roles_updated_at
+    BEFORE UPDATE ON roles
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
