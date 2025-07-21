@@ -55,18 +55,11 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 // GetAllUsers は全ユーザーを取得（ロール情報も含む）
 func (r *UserRepository) GetAllUsers() ([]User, error) {
 	var users []User
-
-	// GORMのJoinを使用してユーザーとロール情報を結合
-	err := r.DB.Table("users u").
-		Select("u.id, u.username, u.email, u.role_id, u.is_active, u.email_verified, u.last_login, u.created_at, u.updated_at, r.name as role_name, r.description as role_description").
-		Joins("JOIN roles r ON u.role_id = r.id").
-		Order("u.created_at DESC").
-		Scan(&users).Error
-
+	// PreloadでRoleを自動取得
+	err := r.DB.Preload("Role").Order("created_at DESC").Find(&users).Error
 	if err != nil {
 		return nil, err
 	}
-
 	return users, nil
 }
 
