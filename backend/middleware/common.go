@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -66,4 +67,18 @@ func RequestID() gin.HandlerFunc {
 // generateRequestID は簡単なリクエストIDを生成
 func generateRequestID() string {
 	return time.Now().Format("20060102150405") + "-" + time.Now().Format("000000")
+}
+
+// HTTPSRedirect はHTTPリダイレクトを行うミドルウェア
+func HTTPSRedirect() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// TLS情報がなければ（=HTTPアクセスなら）リダイレクト
+		if c.Request.TLS == nil {
+			url := "https://" + c.Request.Host + c.Request.RequestURI
+			c.Redirect(http.StatusMovedPermanently, url)
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
 }

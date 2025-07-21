@@ -12,9 +12,20 @@ import (
 )
 
 func main() {
+	// ポート番号を設定
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
+	}
+
+	// 環境変数 ENV を設定
+	env := os.Getenv("ENV")
+	if env == "" || (env != "development" && env != "production") {
+		log.Fatalf("環境変数 ENV を設定してください (ENV=development or ENV=production)")
+		return
+	}
+	if env == "development" {
+		log.Println("開発環境です")
 	}
 
 	// サーバー起動時刻を日本時間（JST）で保存
@@ -41,6 +52,9 @@ func main() {
 	r := gin.Default()
 
 	// ミドルウェアを設定
+	if env == "development" {
+		r.Use(middleware.HTTPSRedirect())
+	}
 	r.Use(middleware.CORS())                 // CORSミドルウェアを追加
 	r.Use(middleware.RequestID())            // Request IDミドルウェアを追加
 	r.Use(middleware.DatabaseMiddleware(db)) // データベース接続ミドルウェアを追加
