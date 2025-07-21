@@ -55,11 +55,6 @@ INSERT INTO roles (name, description) VALUES
     ('admin', '管理者権限'),
     ('user', '一般ユーザー');
 
--- テストユーザーの挿入（パスワードは全て "password123" のハッシュ値）
-INSERT INTO users (username, email, password_hash, role_id, email_verified) VALUES
-    ('admin_user', 'admin@example.com', 'TODO:CREATE_HASH', 1, TRUE),
-    ('test_user', 'user@example.com', 'TODO:CREATE_HASH', 2, TRUE);
-
 -- インデックスの作成（パフォーマンス向上）
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_username ON users(username);
