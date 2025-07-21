@@ -47,11 +47,15 @@ func (uc *UserController) Signup(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"status":  "success",
-		"message": "ユーザー登録に成功しました",
-		"data":    user,
-	})
+    c.JSON(http.StatusOK, gin.H{
+        "status":  "success",
+        "message": "ユーザー登録に成功しました",
+        "data": gin.H{
+            "id":       user.ID,
+            "username": user.Username,
+            "email":    user.Email,
+        },
+    })
 }
 
 // Login はログインを行うハンドラー

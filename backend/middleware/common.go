@@ -74,16 +74,21 @@ func generateRequestID() string {
 
 // HTTPSRedirect はHTTPリダイレクトを行うミドルウェア
 func HTTPSRedirect() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// TLS情報がなければ（=HTTPアクセスなら）リダイレクト
-		if c.Request.TLS == nil {
-			url := "https://" + c.Request.Host + c.Request.RequestURI
-			c.Redirect(http.StatusMovedPermanently, url)
-			c.Abort()
-			return
-		}
-		c.Next()
-	}
+    return func(c *gin.Context) {
+        // プロキシ環境では X-Forwarded-Proto ヘッダーを確認
+        if c.Request.TLS == nil && c.GetHeader("X-Forwarded-Proto") != "https" {
+            // 信頼できるホストを環境変数から取得
+            trustedHost := os.Getenv("TRUSTED_HOST")
+            if trustedHost == "" {
+                trustedHost = c.Request.Host
+            }
+            url := "https://" + trustedHost + c.Request.RequestURI
+            c.Redirect(http.StatusMovedPermanently, url)
+            c.Abort()
+            return
+        }
+        c.Next()
+    }
 }
 
 // GenerateJWT はJWTを生成する
