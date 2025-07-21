@@ -96,16 +96,8 @@ func GenerateJWT(userID uint) (string, error) {
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
     return token.SignedString([]byte(secret))
 }
+
 // JWTAuthMiddleware はJWT認証を行い、トークンの検証も内部で行うミドルウェア
-//
-// Args:
-//     なし
-//
-// Returns:
-//     gin.HandlerFunc: JWT認証を行うGinのミドルウェア
-//
-// Example:
-//     r.Use(JWTAuthMiddleware())
 func JWTAuthMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
         // Authorizationヘッダーからトークンを取得
