@@ -52,7 +52,7 @@ func main() {
 
 	// ミドルウェアを設定
 	env := os.Getenv("ENV")
-	if env == "development" {
+	if env == "production" {
 		r.Use(middleware.HTTPSRedirect())
 	}
 	r.Use(middleware.CORS())                 // CORSミドルウェアを追加
