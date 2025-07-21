@@ -19,8 +19,6 @@ type User struct {
 	CreatedAt       time.Time  `json:"created_at"`
 	UpdatedAt       time.Time  `json:"updated_at"`
 	Role            Role       `json:"role" gorm:"foreignKey:RoleID"` // リレーション定義
-	RoleName        string     `json:"role_name" gorm:"-"`            // DBには保存しない
-	RoleDescription string     `json:"role_description" gorm:"-"`     // DBには保存しない
 }
 
 // Role はロール情報を表す構造体（GORMモデル）
@@ -55,6 +53,7 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 // GetAllUsers は全ユーザーを取得（ロール情報も含む）
 func (r *UserRepository) GetAllUsers() ([]User, error) {
 	var users []User
+
 	// PreloadでRoleを自動取得
 	err := r.DB.Preload("Role").Order("created_at DESC").Find(&users).Error
 	if err != nil {
@@ -67,13 +66,8 @@ func (r *UserRepository) GetAllUsers() ([]User, error) {
 func (r *UserRepository) GetUserByID(id int) (User, error) {
 	var user User
 
-	// GORMのJoinを使用してユーザーとロール情報を結合
-	err := r.DB.Table("users u").
-		Select("u.id, u.username, u.email, u.role_id, u.is_active, u.email_verified, u.last_login, u.created_at, u.updated_at, r.name as role_name, r.description as role_description").
-		Joins("JOIN roles r ON u.role_id = r.id").
-		Where("u.id = ?", id).
-		First(&user).Error
-
+	// PreloadでRoleを自動取得
+	err := r.DB.Preload("Role").First(&user, id).Error
 	if err != nil {
 		return User{}, err
 	}
@@ -99,7 +93,9 @@ func (r *UserRepository) DeleteUser(id uint) error {
 // GetUserByEmail はEmailでユーザーを取得
 func (r *UserRepository) GetUserByEmail(email string) (*User, error) {
 	var user User
-	err := r.DB.Where("email = ?", email).First(&user).Error
+
+	// PreloadでRoleを自動取得
+	err := r.DB.Preload("Role").Where("email = ?", email).First(&user).Error
 	if err != nil {
 		return nil, err
 	}
