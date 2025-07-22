@@ -2,7 +2,6 @@ package test
 
 import (
 	"database/sql"
-	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/digitaldemocracy2030/polimoney/models"
@@ -150,8 +149,6 @@ func MockUserRepositoryCreate(mock sqlmock.Sqlmock, user *models.User) {
 
 // MockDBStats sets up mock expectations for database statistics
 func MockDBStats(mock sqlmock.Sqlmock) {
-	now := time.Now()
-	
 	// Mock for connection stats
 	mock.ExpectQuery("SELECT count\\(\\*\\) FROM pg_stat_activity").
 		WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(5))
