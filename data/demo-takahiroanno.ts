@@ -9,7 +9,7 @@ import type {
 const profile: Profile = {
   name: '安野貴博',
   title: 'AIエンジニア',
-  party: '無所属',
+  party: 'チームみらい',
   image: '/demo-takahiroanno.jpg',
 };
 
