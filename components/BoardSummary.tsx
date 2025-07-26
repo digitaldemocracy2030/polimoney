@@ -20,6 +20,7 @@ import type { Flow, Profile, Report } from '@/models/type';
 import { BoardChartFixed } from './BoardChartFixed';
 
 type Props = {
+  politicianId: string;
   profile: Profile;
   report: Report;
   otherReports: Report[];
@@ -28,6 +29,7 @@ type Props = {
 };
 
 export function BoardSummary({
+  politicianId,
   profile,
   report,
   otherReports,
@@ -39,15 +41,14 @@ export function BoardSummary({
   const pathname = usePathname();
 
   // 現在のパスから現在のレポートIDを取得
-  const currentReportId = pathname.startsWith('/')
-    ? pathname.slice(1)
-    : pathname;
+  const currentReportId = report.id;
 
   // 全てのレポート（現在のレポートと他のレポート）を結合（重複除去）し、年で降順ソート
   const allReports = [
     report,
     ...otherReports.filter((r) => r.id !== report.id),
-  ].sort((a, b) => b.year - a.year);
+  ];
+  const sortedOtherReports = [...allReports].sort((a, b) => b.year - a.year);
   const handleCopyImage = async () => {
     const button = document.getElementById('copy-image-btn');
     if (button) button.style.display = 'none'; // ボタンを非表示
@@ -103,11 +104,15 @@ export function BoardSummary({
             <NativeSelect.Field
               value={currentReportId}
               onChange={(e) => {
-                const target = e.target as HTMLSelectElement;
-                router.push(`/${target.value}`);
+                const selectedReport = allReports.find(
+                  (r) => r.id === e.target.value,
+                );
+                if (selectedReport) {
+                  window.location.href = `/${politicianId}/${selectedReport.year}`;
+                }
               }}
             >
-              {allReports.map((reportItem) => (
+              {sortedOtherReports.map((reportItem) => (
                 <option key={reportItem.id} value={reportItem.id}>
                   {reportItem.year}年 {reportItem.orgName}
                 </option>

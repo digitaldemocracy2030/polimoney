@@ -17,14 +17,16 @@ export default function Page() {
 }
 
 function PreviewAlert() {
-  return <>
-    <Alert.Root status="warning">
-      <Alert.Indicator />
-      <Alert.Content>
-        <Alert.Description>
-          このページの内容は公開前のものです。URLを知っている人しかアクセスできません。
-        </Alert.Description>
-      </Alert.Content>
-    </Alert.Root>
-  </>
+  return (
+    <>
+      <Alert.Root status="warning">
+        <Alert.Indicator />
+        <Alert.Content>
+          <Alert.Description>
+            このページの内容は公開前のものです。URLを知っている人しかアクセスできません。
+          </Alert.Description>
+        </Alert.Content>
+      </Alert.Root>
+    </>
+  );
 }

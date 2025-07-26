@@ -4,6 +4,9 @@ export type Profile = {
   party: string; // 政党
   district?: string; // 選挙区
   image: string; // 画像URL
+  birth_year?: number; // 生年
+  birth_place?: string; // 出身地
+  description?: string; // 説明
 };
 // 政治家一覧表示用
 export type ProfileList = Pick<Profile, 'name' | 'image'> &

@@ -9,7 +9,7 @@ import type {
 const profile: Profile = {
   name: '安野貴博',
   title: 'AIエンジニア',
-  party: '無所属',
+  party: 'チームみらい',
   image: '/demo-takahiroanno.jpg',
 };
 
@@ -227,5 +227,22 @@ const data: AccountingReports = {
     },
   ],
 };
+
+const dataByYear: Record<number, any> = {
+  2024: {
+    profile,
+    datas: [
+      {
+        report: reports[0],
+        flows,
+        transactions,
+      },
+    ],
+  },
+};
+
+export function getDataByYear(year: number) {
+  return dataByYear[year];
+}
 
 export default data;

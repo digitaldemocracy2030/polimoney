@@ -8,18 +8,37 @@ import type {
 
 const profile: Profile = {
   name: 'テスト太郎',
-  title: 'テスト党',
-  party: 'テスト党',
+  title: '（デモ用）',
+  party: 'ポリマネー党',
+  birth_year: 1980,
+  birth_place: '東京都',
   image: '/demo-example.png',
+  description:
+    'ポリマネー党の代表。架空の人物です。ポリマネー党の代表。架空の人物です。ポリマネー党の代表。架空の人物です。',
 };
 
 const reports: Report[] = [
   {
-    id: 'demo-example',
+    id: 'demo-example-2023',
+    year: 2023,
     totalIncome: 111111,
     totalExpense: 100000,
     totalBalance: 11111,
-    year: 2023,
+    orgType: 'その他の政治団体',
+    orgName: 'テストの会',
+    activityArea: '2以上の都道府県の区域等',
+    representative: 'テスト花子',
+    fundManagementOrg: '有/参議院議員(現職)テスト花子',
+    accountingManager: 'テスト花子',
+    administrativeManager: 'テスト花子',
+    lastUpdate: '2024年1月1日',
+  },
+  {
+    id: 'demo-example-2024',
+    year: 2024,
+    totalIncome: 111111,
+    totalExpense: 100000,
+    totalBalance: 11111,
     orgType: 'その他の政治団体',
     orgName: 'テストの会',
     activityArea: '2以上の都道府県の区域等',
@@ -31,10 +50,7 @@ const reports: Report[] = [
   },
 ];
 
-const report = reports[0];
-
 const flows: Flow[] = [
-  // 収入
   {
     id: 'i11',
     name: '個人からの寄附',
@@ -49,8 +65,6 @@ const flows: Flow[] = [
     value: 111111,
     parent: null,
   },
-
-  // 支出
   {
     id: 'e11',
     name: '経常経費',
@@ -97,17 +111,39 @@ const transactions: Transaction[] = [
   },
 ];
 
-const data: AccountingReports = {
-  id: 'demo-example',
-  latestReportId: 'demo-example',
-  profile,
-  datas: [
-    {
-      report: report,
-      flows: flows,
-      transactions: transactions,
-    },
-  ],
+const data2023 = {
+  report: reports[0],
+  flows,
+  transactions,
 };
 
-export default data;
+const data2024 = {
+  report: reports[1],
+  flows,
+  transactions,
+};
+
+const accountingReports: AccountingReports = {
+  id: 'demo-example',
+  latestReportId: 'demo-example-2024',
+  profile,
+  datas: [data2023, data2024],
+};
+
+const dataByYear: Record<number, any> = {
+  2023: data2023,
+  2024: data2024,
+};
+
+export const getDataByYear = (year: number) => {
+  const dataForYear = dataByYear[year];
+  if (!dataForYear) {
+    return null;
+  }
+  return {
+    profile,
+    datas: [dataForYear],
+  };
+};
+
+export default accountingReports;
