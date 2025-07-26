@@ -65,7 +65,9 @@ export default async function Page({
   return (
     <Box>
       <Header />
+      {/* ✅ 修正箇所 */}
       <BoardSummary
+        politicianId={id}
         profile={data.profile}
         report={reportData.report}
         otherReports={data.datas.map((d) => d.report)}

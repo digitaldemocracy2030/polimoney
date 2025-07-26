@@ -5,11 +5,14 @@ import { BoardSummary } from '@/components/BoardSummary';
 import { BoardTransactions } from '@/components/BoardTransactions';
 import type { AccountingReports } from '@/models/type';
 
+// ✅ 1. PropsにpoliticianIdを追加
 interface BoardProps {
   data: AccountingReports | null;
+  politicianId: string;
 }
 
-export function Board({ data }: BoardProps) {
+// ✅ 2. 引数でpoliticianIdを受け取る
+export function Board({ data, politicianId }: BoardProps) {
   if (!data) return <></>;
 
   const reportData = data.datas.find(
@@ -18,7 +21,9 @@ export function Board({ data }: BoardProps) {
   if (!reportData) return null;
   return (
     <>
+      {/* ✅ 3. BoardSummaryにpoliticianIdを渡す */}
       <BoardSummary
+        politicianId={politicianId}
         profile={data.profile}
         report={reportData.report}
         otherReports={data.datas.map((d) => d.report)}

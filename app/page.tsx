@@ -27,17 +27,27 @@ type Entry = {
   latestReportId: string;
   profile: ProfileList;
 };
-const entries: Entry[] = [
+const politicianEntries: Entry[] = [
   demoTakahiroAnno,
   demoRyosukeIdei,
   demoKokiFujisaki,
   demoExample,
-  ...Array.from({ length: comingSoonNum }, (_, i) => ({
+].map((data) => ({
+  id: data.id,
+  latestReportId: data.latestReportId,
+  profile: data.profile,
+}));
+
+const comingSoonEntries: Entry[] = Array.from(
+  { length: comingSoonNum },
+  (_, i) => ({
     ...demoComingsoon,
     id: `${comingSoonId}-${i}`,
     latestReportId: `${comingSoonId}-${i}`,
-  })),
-];
+  }),
+);
+
+const entries: Entry[] = [...politicianEntries, ...comingSoonEntries];
 
 export const metadata = {
   title: 'Polimoney - 政治資金の透明性を高める',
@@ -52,11 +62,16 @@ export default function Page() {
       <SimpleGrid columns={{ base: 1, lg: 2 }} gap={5} mb={5} p={2}>
         {entries.map((entry) => (
           <Link
-            href={
-              !entry.latestReportId.startsWith(comingSoonId)
-                ? `/${entry.latestReportId}`
-                : '#'
-            }
+            href={(() => {
+              if (entry.latestReportId.startsWith(comingSoonId)) {
+                return '#';
+              }
+              const id = entry.latestReportId.replace('demo-', '');
+              const lastHyphenIndex = id.lastIndexOf('-');
+              const politicianId = id.substring(0, lastHyphenIndex);
+              const year = id.substring(lastHyphenIndex + 1);
+              return `/${politicianId}/${year}`;
+            })()}
             key={entry.latestReportId}
           >
             <Card.Root

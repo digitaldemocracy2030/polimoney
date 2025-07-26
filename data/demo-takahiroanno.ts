@@ -228,4 +228,21 @@ const data: AccountingReports = {
   ],
 };
 
+const dataByYear: Record<number, any> = {
+  2024: {
+    profile,
+    datas: [
+      {
+        report: reports[0],
+        flows,
+        transactions,
+      },
+    ],
+  },
+};
+
+export function getDataByYear(year: number) {
+  return dataByYear[year];
+}
+
 export default data;
