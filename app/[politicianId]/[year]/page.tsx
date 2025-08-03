@@ -8,6 +8,7 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
 import { politicianDataMap } from '@/data/politician-data';
+import type { Report } from '@/models/type';
 
 // ✅ 修正点: paramsの型をPromiseでラップする
 type Props = {
@@ -20,9 +21,8 @@ type Props = {
 export async function generateStaticParams() {
   const params = Object.entries(politicianDataMap).flatMap(
     ([politicianId, dataModule]) => {
-      const reports =
-        (dataModule.default as any)?.datas?.map((d: any) => d.report) || [];
-      return reports.map((report: any) => ({
+      const reports = dataModule.default?.datas?.map((d) => d.report) || [];
+      return reports.map((report: Report) => ({
         politicianId: politicianId,
         year: String(report.year),
       }));
@@ -44,7 +44,9 @@ function getPoliticianData(politicianId: string, year: string) {
     return null;
   }
 
-  const allReports = dataModule.default.datas.map((d: any) => d.report);
+  const allReports: Report[] = dataModule.default.datas.map(
+    (d: any) => d.report,
+  );
   return {
     yearData,
     allReports,
