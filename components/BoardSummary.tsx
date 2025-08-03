@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react';
 import html2canvas from 'html2canvas';
 import { LandmarkIcon } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { BoardChart } from '@/components/BoardChart';
 import { BoardContainer } from '@/components/BoardContainer';
@@ -36,9 +35,7 @@ export function BoardSummary({
   flows,
   useFixedBoardChart = false,
 }: Props) {
-  const router = useRouter();
   const [copied, setCopied] = useState(false);
-  const pathname = usePathname();
 
   // 現在のパスから現在のレポートIDを取得
   const currentReportId = report.id;
