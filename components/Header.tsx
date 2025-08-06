@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import SNSSharePanel from './SNSSharePanel';
 
-export function Header() {
+export function Header({ profileName }: { profileName?: string }) {
   const pathname = usePathname();
 
   return (
@@ -32,7 +32,7 @@ export function Header() {
             <Link href={'#summary'}>収支の流れ</Link>
             <Link href={'#income'}>収入の一覧</Link>
             <Link href={'#expense'}>支出の一覧</Link>
-            <SNSSharePanel className="mr-4" />
+            <SNSSharePanel profileName={profileName ?? ''} className="mr-4" />
           </HStack>
         )}
       </HStack>

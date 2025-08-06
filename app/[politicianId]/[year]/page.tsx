@@ -82,7 +82,7 @@ export default async function Page({ params }: Props) {
 
   return (
     <Box>
-      <Header />
+      <Header profileName={data.yearData.profile.name} />
       <BoardSummary
         politicianId={politicianId}
         profile={yearData.profile}
