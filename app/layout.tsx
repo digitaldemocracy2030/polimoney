@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     images: ['/ogp/polimoney.png'],
   },
   other: {
-    thumbnail: '/ogp/polimoney.png',
+    thumbnail: 'https://polimoney.dd2030.org/ogp/polimoney.png',
   },
 };
 
