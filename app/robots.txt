@@ -1,4 +1,6 @@
 User-agent: *
 Disallow: /demo-ryosukeidei.jpg
 Disallow: /demo-takahiroanno.jpg
+Disallow: /demo-kokifujisaki.jpg
 Allow: / 
+Allow: /ogp
