@@ -39,37 +39,35 @@ export function Header({ profileName }: { profileName?: string }) {
               <Heading fontSize={'3xl'}>Polimoney</Heading>
             </Link>
           </Box>
-
-          {/* デスクトップ用：右寄せナビゲーション */}
-          <HStack
-            display={{ base: 'none', lg: 'flex' }}
-            gap={8}
-            position="absolute"
-            right={{ base: 6, md: 10 }}
-          >
-            <HStack fontSize={'sm'} fontWeight={'bold'} gap={8}>
-              <Link href={'#summary'}>収支の流れ</Link>
-              <Link href={'#income'}>収入の一覧</Link>
-              <Link href={'#expense'}>支出の一覧</Link>
-            </HStack>
-            {pathname !== '/' && (
-              <Box>
+          {pathname !== '/' && (
+            <>
+              {/* デスクトップ用：右寄せナビゲーション */}
+              <HStack
+                display={{ base: 'none', lg: 'flex' }}
+                gap={8}
+                position="absolute"
+                right={{ base: 6, md: 10 }}
+              >
+                <HStack fontSize={'sm'} fontWeight={'bold'} gap={8}>
+                  <Link href={'#summary'}>収支の流れ</Link>
+                  <Link href={'#income'}>収入の一覧</Link>
+                  <Link href={'#expense'}>支出の一覧</Link>
+                </HStack>
+                <Box>
+                  <SNSSharePanel profileName={profileName ?? ''} />
+                </Box>
+              </HStack>
+              {/* モバイル用：共有ボタン（右端に固定配置） */}
+              <Box
+                display={{ base: 'block', lg: 'none' }}
+                position="absolute"
+                right={{ base: 6, md: 10 }}
+                top="50%"
+                transform="translateY(-50%)"
+              >
                 <SNSSharePanel profileName={profileName ?? ''} />
               </Box>
-            )}
-          </HStack>
-
-          {/* モバイル用：共有ボタン（右端に固定配置） */}
-          {pathname !== '/' && (
-            <Box
-              display={{ base: 'block', lg: 'none' }}
-              position="absolute"
-              right={{ base: 6, md: 10 }}
-              top="50%"
-              transform="translateY(-50%)"
-            >
-              <SNSSharePanel profileName={profileName ?? ''} />
-            </Box>
+            </>
           )}
         </HStack>
       </Box>
