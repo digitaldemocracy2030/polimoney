@@ -64,6 +64,7 @@ func main() {
 	userController := controllers.NewUserController(db)
 	healthController := controllers.NewHealthController(db)
 	authController := controllers.NewAuthController(db)
+	profileController := controllers.NewProfileController(db)
 
 	// エンドポイントを設定
 	// ルートハンドラー (開発用)
@@ -91,6 +92,15 @@ func main() {
 				users.GET("", userController.GetAllUsers)     // 全ユーザー取得
 				users.GET("/:id", userController.GetUserByID) // 特定ユーザー取得
 			}
+		}
+
+		// マイページ (自分自身の情報)
+		profile := v1.Group("/profile")
+		profile.Use(middleware.JWTAuthMiddleware())
+		{
+			// TODO: マイページ以下のエンドポイント (データの確認・編集などを想定)
+			// マイページの取得 controllers/profile.go
+			profile.GET("", profileController.GetMyPage)
 		}
 	}
 
