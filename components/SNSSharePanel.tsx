@@ -11,13 +11,11 @@ import {
   XIcon,
 } from 'react-share';
 
-const titleMap: Record<string, string> = {
-  '/polimoney': 'Polimoney',
-};
-
 export default function SNSSharePanel({
+  profileName,
   className = '',
 }: {
+  profileName: string;
   className?: string;
 }) {
   const pathname = usePathname();
@@ -30,9 +28,9 @@ export default function SNSSharePanel({
   }, []);
 
   const siteTitle = 'Polimoney';
-  const title = titleMap[pathname];
-  const shareTitle = title ? `${siteTitle} - ${title}` : siteTitle;
+  const shareTitle = profileName ? `${profileName} - ${siteTitle}` : siteTitle;
   const url = `${origin}${pathname}`;
+  const hashTags = ['Polimoney', 'デジタル民主主義2030'];
 
   const SNSButtons = () => (
     <>
@@ -92,10 +90,10 @@ export default function SNSSharePanel({
       <LineShareButton url={url} title={shareTitle}>
         <LineIcon size={32} round />
       </LineShareButton>
-      <FacebookShareButton url={url} title={shareTitle}>
+      <FacebookShareButton url={url} title={shareTitle} hashtag={hashTags[0]}>
         <FacebookIcon size={32} round />
       </FacebookShareButton>
-      <TwitterShareButton url={url} title={shareTitle}>
+      <TwitterShareButton url={url} title={shareTitle} hashtags={hashTags}>
         <XIcon size={32} round />
       </TwitterShareButton>
     </>

@@ -17,7 +17,7 @@ export default function Page() {
 }
 
 function PreviewAlert() {
-  return <>
+  return (
     <Alert.Root status="warning">
       <Alert.Indicator />
       <Alert.Content>
@@ -26,5 +26,5 @@ function PreviewAlert() {
         </Alert.Description>
       </Alert.Content>
     </Alert.Root>
-  </>
+  );
 }
