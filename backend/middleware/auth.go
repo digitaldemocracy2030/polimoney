@@ -7,12 +7,18 @@ import (
 	"log"
 	"os"
 
+	"github.com/digitaldemocracy2030/polimoney/middleware/validators"
 	"github.com/digitaldemocracy2030/polimoney/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
 // Signup は新規ユーザー登録を行う
 func (um *UserMiddleware) Signup(username, email, password string) (*models.User, error) {
+	// Emailのバリデーション
+	if err := validators.ValidateEmail(email); err != nil {
+		return nil, fmt.Errorf("無効なメールアドレスです")
+	}
+
 	// パスワードをsha256ハッシュ化
 	// bcryptの72バイト制限回避のため
 	salt := os.Getenv("PASSWORD_SALT")
