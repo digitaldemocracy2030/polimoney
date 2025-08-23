@@ -2,7 +2,7 @@
 name: 🐛 DEVバグレポート
 about: システムの不具合や予期しない動作を報告する
 title: ""
-labels: ["DEV", bug"]
+labels: ["DEV", "bug"]
 assignees: ""
 ---
 
