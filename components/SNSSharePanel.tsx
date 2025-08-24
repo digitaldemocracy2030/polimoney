@@ -11,6 +11,85 @@ import {
   XIcon,
 } from 'react-share';
 
+const SNSButtons = ({
+  url,
+  shareTitle,
+  hashTags,
+  copied,
+  onCopy,
+}: {
+  url: string;
+  shareTitle: string;
+  hashTags: string[];
+  copied: boolean;
+  onCopy: () => void;
+}) => (
+  <>
+    {/* コピー用ボタン */}
+    <button
+      onClick={onCopy}
+      className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 border transition"
+      aria-label="URLをコピー"
+      type="button"
+    >
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <title>{copied ? 'コピー済み' : 'URLをコピー'}</title>
+        <circle
+          cx="16"
+          cy="16"
+          r="16"
+          fill={copied ? '#4ade80' : '#f3f4f6'}
+          stroke="#e5e7eb"
+        />
+        {copied ? (
+          // コピー済みアイコン（チェックマーク）
+          <path
+            d="M12 17l4 4 7-7"
+            stroke="#fff"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        ) : (
+          // コピーアイコン
+          <>
+            <rect
+              x="10"
+              y="12"
+              width="10"
+              height="10"
+              rx="2"
+              stroke="#555"
+              strokeWidth="2"
+              fill="none"
+            />
+            <rect
+              x="13"
+              y="9"
+              width="10"
+              height="10"
+              rx="2"
+              stroke="#555"
+              strokeWidth="2"
+              opacity="0.3"
+              fill="none"
+            />
+          </>
+        )}
+      </svg>
+    </button>
+    <LineShareButton url={url} title={shareTitle}>
+      <LineIcon size={32} round />
+    </LineShareButton>
+    <FacebookShareButton url={url} title={shareTitle} hashtag={hashTags[0]}>
+      <FacebookIcon size={32} round />
+    </FacebookShareButton>
+    <TwitterShareButton url={url} title={shareTitle} hashtags={hashTags}>
+      <XIcon size={32} round />
+    </TwitterShareButton>
+  </>
+);
+
 export default function SNSSharePanel({
   profileName,
   className = '',
@@ -32,73 +111,6 @@ export default function SNSSharePanel({
   const url = `${origin}${pathname}`;
   const hashTags = ['Polimoney', 'デジタル民主主義2030'];
 
-  const SNSButtons = () => (
-    <>
-      {/* コピー用ボタン */}
-      <button
-        onClick={handleCopy}
-        className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 border transition"
-        aria-label="URLをコピー"
-        type="button"
-      >
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <title>{copied ? 'コピー済み' : 'URLをコピー'}</title>
-          <circle
-            cx="16"
-            cy="16"
-            r="16"
-            fill={copied ? '#4ade80' : '#f3f4f6'}
-            stroke="#e5e7eb"
-          />
-          {copied ? (
-            // コピー済みアイコン（チェックマーク）
-            <path
-              d="M12 17l4 4 7-7"
-              stroke="#fff"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          ) : (
-            // コピーアイコン
-            <>
-              <rect
-                x="10"
-                y="12"
-                width="10"
-                height="10"
-                rx="2"
-                stroke="#555"
-                strokeWidth="2"
-                fill="none"
-              />
-              <rect
-                x="13"
-                y="9"
-                width="10"
-                height="10"
-                rx="2"
-                stroke="#555"
-                strokeWidth="2"
-                opacity="0.3"
-                fill="none"
-              />
-            </>
-          )}
-        </svg>
-      </button>
-      <LineShareButton url={url} title={shareTitle}>
-        <LineIcon size={32} round />
-      </LineShareButton>
-      <FacebookShareButton url={url} title={shareTitle} hashtag={hashTags[0]}>
-        <FacebookIcon size={32} round />
-      </FacebookShareButton>
-      <TwitterShareButton url={url} title={shareTitle} hashtags={hashTags}>
-        <XIcon size={32} round />
-      </TwitterShareButton>
-    </>
-  );
-
   const [visible, setVisible] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -117,7 +129,13 @@ export default function SNSSharePanel({
       {/* SNSボタン：SHAREボタンの左横に表示（中央揃え） */}
       {visible && (
         <div className="absolute right-full mr-2 top-1/2 -translate-y-1/2 flex gap-2 bg-white rounded shadow-lg p-2 z-20">
-          <SNSButtons />
+          <SNSButtons
+            url={url}
+            shareTitle={shareTitle}
+            hashTags={hashTags}
+            copied={copied}
+            onCopy={handleCopy}
+          />
           {/* ポップアップでコピー通知 */}
           {copied && (
             <div className="absolute left-1/2 -translate-x-1/2 -top-8 bg-black text-white text-xs rounded px-3 py-1 shadow z-30 whitespace-nowrap animate-fade-in">
