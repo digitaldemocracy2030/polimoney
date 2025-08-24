@@ -10,7 +10,6 @@ import { Notice } from '@/components/Notice';
 import { politicianDataMap } from '@/data/politician-data';
 import type { Report } from '@/models/type';
 
-// ✅ 修正点: paramsの型をPromiseでラップする
 type Props = {
   params: Promise<{
     politicianId: string;
@@ -35,7 +34,7 @@ export async function generateStaticParams() {
 function getPoliticianData(politicianId: string, year: string) {
   const dataModule = (politicianDataMap as any)[politicianId];
 
-  if (!dataModule || !dataModule.getDataByYear) {
+  if (!dataModule?.getDataByYear) {
     return null;
   }
 
