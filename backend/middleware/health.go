@@ -22,9 +22,9 @@ func NewHealthMiddleware(db *gorm.DB) *HealthMiddleware {
 func (hm *HealthMiddleware) GetHealthStatus() map[string]interface{} {
 	result := map[string]interface{}{
 		"overall_status": "healthy",
-		"message": "全て正常に稼働しています。",
+		"message":        "全て正常に稼働しています。",
 		"database": map[string]interface{}{
-			"status": "connected",
+			"status":  "connected",
 			"details": nil,
 		},
 	}
@@ -35,7 +35,7 @@ func (hm *HealthMiddleware) GetHealthStatus() map[string]interface{} {
 		result["overall_status"] = "unhealthy"
 		result["message"] = "データベースへの接続に失敗しました。"
 		result["database"] = map[string]interface{}{
-			"status": "disconnected",
+			"status":  "disconnected",
 			"details": err.Error(),
 		}
 		return result
@@ -47,7 +47,7 @@ func (hm *HealthMiddleware) GetHealthStatus() map[string]interface{} {
 		result["overall_status"] = "unhealthy"
 		result["message"] = "データベース統計情報の取得に失敗しました。"
 		result["database"] = map[string]interface{}{
-			"status": "connected",
+			"status":  "connected",
 			"details": err.Error(),
 		}
 		return result
@@ -55,7 +55,7 @@ func (hm *HealthMiddleware) GetHealthStatus() map[string]interface{} {
 
 	// 正常時は統計情報を格納
 	result["database"] = map[string]interface{}{
-		"status": "connected",
+		"status":  "connected",
 		"details": dbStats,
 	}
 

@@ -1,0 +1,40 @@
+name: Check Golang
+
+# プルリクエストが作成・更新された時にこのワークフローを実行
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    # backendディレクトリ配下の.goファイルに変更があった場合のみ実行
+    paths:
+      - 'backend/**.go'
+
+jobs:
+  # フォーマットチェックを行うジョブ
+  format-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. リポジトリのコードをチェックアウト
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Go言語の環境をセットアップ
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22' # プロジェクトで使用しているGoのバージョンを指定
+
+      # 3. gofmtでフォーマットをチェック
+      # -l オプションはフォーマットが崩れているファイル名を出力する
+      # 出力があった場合、ワークフローは失敗する
+      - name: Check formatting with gofmt
+        run: |
+          FMT_FILES=$(gofmt -l ./backend)
+
+          if [ -n "${FMT_FILES}" ]; then
+            echo "The following files are not formatted correctly:"
+            echo "${FMT_FILES}"
+            exit 1
+          fi
+
+          echo "All Go files are correctly formatted."

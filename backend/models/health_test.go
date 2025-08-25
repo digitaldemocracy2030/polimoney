@@ -57,7 +57,7 @@ func TestHealthRepository_GetDBStats(t *testing.T) {
 		// Assert
 		assert.NoError(t, err)
 		assert.NotNil(t, stats)
-		
+
 		// Check that all expected keys are present
 		expectedKeys := []string{
 			"open_connections",
@@ -69,11 +69,11 @@ func TestHealthRepository_GetDBStats(t *testing.T) {
 			"max_idle_time_closed",
 			"max_lifetime_closed",
 		}
-		
+
 		for _, key := range expectedKeys {
 			assert.Contains(t, stats, key)
 		}
-		
+
 		// Check that numeric values are valid
 		assert.GreaterOrEqual(t, stats["open_connections"], 0)
 		assert.GreaterOrEqual(t, stats["in_use"], 0)
@@ -82,7 +82,7 @@ func TestHealthRepository_GetDBStats(t *testing.T) {
 		assert.GreaterOrEqual(t, stats["max_idle_closed"], int64(0))
 		assert.GreaterOrEqual(t, stats["max_idle_time_closed"], int64(0))
 		assert.GreaterOrEqual(t, stats["max_lifetime_closed"], int64(0))
-		
+
 		// Check that wait_duration is a string
 		_, ok := stats["wait_duration"].(string)
 		assert.True(t, ok)

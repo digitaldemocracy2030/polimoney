@@ -8,17 +8,17 @@ import (
 
 // User はユーザー情報を表す構造体（GORMモデル）
 type User struct {
-	ID              uint       `json:"id" gorm:"primaryKey"`
-	Username        string     `json:"username" gorm:"uniqueIndex;not null"`
-	Email           string     `json:"email" gorm:"uniqueIndex;not null"`
-	PasswordHash    string     `json:"-" gorm:"column:password_hash;not null"` // JSONには含めない
-	RoleID          uint       `json:"role_id" gorm:"not null"`
-	IsActive        bool       `json:"is_active" gorm:"default:true"`
-	EmailVerified   bool       `json:"email_verified" gorm:"default:false"`
-	LastLogin       *time.Time `json:"last_login"`
-	CreatedAt       time.Time  `json:"created_at"`
-	UpdatedAt       time.Time  `json:"updated_at"`
-	Role            Role       `json:"role" gorm:"foreignKey:RoleID"` // リレーション定義
+	ID            uint       `json:"id" gorm:"primaryKey"`
+	Username      string     `json:"username" gorm:"uniqueIndex;not null"`
+	Email         string     `json:"email" gorm:"uniqueIndex;not null"`
+	PasswordHash  string     `json:"-" gorm:"column:password_hash;not null"` // JSONには含めない
+	RoleID        uint       `json:"role_id" gorm:"not null"`
+	IsActive      bool       `json:"is_active" gorm:"default:true"`
+	EmailVerified bool       `json:"email_verified" gorm:"default:false"`
+	LastLogin     *time.Time `json:"last_login"`
+	CreatedAt     time.Time  `json:"created_at"`
+	UpdatedAt     time.Time  `json:"updated_at"`
+	Role          Role       `json:"role" gorm:"foreignKey:RoleID"` // リレーション定義
 }
 
 // Role はロール情報を表す構造体（GORMモデル）

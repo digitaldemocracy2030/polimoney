@@ -126,16 +126,16 @@ func TestCheckRequiredEnvVariables(t *testing.T) {
 		// The command should exit with status 1
 		assert.Error(t, err)
 		outputStr := string(output)
-		
+
 		// Check all variables are listed
 		assert.Contains(t, outputStr, "・ENV")
 		assert.Contains(t, outputStr, "・PASSWORD_SALT")
 		assert.Contains(t, outputStr, "・JWT_SECRET")
-		
+
 		// Check error message
 		assert.Contains(t, outputStr, "環境変数が設定されていません")
 		assert.Contains(t, outputStr, "cp .env.example .env")
-		
+
 		// Check export commands are shown
 		assert.Contains(t, outputStr, "export ENV=your_value")
 		assert.Contains(t, outputStr, "export PASSWORD_SALT=your_value")
@@ -160,22 +160,22 @@ func TestCheckRequiredEnvVariables(t *testing.T) {
 		// The command should exit with status 1
 		assert.Error(t, err)
 		outputStr := string(output)
-		
+
 		// ENV should not be listed as it's set
 		assert.NotContains(t, outputStr, "・ENV")
-		
+
 		// PASSWORD_SALT and JWT_SECRET should be listed
 		assert.Contains(t, outputStr, "・PASSWORD_SALT")
 		assert.Contains(t, outputStr, "・JWT_SECRET")
-		
+
 		// Check error message
 		assert.Contains(t, outputStr, "環境変数が設定されていません")
-		
+
 		// Count occurrences of missing variables
 		envCount := strings.Count(outputStr, "・ENV")
 		saltCount := strings.Count(outputStr, "・PASSWORD_SALT")
 		jwtCount := strings.Count(outputStr, "・JWT_SECRET")
-		
+
 		assert.Equal(t, 0, envCount, "ENV should not be listed as missing")
 		assert.Equal(t, 1, saltCount, "PASSWORD_SALT should be listed once")
 		assert.Equal(t, 1, jwtCount, "JWT_SECRET should be listed once")

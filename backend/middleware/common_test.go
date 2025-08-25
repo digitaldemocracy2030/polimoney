@@ -51,10 +51,10 @@ func TestCORS(t *testing.T) {
 
 func TestDatabaseMiddleware(t *testing.T) {
 	router := setupTestRouter()
-	
+
 	// Create a mock database
 	db := &gorm.DB{}
-	
+
 	router.Use(DatabaseMiddleware(db))
 	router.GET("/test", func(c *gin.Context) {
 		dbFromContext, exists := c.Get("db")
@@ -104,7 +104,7 @@ func TestErrorHandler(t *testing.T) {
 func TestRequestID(t *testing.T) {
 	router := setupTestRouter()
 	router.Use(RequestID())
-	
+
 	var capturedRequestID string
 	router.GET("/test", func(c *gin.Context) {
 		requestID, exists := c.Get("request_id")
@@ -163,7 +163,7 @@ func TestHTTPSRedirect(t *testing.T) {
 
 	t.Run("uses trusted host from env", func(t *testing.T) {
 		os.Setenv("TRUSTED_HOST", "trusted.example.com")
-		
+
 		router := setupTestRouter()
 		router.Use(HTTPSRedirect())
 		router.GET("/test", func(c *gin.Context) {
@@ -277,7 +277,7 @@ func TestJWTAuthMiddleware(t *testing.T) {
 	t.Run("valid token", func(t *testing.T) {
 		router := setupTestRouter()
 		router.Use(JWTAuthMiddleware())
-		
+
 		var capturedUserID interface{}
 		router.GET("/protected", func(c *gin.Context) {
 			capturedUserID, _ = c.Get("user_id")
