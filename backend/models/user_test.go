@@ -41,7 +41,7 @@ func TestUserRepository_GetAllUsers(t *testing.T) {
 	t.Run("successful retrieval", func(t *testing.T) {
 		// Set up mock expectations
 		now := time.Now()
-		
+
 		// Mock for main query
 		rows := sqlmock.NewRows([]string{
 			"id", "username", "email", "password_hash", "role_id",

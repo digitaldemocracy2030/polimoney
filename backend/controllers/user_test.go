@@ -423,9 +423,9 @@ func TestNewUserController(t *testing.T) {
 	}()
 
 	controller := NewUserController(db)
-	
+
 	assert.NotNil(t, controller)
 	assert.NotNil(t, controller.userMiddleware)
-	
+
 	assert.NoError(t, mock.ExpectationsWereMet())
 }

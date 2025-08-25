@@ -37,12 +37,12 @@ func (r *HealthRepository) GetDBStats() (map[string]interface{}, error) {
 
 	return map[string]interface{}{
 		"open_connections":     stats.OpenConnections,
-		"in_use":              stats.InUse,
-		"idle":                stats.Idle,
-		"wait_count":          stats.WaitCount,
-		"wait_duration":       stats.WaitDuration.String(),
-		"max_idle_closed":     stats.MaxIdleClosed,
+		"in_use":               stats.InUse,
+		"idle":                 stats.Idle,
+		"wait_count":           stats.WaitCount,
+		"wait_duration":        stats.WaitDuration.String(),
+		"max_idle_closed":      stats.MaxIdleClosed,
 		"max_idle_time_closed": stats.MaxIdleTimeClosed,
-		"max_lifetime_closed": stats.MaxLifetimeClosed,
+		"max_lifetime_closed":  stats.MaxLifetimeClosed,
 	}, nil
 }

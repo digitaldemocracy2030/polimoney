@@ -59,8 +59,8 @@ func TestUserMiddleware_Signup(t *testing.T) {
 		mock.ExpectQuery("INSERT INTO \"users\"").
 			WithArgs(
 				username, email, sqlmock.AnyArg(), // password hash will vary
-				2,                                  // roleID
-				true, false, nil,                   // isActive, emailVerified, lastLogin
+				2,                // roleID
+				true, false, nil, // isActive, emailVerified, lastLogin
 				sqlmock.AnyArg(), sqlmock.AnyArg(), // createdAt, updatedAt
 			).
 			WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
@@ -76,11 +76,11 @@ func TestUserMiddleware_Signup(t *testing.T) {
 		assert.Equal(t, email, user.Email)
 		assert.Equal(t, uint(2), user.RoleID)
 		assert.NotEmpty(t, user.PasswordHash)
-		
+
 		// Verify password was hashed correctly
 		assert.NotEqual(t, password, user.PasswordHash)
 		assert.True(t, len(user.PasswordHash) > 50) // bcrypt hashes are typically 60 chars
-		
+
 		assert.NoError(t, mock.ExpectationsWereMet())
 	})
 

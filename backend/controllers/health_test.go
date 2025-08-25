@@ -126,7 +126,7 @@ func TestHealthController_HealthCheck(t *testing.T) {
 		// but the middleware returns overall_status, not status
 		// So this condition will never be true in the current implementation
 		// This is a potential bug in the controller logic
-		
+
 		// For now, we'll document this behavior
 		mock.ExpectPing()
 
@@ -156,9 +156,9 @@ func TestNewHealthController(t *testing.T) {
 	}()
 
 	controller := NewHealthController(db)
-	
+
 	assert.NotNil(t, controller)
 	assert.NotNil(t, controller.healthMiddleware)
-	
+
 	assert.NoError(t, mock.ExpectationsWereMet())
 }

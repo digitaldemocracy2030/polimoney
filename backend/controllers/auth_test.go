@@ -11,13 +11,13 @@ import (
 	"testing"
 	"time"
 
+	"crypto/sha256"
+	"encoding/hex"
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"crypto/sha256"
-	"encoding/hex"
 )
 
 func TestUserController_Signup(t *testing.T) {
@@ -59,9 +59,9 @@ func TestUserController_Signup(t *testing.T) {
 		dbMock.ExpectBegin()
 		dbMock.ExpectQuery("INSERT INTO \"users\"").
 			WithArgs(
-				"testuser", "test@example.com", 
+				"testuser", "test@example.com",
 				sqlmock.AnyArg(), // password hash
-				2, // role_id
+				2,                // role_id
 				true, false, nil,
 				sqlmock.AnyArg(), sqlmock.AnyArg(),
 			).
