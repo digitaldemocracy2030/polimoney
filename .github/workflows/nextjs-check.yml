@@ -3,6 +3,16 @@ name: Check Next.js
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'data/**'
+      - 'models/**'
+      - 'public/**'
+      - 'next.config.ts'
+      - 'tsconfig.json'
+      - 'package.json'
+      - 'package-lock.json'
 
 jobs:
   lint:
@@ -58,7 +68,6 @@ jobs:
           else
             yarn run lint
           fi
-      
       - name: Build
         run: |
           if [ "${{ steps.detect-package-manager.outputs.manager }}" = "npm" ]; then
