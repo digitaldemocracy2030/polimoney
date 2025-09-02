@@ -1,8 +1,10 @@
+import json
 import logging
 import sys
 
 import openpyxl
 
+from wakayama.building import get_building
 from wakayama.income import get_income
 from wakayama.personnel import get_personnel
 
@@ -18,7 +20,7 @@ def analyze(input_file):
     # 各シートを取得
     income = wb["収入"]
     personnel = wb["人件"]
-    # building = wb["家屋"]
+    building = wb["家屋"]
     # communication = wb["通信"]
     # transportation = wb["交通"]
     # printing = wb["印刷"]
@@ -30,8 +32,16 @@ def analyze(input_file):
     # total = wb["合計"]
 
     # 分析
-    get_income(income)
-    get_personnel(personnel)
+    income_data = get_income(income)
+    personnel_data = get_personnel(personnel)
+    building_data = get_building(building)
+
+    with open("income_data.json", "w", encoding="utf-8") as f:
+        json.dump(income_data, f, indent=4, ensure_ascii=False)
+    with open("personnel_data.json", "w", encoding="utf-8") as f:
+        json.dump(personnel_data, f, indent=4, ensure_ascii=False)
+    with open("building_data.json", "w", encoding="utf-8") as f:
+        json.dump(building_data, f, indent=4, ensure_ascii=False)
 
 
 def main():
