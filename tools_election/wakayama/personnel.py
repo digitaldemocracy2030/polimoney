@@ -1,5 +1,3 @@
-import json
-
 from openpyxl import utils
 from openpyxl.worksheet.worksheet import Worksheet
 
@@ -83,7 +81,10 @@ def get_total_personnel(personnel: Worksheet):
 
 def get_personnel(personnel: Worksheet):
     individual_personnel = get_individual_personnel(personnel)
-    print(json.dumps(individual_personnel, indent=4, ensure_ascii=False))
 
     total_personnel = get_total_personnel(personnel)
-    print(json.dumps(total_personnel, indent=4, ensure_ascii=False))
+
+    return {
+        "individual_personnel": individual_personnel,
+        "total_personnel": total_personnel,
+    }

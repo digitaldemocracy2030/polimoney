@@ -1,4 +1,3 @@
-import json
 import re
 
 from openpyxl import utils
@@ -143,10 +142,13 @@ def get_public_expense_equivalent(income: Worksheet):
 
 def get_income(income: Worksheet):
     individual_income = get_individual_income(income)
-    print(json.dumps(individual_income, indent=4, ensure_ascii=False))
 
     total_income = get_total_income(income)
-    print(json.dumps(total_income, indent=4, ensure_ascii=False))
 
     public_expense_equivalent = get_public_expense_equivalent(income)
-    print(json.dumps(public_expense_equivalent, indent=4, ensure_ascii=False))
+
+    return {
+        "individual_income": individual_income,
+        "total_income": total_income,
+        "public_expense_equivalent": public_expense_equivalent,
+    }
