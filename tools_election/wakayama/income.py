@@ -65,7 +65,7 @@ def get_total_income(income: Worksheet):
     min_row = 7
 
     for row in income.iter_rows(min_row=min_row, max_col=C_COL + 1):
-        # A列が "計" でない場合はスキップ
+        # B列が寄附, その他の収入, 計, 総計のいずれでもなければスキップ
         if row[B_COL].value not in ["寄附", "その他の収入", "計", "総計"]:
             continue
         # 9行取得したら終了

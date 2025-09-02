@@ -4,6 +4,7 @@ import sys
 import openpyxl
 
 from wakayama.income import get_income
+from wakayama.personnel import get_personnel
 
 # ログ設定
 logging.basicConfig(
@@ -16,7 +17,7 @@ def analyze(input_file):
 
     # 各シートを取得
     income = wb["収入"]
-    # personnel = wb["人件"]
+    personnel = wb["人件"]
     # building = wb["家屋"]
     # communication = wb["通信"]
     # transportation = wb["交通"]
@@ -30,6 +31,7 @@ def analyze(input_file):
 
     # 分析
     get_income(income)
+    get_personnel(personnel)
 
 
 def main():
