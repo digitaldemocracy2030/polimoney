@@ -74,7 +74,11 @@ def get_total_election_office(building: Worksheet):
         if count == 3:
             break
 
-        total_building_data.append({"name": value_str, "price": row[C_COL].value})
+        price_value = row[C_COL].value
+        # Excelの計算による小数点誤差を避けるため、整数に変換
+        if price_value is not None:
+            price_value = int(price_value)
+        total_building_data.append({"name": value_str, "price": price_value})
         count += 1
 
     return total_building_data
@@ -163,7 +167,11 @@ def get_total_meeting_venue(building: Worksheet):
         if count == 3:
             break
 
-        total_meeting_venue_data.append({"name": value_str, "price": row[C_COL].value})
+        price_value = row[C_COL].value
+        # Excelの計算による小数点誤差を避けるため、整数に変換
+        if price_value is not None:
+            price_value = int(price_value)
+        total_meeting_venue_data.append({"name": value_str, "price": price_value})
         count += 1
 
     return total_meeting_venue_data

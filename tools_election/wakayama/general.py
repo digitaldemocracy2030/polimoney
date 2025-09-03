@@ -28,12 +28,14 @@ def get_individual_general(general: Worksheet):
         purpose_cell = row[F_COL]
         note_cell = row[K_COL]
         # Noneになったら終了
-        if date_cell.value is None:
+        if price_cell.value is None:
             break
 
         general_data.append(
             {
-                "date": date_cell.value.strftime("%Y-%m-%d"),
+                "date": date_cell.value.strftime("%Y-%m-%d")
+                if date_cell.value
+                else None,  # 日付は無い場合もある
                 "price": int(price_cell.value),
                 "category": category_cell.value,
                 "purpose": purpose_cell.value,
@@ -73,18 +75,22 @@ def get_total_general(general: Worksheet):
         if count == 3:
             break
 
-        total_general_data.append({"name": value_str, "price": row[C_COL].value})
+        price_value = row[C_COL].value
+        # Excelの計算による小数点誤差を避けるため、整数に変換
+        if price_value is not None:
+            price_value = int(price_value)
+        total_general_data.append({"name": value_str, "price": price_value})
         count += 1
 
     return total_general_data
 
 
-def get_general(general: Worksheet):
+def get_general(general: Worksheet, name: str):
     individual_general = get_individual_general(general)
 
     total_general = get_total_general(general)
 
     return {
-        "individual_general": individual_general,
-        "total_general": total_general,
+        f"individual_{name}": individual_general,
+        f"total_{name}": total_general,
     }
