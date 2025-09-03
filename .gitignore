@@ -28,6 +28,7 @@
 /tools/merged_files/*.json
 /tools/merged_files/*.csv
 /tools/*.pdf
+/tools_election/output_json/*.json
 
 # debug
 npm-debug.log*
