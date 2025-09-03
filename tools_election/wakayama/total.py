@@ -19,7 +19,7 @@ def extract_number(value):
         value: 抽出対象の値（数値、文字列など）
 
     Returns:
-        int or None: 抽出された数値（小数点がある場合は整数に変換）、抽出できない場合はNone
+        int or float or None: 抽出された数値（小数点がある場合は整数に変換）、抽出できない場合はNone
     """
     if value is None:
         return None
