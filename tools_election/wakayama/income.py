@@ -74,6 +74,9 @@ def get_total_income(income: Worksheet):
         name_value = row[B_COL].value
         price_value = row[C_COL].value
 
+        # Excelの計算による小数点誤差を避けるため、整数に変換
+        if price_value is not None:
+            price_value = int(price_value)
         total_income_data.append({"name": name_value, "price": price_value})
         count += 1
 

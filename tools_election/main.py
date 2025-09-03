@@ -7,6 +7,7 @@ import openpyxl
 from wakayama.building import get_building
 from wakayama.general import get_general
 from wakayama.income import get_income
+from wakayama.total import get_total
 
 # ログ設定
 logging.basicConfig(
@@ -31,52 +32,52 @@ def analyze(input_file):
     building = wb["家屋"]
     communication = wb["通信"]
     transportation = wb["交通"]
-    # printing = wb["印刷"]
+    printing = wb["印刷"]
     advertising = wb["広告"]
     stationery = wb["文具"]
     food = wb["食料"]
     accommodation = wb["休泊"]
     miscellaneous = wb["雑費"]
-    # total = wb["合計"]
+    total = wb["支出 (計)"]
 
     # 分析
     income_data = get_income(income)  # 収入
-    personnel_data = get_general(personnel)  # 人件
+    personnel_data = get_general(personnel, "personnel")  # 人件
     building_data = get_building(building)  # 家屋
-    communication_data = get_general(communication)  # 通信
-    transportation_data = get_general(transportation)  # 交通
-    # printing_data = get_printing(printing)  # 印刷
-    advertising_data = get_general(advertising)  # 広告
-    stationery_data = get_general(stationery)  # 文具
-    food_data = get_general(food)  # 食料
-    accommodation_data = get_general(accommodation)  # 休泊
-    miscellaneous_data = get_general(miscellaneous)  # 雑費
-    # total_data = get_total(total)  # 合計
+    communication_data = get_general(communication, "communication")  # 通信
+    transportation_data = get_general(transportation, "transportation")  # 交通
+    printing_data = get_general(printing, "printing")  # 印刷
+    advertising_data = get_general(advertising, "advertising")  # 広告
+    stationery_data = get_general(stationery, "stationery")  # 文具
+    food_data = get_general(food, "food")  # 食料
+    accommodation_data = get_general(accommodation, "accommodation")  # 休泊
+    miscellaneous_data = get_general(miscellaneous, "miscellaneous")  # 雑費
+    total_data = get_total(total)  # 合計
 
-    with open("income_data.json", "w", encoding="utf-8") as f:
+    with open("output_json/income_data.json", "w", encoding="utf-8") as f:
         json.dump(income_data, f, indent=4, ensure_ascii=False)
-    with open("personnel_data.json", "w", encoding="utf-8") as f:
+    with open("output_json/personnel_data.json", "w", encoding="utf-8") as f:
         json.dump(personnel_data, f, indent=4, ensure_ascii=False)
-    with open("building_data.json", "w", encoding="utf-8") as f:
+    with open("output_json/building_data.json", "w", encoding="utf-8") as f:
         json.dump(building_data, f, indent=4, ensure_ascii=False)
-    with open("communication_data.json", "w", encoding="utf-8") as f:
+    with open("output_json/communication_data.json", "w", encoding="utf-8") as f:
         json.dump(communication_data, f, indent=4, ensure_ascii=False)
-    with open("transportation_data.json", "w", encoding="utf-8") as f:
+    with open("output_json/transportation_data.json", "w", encoding="utf-8") as f:
         json.dump(transportation_data, f, indent=4, ensure_ascii=False)
-    # with open("printing_data.json", "w", encoding="utf-8") as f:
-    #     json.dump(printing_data, f, indent=4, ensure_ascii=False)
-    with open("advertising_data.json", "w", encoding="utf-8") as f:
+    with open("output_json/printing_data.json", "w", encoding="utf-8") as f:
+        json.dump(printing_data, f, indent=4, ensure_ascii=False)
+    with open("output_json/advertising_data.json", "w", encoding="utf-8") as f:
         json.dump(advertising_data, f, indent=4, ensure_ascii=False)
-    with open("stationery_data.json", "w", encoding="utf-8") as f:
+    with open("output_json/stationery_data.json", "w", encoding="utf-8") as f:
         json.dump(stationery_data, f, indent=4, ensure_ascii=False)
-    with open("food_data.json", "w", encoding="utf-8") as f:
+    with open("output_json/food_data.json", "w", encoding="utf-8") as f:
         json.dump(food_data, f, indent=4, ensure_ascii=False)
-    with open("accommodation_data.json", "w", encoding="utf-8") as f:
+    with open("output_json/accommodation_data.json", "w", encoding="utf-8") as f:
         json.dump(accommodation_data, f, indent=4, ensure_ascii=False)
-    with open("miscellaneous_data.json", "w", encoding="utf-8") as f:
+    with open("output_json/miscellaneous_data.json", "w", encoding="utf-8") as f:
         json.dump(miscellaneous_data, f, indent=4, ensure_ascii=False)
-    # with open("total_data.json", "w", encoding="utf-8") as f:
-    #     json.dump(total_data, f, indent=4, ensure_ascii=False)
+    with open("output_json/total_data.json", "w", encoding="utf-8") as f:
+        json.dump(total_data, f, indent=4, ensure_ascii=False)
 
 
 def main():
