@@ -1,5 +1,7 @@
 import json
 import logging
+import os
+import re
 import sys
 
 import openpyxl
@@ -54,30 +56,31 @@ def analyze(input_file):
     miscellaneous_data = get_general(miscellaneous, "miscellaneous")  # 雑費
     total_data = get_total(total)  # 合計
 
-    with open("output_json/income_data.json", "w", encoding="utf-8") as f:
-        json.dump(income_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/personnel_data.json", "w", encoding="utf-8") as f:
-        json.dump(personnel_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/building_data.json", "w", encoding="utf-8") as f:
-        json.dump(building_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/communication_data.json", "w", encoding="utf-8") as f:
-        json.dump(communication_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/transportation_data.json", "w", encoding="utf-8") as f:
-        json.dump(transportation_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/printing_data.json", "w", encoding="utf-8") as f:
-        json.dump(printing_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/advertising_data.json", "w", encoding="utf-8") as f:
-        json.dump(advertising_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/stationery_data.json", "w", encoding="utf-8") as f:
-        json.dump(stationery_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/food_data.json", "w", encoding="utf-8") as f:
-        json.dump(food_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/accommodation_data.json", "w", encoding="utf-8") as f:
-        json.dump(accommodation_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/miscellaneous_data.json", "w", encoding="utf-8") as f:
-        json.dump(miscellaneous_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/total_data.json", "w", encoding="utf-8") as f:
-        json.dump(total_data, f, indent=4, ensure_ascii=False)
+    # ファイル名に使えない文字を_に変換
+    safe_input_file = re.sub(r'[\\/:*?"<>|]', "_", input_file)
+
+    # フォルダを作成
+    os.makedirs(f"output_json/{safe_input_file}", exist_ok=True)
+
+    data_list = [
+        ("income_data.json", income_data),
+        ("personnel_data.json", personnel_data),
+        ("building_data.json", building_data),
+        ("communication_data.json", communication_data),
+        ("transportation_data.json", transportation_data),
+        ("printing_data.json", printing_data),
+        ("advertising_data.json", advertising_data),
+        ("stationery_data.json", stationery_data),
+        ("food_data.json", food_data),
+        ("accommodation_data.json", accommodation_data),
+        ("miscellaneous_data.json", miscellaneous_data),
+        ("total_data.json", total_data),
+    ]
+
+    for file_name, data in data_list:
+        path = f"output_json/{safe_input_file}/{file_name}"
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
 
 
 def main():

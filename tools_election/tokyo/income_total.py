@@ -1,12 +1,8 @@
 import re
 
-from openpyxl import utils
 from openpyxl.worksheet.worksheet import Worksheet
 
-# AからCの列インデックスを取得（0始まり）
-A_COL = utils.column_index_from_string("A") - 1
-B_COL = utils.column_index_from_string("B") - 1
-C_COL = utils.column_index_from_string("C") - 1
+from util import B_COL, C_COL
 
 
 def get_individual_income_total(income_total: Worksheet):

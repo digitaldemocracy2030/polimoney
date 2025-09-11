@@ -1,14 +1,6 @@
-from openpyxl import utils
 from openpyxl.worksheet.worksheet import Worksheet
 
-from util import extract_number
-
-# AからJの列インデックスを取得（0始まり）
-A_COL = utils.column_index_from_string("A") - 1
-B_COL = utils.column_index_from_string("B") - 1
-C_COL = utils.column_index_from_string("C") - 1
-D_COL = utils.column_index_from_string("D") - 1
-I_COL = utils.column_index_from_string("I") - 1
+from util import A_COL, B_COL, C_COL, D_COL, I_COL, extract_number
 
 
 def get_individual_general(general: Worksheet):
