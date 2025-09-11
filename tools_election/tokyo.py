@@ -20,7 +20,7 @@ def analyze(input_file):
     """
     指定されたExcelファイルを解析し、各シートのデータをJSONファイルとして出力する。
 
-    人件・通信・交通・広告・文具・食料・休泊・雑費は同じフォーマットで処理される。
+    収入・収入計・支出計以外は同じフォーマットで処理される。
 
     Args:
         input_file (str): 解析対象のExcelファイルのパス
@@ -75,7 +75,7 @@ def analyze(input_file):
 
 def main():
     if len(sys.argv) != 2:
-        logging.error("python wakayama.py <input_file> と入力してください")
+        logging.error("python tokyo.py <input_file> と入力してください")
         sys.exit(1)
 
     logging.info(f"分析を開始します: {sys.argv[1]}")

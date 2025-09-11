@@ -1,3 +1,5 @@
+import datetime
+
 from openpyxl.worksheet.worksheet import Worksheet
 
 from util import A_COL, B_COL, C_COL, H_COL, extract_number
@@ -37,7 +39,11 @@ def get_individual_income(income: Worksheet):
 
         income_data.append(
             {
-                "date": date_cell.value.strftime("%Y-%m-%d"),
+                "date": (
+                    date_cell.value.strftime("%Y-%m-%d")
+                    if isinstance(date_cell.value, (datetime.date, datetime.datetime))
+                    else None
+                ),
                 "price": extract_number(price_cell.value),
                 "category": category_cell.value,
                 "note": note_cell.value,

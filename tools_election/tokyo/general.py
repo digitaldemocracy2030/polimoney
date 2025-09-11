@@ -1,3 +1,5 @@
+import datetime
+
 from openpyxl.worksheet.worksheet import Worksheet
 
 from util import A_COL, B_COL, C_COL, D_COL, I_COL, extract_number
@@ -28,9 +30,11 @@ def get_individual_general(general: Worksheet):
 
         general_data.append(
             {
-                "date": date_cell.value.strftime("%Y-%m-%d")
-                if date_cell.value
-                else None,  # 日付は無い場合もある
+                "date": (
+                    date_cell.value.strftime("%Y-%m-%d")
+                    if isinstance(date_cell.value, (datetime.date, datetime.datetime))
+                    else None  # 日付は無い場合もある
+                ),
                 "price": extract_number(price_cell.value),
                 "category": category_cell.value,
                 "purpose": purpose_cell.value,

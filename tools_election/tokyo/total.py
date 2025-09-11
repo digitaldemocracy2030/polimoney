@@ -38,9 +38,10 @@ def get_public_expense_equivalent_total(total: Worksheet):
     get_public_expense_equivalent_total_data = []
 
     for row in total.iter_rows(min_row=12, max_col=I_COL + 1):
-        item_cell = row[B_COL].value.strip()
-        if item_cell is None or item_cell == "":
+        raw = row[B_COL].value
+        if not isinstance(raw, str) or raw.strip() == "":
             continue
+        item_cell = raw.strip()
         if item_cell == "計":
             get_public_expense_equivalent_total_data.append(
                 {"total": extract_number(row[H_COL].value)}
