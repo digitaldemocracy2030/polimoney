@@ -1,11 +1,10 @@
 import json
 import logging
-import os
-import re
 import sys
 
 import openpyxl
 
+import util
 from wakayama.building import get_building
 from wakayama.general import get_general
 from wakayama.income import get_income
@@ -56,11 +55,8 @@ def analyze(input_file):
     miscellaneous_data = get_general(miscellaneous, "miscellaneous")  # 雑費
     total_data = get_total(total)  # 合計
 
-    # ファイル名に使えない文字を_に変換
-    safe_input_file = re.sub(r'[\\/:*?"<>|]', "_", input_file)
-
     # フォルダを作成
-    os.makedirs(f"output_json/{safe_input_file}", exist_ok=True)
+    safe_input_file = util.create_output_folder(input_file)
 
     data_list = [
         ("income_data.json", income_data),

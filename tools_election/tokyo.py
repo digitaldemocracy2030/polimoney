@@ -1,12 +1,10 @@
 import json
 import logging
-import os
-import re
 import sys
 
 import openpyxl
 
-# from tokyo.general import get_general
+import util
 from tokyo.general import get_general
 from tokyo.income import get_income
 from tokyo.income_total import get_income_total
@@ -53,11 +51,8 @@ def analyze(input_file):
     miscellaneous_data = get_general(miscellaneous, "miscellaneous")  # 雑費
     total_data = get_total(total)  # 合計
 
-    # ファイル名に使えない文字を_に変換
-    safe_input_file = re.sub(r'[\\/:*?"<>|]', "_", input_file)
-
     # フォルダを作成
-    os.makedirs(f"output_json/{safe_input_file}", exist_ok=True)
+    safe_input_file = util.create_output_folder(input_file)
 
     data_list = [
         ("income_data.json", income_data),

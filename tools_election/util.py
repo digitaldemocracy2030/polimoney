@@ -1,3 +1,4 @@
+import os
 import re
 
 from openpyxl import utils
@@ -42,6 +43,15 @@ def extract_number(value):
                 return int(num_str)
 
     return None
+
+
+def create_output_folder(input_file: str):
+    """
+    ファイル名に使えない文字を_に変換（絶対パスではなくファイル名のみを使用）
+    """
+    base_filename = os.path.basename(input_file)
+    safe_input_file = re.sub(r'[\\/:*?"<>|]', "_", base_filename)
+    return safe_input_file
 
 
 A_COL = utils.column_index_from_string("A") - 1
