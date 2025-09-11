@@ -1,6 +1,6 @@
 from openpyxl.worksheet.worksheet import Worksheet
 
-from util import B_COL, C_COL, G_COL, H_COL, I_COL, extract_number
+from util import B_COL, C_COL, E_COL, H_COL, I_COL, extract_number
 
 
 def get_individual_total(total: Worksheet):
@@ -13,15 +13,16 @@ def get_individual_total(total: Worksheet):
 
     total_data = []
 
-    # 4~13列目を取得
-    for i, row in enumerate(total.iter_rows(min_row=5, max_row=13, max_col=C_COL + 1)):
+    # 2~10列目を取得
+    for i, row in enumerate(total.iter_rows(min_row=2, max_row=10, max_col=C_COL + 1)):
         if 0 <= i <= 2:
-            name = "計 " + row[B_COL].value
+            name = "今回計 " + row[B_COL].value
         elif 3 <= i <= 5:
             name = "前回計 " + row[B_COL].value
         elif 6 <= i <= 8:
             name = "総計 " + row[B_COL].value
         price_value = extract_number(row[C_COL].value)
+        # extract_number関数内で四捨五入処理済み
         total_data.append({"name": name, "price": price_value})
 
     return total_data
@@ -36,13 +37,22 @@ def get_public_expense_equivalent_total(total: Worksheet):
 
     get_public_expense_equivalent_total_data = []
 
-    for row in total.iter_rows(min_row=15, max_row=23, max_col=I_COL + 1):
+    for row in total.iter_rows(min_row=12, max_col=I_COL + 1):
+        raw = row[B_COL].value
+        if not isinstance(raw, str) or raw.strip() == "":
+            continue
+        item_cell = raw.strip()
+        if item_cell == "計":
+            get_public_expense_equivalent_total_data.append(
+                {"total": extract_number(row[H_COL].value)}
+            )
+            break
         get_public_expense_equivalent_total_data.append(
             {
-                "item": row[C_COL].value,  # 項目（C列）
-                "unit_price": extract_number(row[G_COL].value),  # 単価（G列）
-                "quantity": extract_number(row[H_COL].value),  # 枚数（H列）
-                "price": extract_number(row[I_COL].value),  # 金額（I列）
+                "item": item_cell,  # 項目（C列）
+                "unit_price": extract_number(row[C_COL].value),  # 単価（C列）
+                "quantity": extract_number(row[E_COL].value),  # 枚数（E列）
+                "price": extract_number(row[H_COL].value),  # 金額（H列）
             }
         )
 

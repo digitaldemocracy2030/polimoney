@@ -4,6 +4,7 @@ import sys
 
 import openpyxl
 
+import util
 from wakayama.building import get_building
 from wakayama.general import get_general
 from wakayama.income import get_income
@@ -54,35 +55,33 @@ def analyze(input_file):
     miscellaneous_data = get_general(miscellaneous, "miscellaneous")  # 雑費
     total_data = get_total(total)  # 合計
 
-    with open("output_json/income_data.json", "w", encoding="utf-8") as f:
-        json.dump(income_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/personnel_data.json", "w", encoding="utf-8") as f:
-        json.dump(personnel_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/building_data.json", "w", encoding="utf-8") as f:
-        json.dump(building_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/communication_data.json", "w", encoding="utf-8") as f:
-        json.dump(communication_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/transportation_data.json", "w", encoding="utf-8") as f:
-        json.dump(transportation_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/printing_data.json", "w", encoding="utf-8") as f:
-        json.dump(printing_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/advertising_data.json", "w", encoding="utf-8") as f:
-        json.dump(advertising_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/stationery_data.json", "w", encoding="utf-8") as f:
-        json.dump(stationery_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/food_data.json", "w", encoding="utf-8") as f:
-        json.dump(food_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/accommodation_data.json", "w", encoding="utf-8") as f:
-        json.dump(accommodation_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/miscellaneous_data.json", "w", encoding="utf-8") as f:
-        json.dump(miscellaneous_data, f, indent=4, ensure_ascii=False)
-    with open("output_json/total_data.json", "w", encoding="utf-8") as f:
-        json.dump(total_data, f, indent=4, ensure_ascii=False)
+    # フォルダを作成
+    safe_input_file = util.create_output_folder(input_file)
+
+    data_list = [
+        ("income_data.json", income_data),
+        ("personnel_data.json", personnel_data),
+        ("building_data.json", building_data),
+        ("communication_data.json", communication_data),
+        ("transportation_data.json", transportation_data),
+        ("printing_data.json", printing_data),
+        ("advertising_data.json", advertising_data),
+        ("stationery_data.json", stationery_data),
+        ("food_data.json", food_data),
+        ("accommodation_data.json", accommodation_data),
+        ("miscellaneous_data.json", miscellaneous_data),
+        ("total_data.json", total_data),
+    ]
+
+    for file_name, data in data_list:
+        path = f"output_json/{safe_input_file}/{file_name}"
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
 
 
 def main():
     if len(sys.argv) != 2:
-        logging.error("python main.py <input_file> と入力してください")
+        logging.error("python wakayama.py <input_file> と入力してください")
         sys.exit(1)
 
     logging.info(f"分析を開始します: {sys.argv[1]}")
