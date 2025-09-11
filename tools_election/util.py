@@ -16,9 +16,14 @@ def extract_number(value):
     if value is None:
         return None
 
-    # 既に数値の場合はそのまま返す
-    if isinstance(value, (int, float)):
+    # 既に数値の場合はfloatでかつ整数値ならintで返す
+    if isinstance(value, int):
         return value
+    if isinstance(value, float):
+        if value.is_integer():
+            return int(value)
+        else:
+            return value
 
     # 文字列から数字（小数点含む）を抽出
     if isinstance(value, str):
@@ -28,7 +33,11 @@ def extract_number(value):
         if match:
             num_str = match.group(1)
             if "." in num_str:
-                return float(num_str)
+                num = float(num_str)
+                if num.is_integer():
+                    return int(num)
+                else:
+                    return num
             else:
                 return int(num_str)
 
