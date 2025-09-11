@@ -5,6 +5,7 @@ import sys
 import openpyxl
 
 # from tokyo.general import get_general
+from tokyo.general import get_general
 from tokyo.income import get_income
 from tokyo.income_total import get_income_total
 
@@ -28,34 +29,45 @@ def analyze(input_file):
     # 各シートを取得
     income = wb["【２】収入"]
     income_total = wb["【３】収入計"]
-    # printing = wb["【４】支出 (印刷費)"]
-    # building = wb["【４】支出 (家屋費)"]
-    # advertising = wb["【４】支出 (広告費)"]
-    # transportation = wb["【４】支出 (交通費)"]
-    # stationery = wb["【４】支出 (文具費)"]
-    # food = wb["【４】支出 (食料費)"]
-    # miscellaneous = wb["【４】支出 (雑費)"]
+    printing = wb["【４】支出 (印刷費)"]
+    building = wb["【４】支出 (家屋費)"]
+    advertising = wb["【４】支出 (広告費)"]
+    transportation = wb["【４】支出 (交通費)"]
+    stationery = wb["【４】支出 (文具費)"]
+    food = wb["【４】支出 (食料費)"]
+    miscellaneous = wb["【４】支出 (雑費)"]
     # total = wb["支出 (計)"]
 
     # 分析
     income_data = get_income(income)  # 収入
     income_total_data = get_income_total(income_total)  # 収入計
-    # personnel_data = get_general(personnel, "personnel")  # 人件
-    # building_data = get_building(building)  # 家屋
-    # communication_data = get_general(communication, "communication")  # 通信
-    # transportation_data = get_general(transportation, "transportation")  # 交通
-    # printing_data = get_general(printing, "printing")  # 印刷
-    # advertising_data = get_general(advertising, "advertising")  # 広告
-    # stationery_data = get_general(stationery, "stationery")  # 文具
-    # food_data = get_general(food, "food")  # 食料
-    # accommodation_data = get_general(accommodation, "accommodation")  # 休泊
-    # miscellaneous_data = get_general(miscellaneous, "miscellaneous")  # 雑費
+    printing_data = get_general(printing, "printing")  # 印刷
+    building_data = get_general(building, "building")  # 家屋
+    advertising_data = get_general(advertising, "advertising")  # 広告
+    transportation_data = get_general(transportation, "transportation")  # 交通
+    stationery_data = get_general(stationery, "stationery")  # 文具
+    food_data = get_general(food, "food")  # 食料
+    miscellaneous_data = get_general(miscellaneous, "miscellaneous")  # 雑費
     # total_data = get_total(total)  # 合計
 
     with open("output_json/income_data.json", "w", encoding="utf-8") as f:
         json.dump(income_data, f, indent=4, ensure_ascii=False)
     with open("output_json/income_total_data.json", "w", encoding="utf-8") as f:
         json.dump(income_total_data, f, indent=4, ensure_ascii=False)
+    with open("output_json/printing_data.json", "w", encoding="utf-8") as f:
+        json.dump(printing_data, f, indent=4, ensure_ascii=False)
+    with open("output_json/building_data.json", "w", encoding="utf-8") as f:
+        json.dump(building_data, f, indent=4, ensure_ascii=False)
+    with open("output_json/advertising_data.json", "w", encoding="utf-8") as f:
+        json.dump(advertising_data, f, indent=4, ensure_ascii=False)
+    with open("output_json/transportation_data.json", "w", encoding="utf-8") as f:
+        json.dump(transportation_data, f, indent=4, ensure_ascii=False)
+    with open("output_json/stationery_data.json", "w", encoding="utf-8") as f:
+        json.dump(stationery_data, f, indent=4, ensure_ascii=False)
+    with open("output_json/food_data.json", "w", encoding="utf-8") as f:
+        json.dump(food_data, f, indent=4, ensure_ascii=False)
+    with open("output_json/miscellaneous_data.json", "w", encoding="utf-8") as f:
+        json.dump(miscellaneous_data, f, indent=4, ensure_ascii=False)
 
 
 def main():
