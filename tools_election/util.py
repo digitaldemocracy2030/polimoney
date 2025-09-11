@@ -51,6 +51,7 @@ def create_output_folder(input_file: str):
     """
     base_filename = os.path.basename(input_file)
     safe_input_file = re.sub(r'[\\/:*?"<>|]', "_", base_filename)
+    os.makedirs(f"output_json/{safe_input_file}", exist_ok=True)
     return safe_input_file
 
 
