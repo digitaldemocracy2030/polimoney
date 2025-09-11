@@ -1,6 +1,8 @@
 from openpyxl import utils
 from openpyxl.worksheet.worksheet import Worksheet
 
+from util import extract_number
+
 # AからJの列インデックスを取得（0始まり）
 A_COL = utils.column_index_from_string("A") - 1
 B_COL = utils.column_index_from_string("B") - 1
@@ -38,13 +40,13 @@ def get_individual_income(income: Worksheet):
 
         # 小計になったら終了
         if date_cell.value == "小計":
-            income_data.append({"total": int(price_cell.value)})
+            income_data.append({"total": extract_number(price_cell.value)})
             break
 
         income_data.append(
             {
                 "date": date_cell.value.strftime("%Y-%m-%d"),
-                "price": int(price_cell.value),
+                "price": extract_number(price_cell.value),
                 "category": category_cell.value,
                 "note": note_cell.value,
             }

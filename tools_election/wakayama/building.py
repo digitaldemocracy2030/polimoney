@@ -3,6 +3,8 @@ import datetime
 from openpyxl import utils
 from openpyxl.worksheet.worksheet import Worksheet
 
+from util import extract_number
+
 # AからJの列インデックスを取得（0始まり）
 A_COL = utils.column_index_from_string("A") - 1
 B_COL = utils.column_index_from_string("B") - 1
@@ -35,7 +37,7 @@ def get_individual_election_office(building: Worksheet):
         building_data.append(
             {
                 "date": date_cell.value.strftime("%Y-%m-%d"),
-                "price": int(price_cell.value),
+                "price": extract_number(price_cell.value),
                 "category": category_cell.value,
                 "purpose": purpose_cell.value,
                 "note": note_cell.value,
@@ -75,9 +77,7 @@ def get_total_election_office(building: Worksheet):
             break
 
         price_value = row[C_COL].value
-        # Excelの計算による小数点誤差を避けるため、整数に変換
-        if price_value is not None:
-            price_value = int(price_value)
+        price_value = extract_number(price_value)
         total_building_data.append({"name": value_str, "price": price_value})
         count += 1
 
@@ -128,7 +128,7 @@ def get_individual_meeting_venue(building: Worksheet):
         meeting_venue_data.append(
             {
                 "date": date_cell.value.strftime("%Y-%m-%d"),
-                "price": int(price_cell.value),
+                "price": extract_number(price_cell.value),
                 "category": category_cell.value,
                 "purpose": purpose_cell.value,
                 "note": note_cell.value,
@@ -168,9 +168,7 @@ def get_total_meeting_venue(building: Worksheet):
             break
 
         price_value = row[C_COL].value
-        # Excelの計算による小数点誤差を避けるため、整数に変換
-        if price_value is not None:
-            price_value = int(price_value)
+        price_value = extract_number(price_value)
         total_meeting_venue_data.append({"name": value_str, "price": price_value})
         count += 1
 

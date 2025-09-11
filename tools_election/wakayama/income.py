@@ -3,6 +3,8 @@ import re
 from openpyxl import utils
 from openpyxl.worksheet.worksheet import Worksheet
 
+from util import extract_number
+
 # AからJの列インデックスを取得（0始まり）
 A_COL = utils.column_index_from_string("A") - 1
 B_COL = utils.column_index_from_string("B") - 1
@@ -40,7 +42,7 @@ def get_individual_income(income: Worksheet):
         income_data.append(
             {
                 "date": date_cell.value.strftime("%Y-%m-%d"),
-                "price": int(price_cell.value),
+                "price": extract_number(price_cell.value),
                 "category": category_cell.value,
                 "note": note_cell.value,
             }
@@ -74,9 +76,7 @@ def get_total_income(income: Worksheet):
         name_value = row[B_COL].value
         price_value = row[C_COL].value
 
-        # Excelの計算による小数点誤差を避けるため、整数に変換
-        if price_value is not None:
-            price_value = int(price_value)
+        price_value = extract_number(price_value)
         total_income_data.append({"name": name_value, "price": price_value})
         count += 1
 

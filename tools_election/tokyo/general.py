@@ -1,6 +1,8 @@
 from openpyxl import utils
 from openpyxl.worksheet.worksheet import Worksheet
 
+from util import extract_number
+
 # AからJの列インデックスを取得（0始まり）
 A_COL = utils.column_index_from_string("A") - 1
 B_COL = utils.column_index_from_string("B") - 1
@@ -29,7 +31,7 @@ def get_individual_general(general: Worksheet):
 
         # 小計になったら終了
         if date_cell.value == "小計":
-            general_data.append({"total": int(price_cell.value)})
+            general_data.append({"total": extract_number(price_cell.value)})
             break
 
         general_data.append(
@@ -37,7 +39,7 @@ def get_individual_general(general: Worksheet):
                 "date": date_cell.value.strftime("%Y-%m-%d")
                 if date_cell.value
                 else None,  # 日付は無い場合もある
-                "price": int(price_cell.value),
+                "price": extract_number(price_cell.value),
                 "category": category_cell.value,
                 "purpose": purpose_cell.value,
                 "note": note_cell.value,

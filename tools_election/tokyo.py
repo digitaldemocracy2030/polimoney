@@ -8,6 +8,7 @@ import openpyxl
 from tokyo.general import get_general
 from tokyo.income import get_income
 from tokyo.income_total import get_income_total
+from tokyo.total import get_total
 
 # ログ設定
 logging.basicConfig(
@@ -36,7 +37,7 @@ def analyze(input_file):
     stationery = wb["【４】支出 (文具費)"]
     food = wb["【４】支出 (食料費)"]
     miscellaneous = wb["【４】支出 (雑費)"]
-    # total = wb["支出 (計)"]
+    total = wb["【５】支出計"]
 
     # 分析
     income_data = get_income(income)  # 収入
@@ -48,7 +49,7 @@ def analyze(input_file):
     stationery_data = get_general(stationery, "stationery")  # 文具
     food_data = get_general(food, "food")  # 食料
     miscellaneous_data = get_general(miscellaneous, "miscellaneous")  # 雑費
-    # total_data = get_total(total)  # 合計
+    total_data = get_total(total)  # 合計
 
     with open("output_json/income_data.json", "w", encoding="utf-8") as f:
         json.dump(income_data, f, indent=4, ensure_ascii=False)
@@ -68,6 +69,8 @@ def analyze(input_file):
         json.dump(food_data, f, indent=4, ensure_ascii=False)
     with open("output_json/miscellaneous_data.json", "w", encoding="utf-8") as f:
         json.dump(miscellaneous_data, f, indent=4, ensure_ascii=False)
+    with open("output_json/total_data.json", "w", encoding="utf-8") as f:
+        json.dump(total_data, f, indent=4, ensure_ascii=False)
 
 
 def main():
