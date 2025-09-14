@@ -85,6 +85,7 @@ func main() {
 		v1.POST("/login", authController.Login)
 
 		// 以下、管理者用
+		// TODO: ロール確認のミドルウェアを追加する
 		admin := v1.Group("/admin")
 		admin.Use(middleware.JWTAuthMiddleware()) // ログイン必須
 		{
@@ -96,7 +97,6 @@ func main() {
 			}
 			// 政治資金収支報告書
 			politicalFunds := admin.Group("/political_funds")
-			politicalFunds.Use(middleware.JWTAuthMiddleware()) // ログイン必須
 			{
 				// TODO: GETも追加する
 				// 政治資金収支報告書のデータ追加 controllers/political_funds.go
@@ -105,7 +105,6 @@ func main() {
 
 			// 選挙運動費用収支報告書
 			electionFunds := admin.Group("/election_funds")
-			electionFunds.Use(middleware.JWTAuthMiddleware()) // ログイン必須
 			{
 				// TODO: GETも追加する
 				// 選挙運動費用収支報告書のデータ追加 controllers/election_funds.go
