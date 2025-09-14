@@ -178,7 +178,7 @@ function convert(data: InputData, outputId = 'converted-data'): OutputData {
     id: outputId,
     latestReportId: reportId,
     profile,
-    datas: [
+    data: [
       {
         report,
         flows,

@@ -52,9 +52,9 @@ export type Transaction = {
 
 export type AccountingReports = {
   id: string;
-  latestReportId: string;
+  latestReportId: string; // TODO: 動的生成に変更
   profile: Profile;
-  datas: {
+  data: {
     report: Report;
     flows: Flow[];
     transactions: Transaction[];

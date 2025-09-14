@@ -30,7 +30,7 @@ const data = {
   id: comingSoonId,
   latestReportId: comingSoonId,
   profile,
-  datas: [
+  data: [
     {
       report: emptyReport,
       flows: emptyFlows,
@@ -42,7 +42,7 @@ const data = {
 const dataByYear: Record<number, any> = {
   [new Date().getFullYear()]: {
     profile,
-    datas: [
+    data: [
       {
         report: emptyReport,
         flows: emptyFlows,
