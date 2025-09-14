@@ -65,6 +65,8 @@ func main() {
 	healthController := controllers.NewHealthController(db)
 	authController := controllers.NewAuthController(db)
 	profileController := controllers.NewProfileController(db)
+	politicalFundsController := controllers.NewPoliticalFundsController(db)
+	electionFundsController := controllers.NewElectionFundsController(db)
 
 	// エンドポイントを設定
 	// ルートハンドラー (開発用)
@@ -84,7 +86,7 @@ func main() {
 
 		// 以下、管理者用
 		admin := v1.Group("/admin")
-		admin.Use(middleware.JWTAuthMiddleware()) // ValidateJWTをGinのミドルウェアとしてラップした関数を使用
+		admin.Use(middleware.JWTAuthMiddleware()) // ログイン必須
 		{
 			// ユーザー関連の controllers/user.go
 			users := admin.Group("/users")
@@ -92,16 +94,35 @@ func main() {
 				users.GET("", userController.GetAllUsers)     // 全ユーザー取得
 				users.GET("/:id", userController.GetUserByID) // 特定ユーザー取得
 			}
+			// 政治資金収支報告書
+			politicalFunds := admin.Group("/political_funds")
+			politicalFunds.Use(middleware.JWTAuthMiddleware()) // ログイン必須
+			{
+				// TODO: GETも追加する
+				// 政治資金収支報告書のデータ追加 controllers/political_funds.go
+				politicalFunds.POST("", politicalFundsController.PostPoliticalFunds)
+			}
+
+			// 選挙運動費用収支報告書
+			electionFunds := admin.Group("/election_funds")
+			electionFunds.Use(middleware.JWTAuthMiddleware()) // ログイン必須
+			{
+				// TODO: GETも追加する
+				// 選挙運動費用収支報告書のデータ追加 controllers/election_funds.go
+				electionFunds.POST("", electionFundsController.PostElectionFunds)
+			}
 		}
 
 		// マイページ (自分自身の情報)
 		profile := v1.Group("/profile")
-		profile.Use(middleware.JWTAuthMiddleware())
+		profile.Use(middleware.JWTAuthMiddleware()) // ログイン必須
 		{
 			// TODO: マイページ以下のエンドポイント (データの確認・編集などを想定)
 			// マイページの取得 controllers/profile.go
 			profile.GET("", profileController.GetMyPage)
 		}
+
+		// TODO: ユーザー自身の政治資金収支報告書・選挙運動費用収支報告書の登録機能を追加
 	}
 
 	// サーバーを起動
