@@ -59,16 +59,6 @@ func validateCandidateName(candidateName string) error {
 		return errors.New("候補者名は空白のみでは無効です")
 	}
 
-	// 長さの検証（最大100文字）
-	if len(candidateName) > 100 {
-		return errors.New("候補者名は100文字以内で入力してください")
-	}
-
-	// 最小長の検証（2文字以上）
-	if len(candidateName) < 2 {
-		return errors.New("候補者名は2文字以上で入力してください")
-	}
-
 	return nil
 }
 
@@ -116,16 +106,6 @@ func validateElectionArea(electionArea string) error {
 		return errors.New("選挙区は空白のみでは無効です")
 	}
 
-	// 長さの検証（最大255文字）
-	if len(electionArea) > 255 {
-		return errors.New("選挙区は255文字以内で入力してください")
-	}
-
-	// 最小長の検証（2文字以上）
-	if len(electionArea) < 2 {
-		return errors.New("選挙区は2文字以上で入力してください")
-	}
-
 	return nil
 }
 
@@ -159,19 +139,9 @@ func validatePoliticalParty(politicalParty string) error {
 		return errors.New("所属政党は空白のみでは無効です")
 	}
 
-	// 長さの検証（最大100文字）
-	if len(politicalParty) > 100 {
-		return errors.New("所属政党は100文字以内で入力してください")
-	}
-
 	// 「無所属」の場合は許可
 	if politicalParty == "無所属" {
 		return nil
-	}
-
-	// 最小長の検証（2文字以上）
-	if len(politicalParty) < 2 {
-		return errors.New("所属政党は2文字以上で入力してください")
 	}
 
 	return nil
