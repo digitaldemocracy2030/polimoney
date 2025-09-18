@@ -15,9 +15,7 @@ interface BoardProps {
 export function Board({ data, politicianId }: BoardProps) {
   if (!data) return <></>;
 
-  const reportData = data.datas.find(
-    (d) => d.report.id === data.latestReportId,
-  );
+  const reportData = data.data.find((d) => d.report.id === data.latestReportId);
   if (!reportData) return null;
   return (
     <>
@@ -26,7 +24,7 @@ export function Board({ data, politicianId }: BoardProps) {
         politicianId={politicianId}
         profile={data.profile}
         report={reportData.report}
-        otherReports={data.datas.map((d) => d.report)}
+        otherReports={data.data.map((d) => d.report)}
         flows={reportData.flows}
         useFixedBoardChart={false}
       />
