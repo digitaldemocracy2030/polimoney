@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/javascript-node:20
+FROM mcr.microsoft.com/devcontainers/javascript-node:20-bookworm
 
 # Install Python and required system dependencies
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
