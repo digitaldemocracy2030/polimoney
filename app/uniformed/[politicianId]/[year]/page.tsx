@@ -63,11 +63,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!data) {
     return {
       title: 'データが見つかりません | Polimoney (ポリマネー)',
+      robots: {
+        index: false,
+        follow: false,
+        nocache: true,
+      },
     };
   }
 
   return {
     title: `${data.yearData.profile.name} (${year}年) | Polimoney (ポリマネー)`,
+    robots: {
+      index: false,
+      follow: false,
+      nocache: true,
+    },
   };
 }
 
