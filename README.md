@@ -1,5 +1,7 @@
 # Polimoney
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/digitaldemocracy2030/polimoney)
+
 Polimoney は[デジタル民主主義2030](https://dd2030.org/)の一環として、政治資金の透明性を高めるために開発されたオープンソースのプロジェクトです。政治資金収支報告書のデータを視覚化し、市民が政治資金の流れを容易に理解できるようにすることを目指しています。
 
 ### Polimoneyの目的（なんで見える化するんだっけ？）
