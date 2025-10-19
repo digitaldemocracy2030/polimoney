@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react';
 import type { Metadata } from 'next';
 import { Provider } from '@/components/ui/provider';
 import './global.css';
+import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
   title: 'Polimoney (ポリマネー)',
@@ -69,6 +70,7 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <NextTopLoader showSpinner={false} />
         <Provider>
           <Box maxW="1200px" mx="auto" p={{ base: 5, lg: 10 }}>
             {children}
