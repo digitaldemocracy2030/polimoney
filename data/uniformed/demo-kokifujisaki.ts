@@ -123,6 +123,18 @@ const data: DataByYear = {
     ],
   },
   2023: {
+    categories: {
+      income: [
+        { id: 'i01', name: '前年繰越' },
+        { id: 'i02', name: '本年の収入額' },
+        { id: 'i03', name: '党費・会費', parent: 'i02' },
+        { id: 'i04', name: '交付金', parent: 'i02' },
+      ],
+      expense: [
+        { id: 'e01', name: '政治活動費' },
+        { id: 'e03', name: '組織活動費', parent: 'e01' },
+      ],
+    },
     transactions: [
       // 収入
       {
@@ -172,12 +184,15 @@ const data: DataByYear = {
         { id: 'i03', name: '党費・会費', parent: 'i02' },
         { id: 'i04', name: '交付金', parent: 'i02' },
         { id: 'i05', name: '事業収入', parent: 'i02' },
+        { id: 'i06', name: '寄附', parent: 'i02' },
       ],
       expense: [
         { id: 'e01', name: '政治活動費' },
         { id: 'e02', name: '翌年繰越' },
         { id: 'e03', name: '組織活動費', parent: 'e01' },
         { id: 'e04', name: '宣伝事業費', parent: 'e01' },
+        { id: 'e05', name: '選挙関係費', parent: 'e01' },
+        { id: 'e06', name: 'その他の経費', parent: 'e01' },
       ],
     },
     transactions: [

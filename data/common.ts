@@ -11,6 +11,15 @@ import type { Flow, Report, Transaction } from '@/models/type';
 // =============================================================================
 
 /**
+ * カテゴリ定義
+ */
+export type Category = {
+  id: string;
+  name: string;
+  parent?: string;
+};
+
+/**
  * 年度別データの型定義
  */
 export interface YearlyData {

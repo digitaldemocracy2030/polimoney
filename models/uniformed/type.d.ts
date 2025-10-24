@@ -33,7 +33,7 @@ export type Flow = {
   name: string; // 項目名
   direction: TransactionDirection; // 収入or支出
   value: number; // 金額
-  parent: string | null; // 親要素のID
+  parent?: string; // 親要素のID
 };
 
 export type TransactionDirection = 'income' | 'expense';
@@ -58,8 +58,8 @@ export type AccountingReports = {
     report: Report;
     transactions: Transaction[];
     categories?: {
-      income: import('@/data/common').Category[];
-      expense: import('@/data/common').Category[];
+      income: import('@/data/uniformed/common').Category[];
+      expense: import('@/data/uniformed/common').Category[];
     };
   }[];
 };

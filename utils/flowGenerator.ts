@@ -2,7 +2,7 @@
  * カテゴリ定義ベースのTransactionからFlowを生成するユーティリティ（V2）
  */
 
-import type { Category } from '@/data/common';
+import type { Category } from '@/data/uniformed/common';
 import type { Flow, Transaction } from '@/models/type';
 
 /**
