@@ -1,48 +1,33 @@
-# マルチステージビルド
-FROM golang:1.24-alpine AS builder
+FROM python:3.11-slim
 
-# 作業ディレクトリを設定
 WORKDIR /app
 
-# 必要なパッケージをインストール
-RUN apk add --no-cache git
+# システム依存関係インストール（ODBCドライバー用）
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    unixodbc-dev \
+    curl \
+    gnupg \
+    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+    && apt-get update \
+    && ACCEPT_EULA=Y apt-get install -y msodbcsql18 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Go modulesのファイルをコピー
-COPY go.mod go.sum ./
+# Python依存関係インストール
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# 依存関係をダウンロード
-RUN go mod download
-
-# ソースコードをコピー
+# アプリケーションコードコピー
 COPY . .
 
-# アプリケーションをビルド
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+# ポート公開
+EXPOSE 8000
 
-# 本番用イメージ
-FROM alpine:latest
+# ヘルスチェック
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8000/api/v1/health')" || exit 1
 
-# 必要なパッケージをインストール
-RUN apk --no-cache add ca-certificates postgresql-client tzdata
-
-# タイムゾーンを日本に設定
-ENV TZ=Asia/Tokyo
-RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
-    echo "Asia/Tokyo" > /etc/timezone
-
-# 作業ディレクトリを作成
-WORKDIR /root/
-
-# ビルドしたバイナリをコピー
-COPY --from=builder /app/main .
-
-# 待機スクリプトをコピー
-COPY wait-for-postgres.sh .
-RUN chmod +x wait-for-postgres.sh && \
-    sed -i 's/\r$//' wait-for-postgres.sh
-
-# ポートを公開
-EXPOSE 8080
-
-# アプリケーションを実行
-CMD ["./wait-for-postgres.sh", "postgres", "./main"]
+# 起動コマンド
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

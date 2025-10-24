@@ -1,6 +1,0 @@
--- 追加のテストユーザーデータ
--- INSERT INTO users (username, email, password_hash, role_id, email_verified, is_active) VALUES
---     ('john_doe', 'john.doe@example.com', 'TODO:CREATE_HASH', 2, TRUE, TRUE),
---     ('jane_smith', 'jane.smith@example.com', 'TODO:CREATE_HASH', 2, TRUE, TRUE),
---     ('inactive_user', 'inactive@example.com', 'TODO:CREATE_HASH', 2, FALSE, FALSE),
---     ('unverified_user', 'unverified@example.com', 'TODO:CREATE_HASH', 2, FALSE, TRUE);

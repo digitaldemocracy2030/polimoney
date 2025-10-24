@@ -1,46 +1,16 @@
 services:
-  postgres:
-    image: postgres:17
-    container_name: polimoney_db
-    environment:
-      POSTGRES_DB: polimoney
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres123
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./init-db:/docker-entrypoint-initdb.d
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d polimoney"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - polimoney_network
-
   app:
     build: .
     container_name: polimoney_api
-    depends_on:
-      postgres:
-        condition: service_healthy
     environment:
-      PORT: 8080
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: postgres123
-      DB_NAME: polimoney
-      DB_SSLMODE: disable
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      PASSWORD_SALT: ${PASSWORD_SALT}
       ENV: development
-      PASSWORD_SALT: dev_salt
-      JWT_SECRET: dev_salt
+      DEBUG: "True"
     ports:
-      - "8080:8080"
-    networks:
-      - polimoney_network
+      - "8000:8000"
+    volumes:
+      - .:/app
     restart: unless-stopped
-
-networks:
-  polimoney_network:
-    driver: bridge
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
