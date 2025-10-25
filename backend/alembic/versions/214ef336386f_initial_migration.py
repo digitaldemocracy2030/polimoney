@@ -17,6 +17,10 @@ depends_on = None
 
 
 def upgrade() -> None:
+    """データベーススキーマをアップグレードする
+
+    初期マイグレーションを実行し、必要なテーブルとデータを作成する。
+    """
     # Create roles table
     op.create_table('roles',
         sa.Column('id', sa.Integer(), nullable=False),
@@ -139,6 +143,10 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
+    """データベーススキーマをダウングレードする
+
+    初期マイグレーションをロールバックし、作成したテーブルを削除する。
+    """
     # Drop tables in reverse order
     op.drop_table('election_funds')
     op.drop_table('political_funds')

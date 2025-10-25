@@ -6,6 +6,10 @@ from app.core.security import create_access_token
 
 
 class TestAuthAPI:
+    """認証APIのテストケース
+
+    認証関連のAPIエンドポイントをテストするクラス。
+    """
     @pytest.mark.asyncio
     async def test_signup_success(self, db_session: Session):
         """正常なユーザー登録APIテスト"""
@@ -121,6 +125,10 @@ class TestAuthAPI:
 
 
 class TestProtectedRoutes:
+    """保護されたルートのテストケース
+
+    認証が必要なAPIエンドポイントをテストするクラス。
+    """
     @pytest.mark.asyncio
     async def test_profile_access_with_valid_token(self, async_client: AsyncClient, db_session: Session):
         """有効なトークンでのプロファイルアクセステスト"""

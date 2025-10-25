@@ -7,6 +7,10 @@ from app.core.security import create_access_token
 
 
 class TestPoliticalFundsAPI:
+    """政治資金APIのテストケース
+
+    政治資金関連のAPIエンドポイントをテストするクラス。
+    """
     @pytest.mark.asyncio
     async def test_create_political_funds_as_admin(self, async_client: AsyncClient, db_session: Session):
         """管理者として政治資金データ作成テスト"""

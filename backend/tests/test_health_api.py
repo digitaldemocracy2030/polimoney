@@ -5,6 +5,10 @@ from app.routers.health import health_check
 
 
 class TestHealthAPI:
+    """ヘルスチェックAPIのテストケース
+
+    ヘルスチェックエンドポイントをテストするクラス。
+    """
     @pytest.mark.asyncio
     async def test_health_check(self, db_session: Session):
         """ヘルスチェックAPIテスト"""
