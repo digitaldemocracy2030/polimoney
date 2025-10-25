@@ -1,99 +1,76 @@
-import hashlib
-from datetime import datetime, timedelta
-from typing import Optional
+from typing import Any, Dict, Optional
 
-from jose import JWTError, jwt
-from passlib.context import CryptContext
+import requests
+from jose import JWTError, jwk, jwt
 
 from app.config import settings
 
-# Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+def get_auth0_public_key(token: str) -> Optional[Dict[str, Any]]:
+    """Auth0のJWKSから公開鍵を取得する
 
-def create_password_hash(password: str) -> str:
-    """SHA256とbcryptを使用してパスワードハッシュを作成する
-
-    Goとの互換性のため、まずSHA256でハッシュ化した後、
-    bcryptでさらにハッシュ化する2段階のハッシュ化を行う。
+    JWTトークンのヘッダーからkidを取得し、
+    Auth0のJWKSエンドポイントから対応する公開鍵を取得する。
 
     Args:
-        password (str): ハッシュ化するパスワード（平文）
+        token (str): JWTトークン
 
     Returns:
-        str: bcryptでハッシュ化されたパスワード文字列
+        Optional[Dict[str, Any]]: JWK形式の公開鍵。取得できない場合はNone
     """
-    # First hash with SHA256 (for Go compatibility)
-    salt = settings.password_salt
-    sha256_hash = hashlib.sha256((password + salt).encode()).hexdigest()
+    try:
+        # JWTヘッダーからkidを取得
+        headers = jwt.get_unverified_header(token)
+        kid = headers.get("kid")
+        if not kid:
+            return None
 
-    # Then hash with bcrypt
-    return pwd_context.hash(sha256_hash)
+        # JWKSエンドポイントから鍵を取得
+        jwks_url = f"https://{settings.auth0_domain}/.well-known/jwks.json"
+        response = requests.get(jwks_url)
+        response.raise_for_status()
+        jwks = response.json()
 
+        # kidに一致する鍵を探す
+        for key in jwks.get("keys", []):
+            if key.get("kid") == kid:
+                return key
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """平文パスワードをハッシュと照合する
-
-    SHA256で平文パスワードをハッシュ化した後、
-    bcryptで保存されたハッシュと照合する。
-
-    Args:
-        plain_password (str): 照合する平文パスワード
-        hashed_password (str): 保存されたハッシュ化されたパスワード
-
-    Returns:
-        bool: パスワードが一致すればTrue、そうでなければFalse
-    """
-    # First hash the plain password with SHA256
-    salt = settings.password_salt
-    sha256_hash = hashlib.sha256((plain_password + salt).encode()).hexdigest()
-
-    # Then verify with bcrypt
-    return pwd_context.verify(sha256_hash, hashed_password)
+        return None
+    except Exception:
+        return None
 
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
-    """JWTアクセストークンを作成する
+def verify_auth0_token(token: str) -> Optional[Dict[str, Any]]:
+    """Auth0 JWTトークンを検証する
 
-    指定されたデータをペイロードに含むJWTトークンを生成する。
-    有効期限が指定されない場合は、設定されたデフォルトの有効期間を使用する。
-
-    Args:
-        data (dict): JWTペイロードに含めるデータ
-        expires_delta (Optional[timedelta]): トークンの有効期間。
-                                           指定されない場合は設定値を使用
-
-    Returns:
-        str: 生成されたJWTトークン文字列
-    """
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(hours=settings.jwt_expiration_hours)
-
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.jwt_secret, algorithm="HS256")
-    return encoded_jwt
-
-
-def verify_token(token: str) -> Optional[int]:
-    """JWTトークンを検証し、有効な場合はユーザーIDを返す
-
-    JWTトークンをデコードし、署名を検証する。
-    有効な場合はペイロードからユーザーIDを抽出して返す。
+    Auth0が発行したJWTトークンをRS256アルゴリズムで検証する。
+    audience、issuer、署名をチェックする。
 
     Args:
         token (str): 検証するJWTトークン
 
     Returns:
-        Optional[int]: トークンが有効な場合はユーザーID、無効な場合はNone
+        Optional[Dict[str, Any]]: トークンが有効な場合はデコードされたペイロード、無効な場合はNone
     """
     try:
-        payload = jwt.decode(token, settings.jwt_secret, algorithms=["HS256"])
-        user_id: int = payload.get("sub")
-        if user_id is None:
+        # 公開鍵を取得
+        jwk_key = get_auth0_public_key(token)
+        if not jwk_key:
             return None
-        return user_id
+
+        # JWKから公開鍵を構築
+        public_key = jwk.construct(jwk_key)
+
+        # トークンを検証
+        payload = jwt.decode(
+            token,
+            public_key,
+            algorithms=settings.auth0_algorithms,
+            audience=settings.auth0_api_audience,
+            issuer=settings.auth0_issuer,
+        )
+
+        return payload
     except JWTError:
         return None

@@ -1,6 +1,6 @@
-import os
 from typing import List, Optional
 
+from pydantic import Field
 from pydantic_settings import BaseSettings
 
 
@@ -9,42 +9,45 @@ class Settings(BaseSettings):
 
     アプリケーション全体の設定を管理するクラス。
     """
+
     # Database settings
-    database_server: str = "your-server.database.windows.net"
-    database_name: str = "your-database-name"
-    database_user: str = "your-username"
-    database_password: str = "your-password"
-    database_driver: str = "{ODBC Driver 18 for SQL Server}"
+    database_server: str = Field(..., env="DATABASE_SERVER")
+    database_name: str = Field(..., env="DATABASE_NAME")
+    database_user: str = Field(..., env="DATABASE_USER")
+    database_password: str = Field(..., env="DATABASE_PASSWORD")
+    database_driver: str = Field(
+        "{ODBC Driver 18 for SQL Server}", env="DATABASE_DRIVER"
+    )
 
     # Or use connection string directly
-    database_url: Optional[str] = None
+    database_url: Optional[str] = Field(None, env="DATABASE_URL")
 
-    # Security settings
-    jwt_secret: str = "your_jwt_secret_key_here"
-    password_salt: str = "your_password_salt_here"
-    jwt_expiration_hours: int = 24
+    # Auth0 settings
+    auth0_domain: str = Field(..., env="AUTH0_DOMAIN")
+    auth0_api_audience: str = Field(..., env="AUTH0_API_AUDIENCE")
+    auth0_client_id: str = Field(..., env="AUTH0_CLIENT_ID")
+    auth0_algorithms: List[str] = Field(["RS256"], env="AUTH0_ALGORITHMS")
+    auth0_issuer: str = Field(..., env="AUTH0_ISSUER")
 
     # Application settings
-    env: str = "development"
-    debug: bool = True
+    env: str = Field("development", env="ENV")
+    debug: bool = Field(True, env="DEBUG")
 
     # Server settings
-    host: str = "0.0.0.0"
-    port: int = 8000
+    host: str = Field("0.0.0.0", env="HOST")
+    port: int = Field(8000, env="PORT")
 
     # CORS settings
-    cors_origins: List[str] = ["http://localhost:3000", "http://localhost:8080"]
-
-    # Optional admin user creation
-    admin_username: str = "admin"
-    admin_email: str = "admin@example.com"
-    admin_password: str = "admin123"
+    cors_origins: List[str] = Field(
+        ["http://localhost:3000", "http://localhost:8080"], env="CORS_ORIGINS"
+    )
 
     class Config:
         """Pydantic設定
 
         Pydanticの設定クラス。
         """
+
         env_file = ".env"
         case_sensitive = False
 

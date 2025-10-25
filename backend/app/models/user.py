@@ -42,13 +42,13 @@ class User(Base):
     """システムユーザーを表すモデル
 
     アプリケーションのユーザー情報を管理するテーブル。
-    認証、プロフィール、権限管理のための基本情報を含む。
+    Auth0と連携した認証、プロフィール、権限管理のための基本情報を含む。
 
     Attributes:
         id (int): プライマリキー
+        auth0_user_id (str): Auth0のユーザーID（sub）、ユニーク制約
         username (str): ユーザー名（ユニーク制約）
         email (str): メールアドレス（ユニーク制約）
-        password_hash (str): パスワードのハッシュ値
         role_id (int): ロールID（外部キー）
         is_active (bool): アカウントが有効かどうか
         email_verified (bool): メールアドレスが検証済みかどうか
@@ -61,13 +61,15 @@ class User(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    auth0_user_id: Mapped[str] = mapped_column(
+        String(255), unique=True, nullable=False, index=True
+    )
     username: Mapped[str] = mapped_column(
         String(50), unique=True, nullable=False, index=True
     )
     email: Mapped[str] = mapped_column(
         String(100), unique=True, nullable=False, index=True
     )
-    password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     role_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("roles.id"), nullable=False
     )

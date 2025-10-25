@@ -1,10 +1,10 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app import models
 from app.core.auth import AuthService
-from app.core.security import verify_token
+from app.core.security import verify_auth0_token
 from app.database import get_db
 
 # JWT Bearer token scheme
@@ -33,8 +33,9 @@ def get_current_user(
     """現在認証されているユーザーを取得する依存関数
 
     AuthorizationヘッダーからBearerトークンを抽出し、
-    JWTを検証してユーザーIDを取得し、データベースからユーザー情報を取得する。
-    トークンが無効な場合やユーザーが見つからない場合はHTTPエラーを発生させる。
+    Auth0 JWTを検証してユーザーIDを取得し、データベースからユーザー情報を取得する。
+    初回ログイン時はAuth0ユーザーをローカルDBに同期する。
+    トークンが無効な場合やユーザーが非アクティブな場合はHTTPエラーを発生させる。
 
     Args:
         credentials (HTTPAuthorizationCredentials): Bearerトークン認証情報
@@ -44,30 +45,41 @@ def get_current_user(
         models.User: 認証されたユーザーオブジェクト
 
     Raises:
-        HTTPException: トークンが無効な場合やユーザーが見つからない場合、
-                      またはユーザーが非アクティブな場合
+        HTTPException: トークンが無効な場合またはユーザーが非アクティブな場合
     """
     token = credentials.credentials
-    user_id = verify_token(token)
 
-    if user_id is None:
+    # Auth0トークン検証
+    payload = verify_auth0_token(token)
+    if not payload:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    user = db.query(models.User).filter(models.User.id == user_id).first()
-    if user is None:
+    auth0_user_id = payload.get("sub")
+    if not auth0_user_id:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found",
+            detail="Invalid token payload",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+    # ローカルDBでユーザー検索（auth0_user_idで）
+    user = (
+        db.query(models.User).filter(models.User.auth0_user_id == auth0_user_id).first()
+    )
+
+    # 初回ログイン時はユーザー作成
+    if not user:
+        auth_service = AuthService(db)
+        user = auth_service.sync_user(payload)
+
+    # ユーザーがアクティブかチェック
     if not user.is_active:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Inactive user"
+            status_code=status.HTTP_403_FORBIDDEN, detail="Inactive user"
         )
 
     return user
@@ -80,9 +92,10 @@ def get_current_user_with_role(
     """ロール情報付きで現在認証されているユーザーを取得する依存関数
 
     AuthorizationヘッダーからBearerトークンを抽出し、
-    JWTを検証してユーザーIDを取得し、データベースからユーザー情報と
+    Auth0 JWTを検証してユーザーIDを取得し、データベースからユーザー情報と
     関連するロール情報を取得する。
-    トークンが無効な場合やユーザーが見つからない場合はHTTPエラーを発生させる。
+    初回ログイン時はAuth0ユーザーをローカルDBに同期する。
+    トークンが無効な場合やユーザーが非アクティブな場合はHTTPエラーを発生させる。
 
     Args:
         credentials (HTTPAuthorizationCredentials): Bearerトークン認証情報
@@ -92,36 +105,52 @@ def get_current_user_with_role(
         models.User: ロール情報付きの認証されたユーザーオブジェクト
 
     Raises:
-        HTTPException: トークンが無効な場合やユーザーが見つからない場合、
-                      またはユーザーが非アクティブな場合
+        HTTPException: トークンが無効な場合またはユーザーが非アクティブな場合
     """
     token = credentials.credentials
-    user_id = verify_token(token)
 
-    if user_id is None:
+    # Auth0トークン検証
+    payload = verify_auth0_token(token)
+    if not payload:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    user = (
-        db.query(models.User)
-        .options(db.joinedload(models.User.role))
-        .filter(models.User.id == user_id)
-        .first()
-    )
-
-    if user is None:
+    auth0_user_id = payload.get("sub")
+    if not auth0_user_id:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found",
+            detail="Invalid token payload",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+    # ローカルDBでユーザー検索（auth0_user_idで、ロール情報も取得）
+    user = (
+        db.query(models.User)
+        .options(joinedload(models.User.role))
+        .filter(models.User.auth0_user_id == auth0_user_id)
+        .first()
+    )
+
+    # 初回ログイン時はユーザー作成
+    if not user:
+        auth_service = AuthService(db)
+        user = auth_service.sync_user(payload)
+        # ロール情報を再読み込み
+        db.refresh(user)
+        user = (
+            db.query(models.User)
+            .options(joinedload(models.User.role))
+            .filter(models.User.auth0_user_id == auth0_user_id)
+            .first()
+        )
+
+    # ユーザーがアクティブかチェック
     if not user.is_active:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Inactive user"
+            status_code=status.HTTP_403_FORBIDDEN, detail="Inactive user"
         )
 
     return user

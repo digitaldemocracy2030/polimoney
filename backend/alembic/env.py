@@ -2,50 +2,43 @@ import os
 import sys
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 
-# Add the app directory to the Python path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+# appディレクトリをPythonパスに追加
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-# Import our models
+# モデルをインポート
 from app.database import Base
-from app.models.user import User, Role
-from app.models.political_funds import PoliticalFunds
-from app.models.election_funds import ElectionFunds
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
+# これはAlembic Configオブジェクトで、使用中の.iniファイル内の値へのアクセスを提供します
 config = context.config
 
-# Interpret the config file for Python logging.
-# This line sets up loggers basically.
+# Pythonロギング用の設定ファイルを解釈
+# この行は基本的にロガーを設定します
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
+# 'autogenerate'サポートのために、モデルのMetaDataオブジェクトをここに追加
 target_metadata = Base.metadata
 
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
+# env.pyの必要性によって定義される、設定からの他の値は以下のように取得できます:
 # my_important_option = config.get_main_option("my_important_option")
-# ... etc.
+# ... など
 
 
 def run_migrations_offline() -> None:
-    """Run migrations in 'offline' mode.
+    """オフラインマイグレーションを実行する関数
 
-    This configures the context with just a URL
-    and not an Engine, though an Engine is acceptable
-    here as well.  By skipping the Engine creation
-    we don't even need a DBAPI to be available.
+    データベース接続なしでマイグレーションを実行するための関数。
+    主に以下のタスクを実行する：
+    - SQLAlchemyのURLを取得
+    - マイグレーションコンテキストを設定
+    - トランザクション内でマイグレーションを実行
 
-    Calls to context.execute() here emit the given string to the
-    script output.
-
+    Returns:
+        None: マイグレーションを実行し、スキーマを更新する
     """
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
@@ -60,16 +53,21 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    """Run migrations in 'online' mode.
+    """オンラインマイグレーションを実行する関数
 
-    In this scenario we need to create an Engine
-    and associate a connection with the context.
+    データベース接続を使用してマイグレーションを実行するための関数。
+    主に以下のタスクを実行する：
+    - 環境変数または設定からデータベースURLを取得
+    - マイグレーションコンテキストを設定
+    - トランザクション内でマイグレーションを実行
 
+    Returns:
+        None: マイグレーションを実行し、スキーマを更新する
     """
-    # Get database URL from environment or config
+    # 環境変数または設定からデータベースURLを取得
     database_url = os.getenv("DATABASE_URL")
     if not database_url:
-        # Fallback to individual environment variables for Azure SQL Database
+        # Azure SQL Database用の個別の環境変数へのフォールバック
         database_url = (
             f"mssql+pyodbc://{os.getenv('DATABASE_USER')}:"
             f"{os.getenv('DATABASE_PASSWORD')}@"
@@ -85,9 +83,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
