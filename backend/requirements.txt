@@ -9,7 +9,7 @@ python-dotenv==1.0.0
 pydantic==2.5.0
 pydantic-settings==2.1.0
 email-validator==2.1.0
-requests==2.32.3
+requests==2.32.4
 
 # Development and testing
 pytest==7.4.3
