@@ -47,36 +47,16 @@ class UserBase(BaseModel):
     email: EmailStr
 
 
-class UserCreate(UserBase):
-    """ユーザー作成用スキーマ
-
-    新しいユーザーを作成するためのリクエスト用スキーマ。
-    UserBaseのフィールドに加えてパスワードフィールドを含む。
-    """
-
-    password: str = Field(..., min_length=8)
-
-
-class UserLogin(BaseModel):
-    """ユーザーログイン用スキーマ
-
-    ユーザーログイン時のリクエストデータを定義するスキーマ。
-    メールアドレスとパスワードのみを含む。
-    """
-
-    email: EmailStr
-    password: str
-
-
 class User(UserBase):
     """ユーザーの完全スキーマ
 
     ユーザーの全フィールドを含むレスポンス用スキーマ。
     データベースから取得したユーザー情報を表現する。
-    関連するロール情報も含む。
+    Auth0のユーザーIDと関連するロール情報も含む。
     """
 
     id: int
+    auth0_user_id: str
     role: Role
     is_active: bool
     email_verified: bool
@@ -98,23 +78,13 @@ class UserUpdate(BaseModel):
     email_verified: Optional[bool] = None
 
 
-# Token schemas
-class Token(BaseModel):
-    """アクセストークンスキーマ
+# Auth0 Config schema
+class Auth0Config(BaseModel):
+    """Auth0設定スキーマ
 
-    JWT認証で使用されるアクセストークンを表現するスキーマ。
-    認証成功時にクライアントに返却される。
+    フロントエンドがAuth0を初期化するために必要な設定情報。
     """
 
-    access_token: str
-    token_type: str = "bearer"
-
-
-class TokenData(BaseModel):
-    """トークンデータスキーマ
-
-    JWTトークンのペイロードに含まれるデータを表現するスキーマ。
-    トークン検証時に使用される。
-    """
-
-    user_id: Optional[int] = None
+    domain: str
+    client_id: str
+    audience: str
