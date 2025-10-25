@@ -1,8 +1,9 @@
+import logging
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
-import logging
 
 from app.config import settings
 
@@ -27,9 +28,14 @@ Base = declarative_base()
 
 
 def get_db() -> Session:
-    """
-    Dependency function to get database session.
-    Use this in FastAPI dependency injection.
+    """データベースセッションを取得する依存関数
+
+    FastAPIの依存性注入で使用するためのジェネレータ関数。
+    リクエストごとに新しいデータベースセッションを作成し、
+    リクエスト終了後に自動的にクローズする。
+
+    Yields:
+        Session: SQLAlchemyのデータベースセッション
     """
     db = SessionLocal()
     try:
@@ -39,7 +45,14 @@ def get_db() -> Session:
 
 
 def create_tables():
-    """Create all database tables"""
+    """すべてのデータベーステーブルを作成する
+
+    Base.metadata.create_all()を使用して、定義されたすべての
+    SQLAlchemyモデルに対応するデータベーステーブルを作成する。
+
+    Raises:
+        Exception: テーブル作成に失敗した場合
+    """
     try:
         Base.metadata.create_all(bind=engine)
         logger.info("Database tables created successfully")
@@ -49,7 +62,15 @@ def create_tables():
 
 
 def drop_tables():
-    """Drop all database tables (use with caution!)"""
+    """すべてのデータベーステーブルを削除する（注意して使用すること！）
+
+    Base.metadata.drop_all()を使用して、定義されたすべての
+    SQLAlchemyモデルに対応するデータベーステーブルを削除する。
+    この操作はデータを完全に失うため、本番環境では使用しないこと。
+
+    Raises:
+        Exception: テーブル削除に失敗した場合
+    """
     try:
         Base.metadata.drop_all(bind=engine)
         logger.info("Database tables dropped successfully")
@@ -59,7 +80,14 @@ def drop_tables():
 
 
 def init_db():
-    """Initialize database with basic data"""
+    """データベースを基本データで初期化する
+
+    デフォルトのユーザーロール（admin, user）を作成する。
+    これらのロールが存在しない場合のみ新規作成し、既存のデータは保持する。
+
+    Raises:
+        Exception: データベース初期化に失敗した場合
+    """
     from app.models.user import Role
 
     db = SessionLocal()

@@ -6,6 +6,10 @@ from app.core.security import create_access_token
 
 
 class TestUsersAPI:
+    """ユーザーAPIのテストケース
+
+    ユーザー関連のAPIエンドポイントをテストするクラス。
+    """
     @pytest.mark.asyncio
     async def test_get_all_users_as_admin(self, async_client: AsyncClient, db_session: Session):
         """管理者として全ユーザー取得テスト"""

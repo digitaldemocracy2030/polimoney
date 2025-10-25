@@ -1,9 +1,16 @@
-from pydantic import BaseModel, Field
-from typing import Optional
 from datetime import datetime
+from typing import Optional
+
+from pydantic import BaseModel, Field
 
 
 class PoliticalFundsBase(BaseModel):
+    """政治資金データの基本スキーマ
+
+    政治資金収支報告書の基本フィールドを定義するベースクラス。
+    団体情報と財務データを表現する。
+    """
+
     organization_name: str = Field(..., min_length=1, max_length=255)
     organization_type: str = Field(..., min_length=1, max_length=100)
     representative_name: str = Field(..., min_length=1, max_length=255)
@@ -18,10 +25,20 @@ class PoliticalFundsBase(BaseModel):
 
 
 class PoliticalFundsCreate(PoliticalFundsBase):
-    pass
+    """政治資金データ作成用スキーマ
+
+    新しい政治資金データを作成するためのリクエスト用スキーマ。
+    PoliticalFundsBaseの全フィールドを継承する。
+    """
 
 
 class PoliticalFundsUpdate(BaseModel):
+    """政治資金データ更新用スキーマ
+
+    政治資金データを更新するためのリクエスト用スキーマ。
+    全てのフィールドがオプションで、更新したいフィールドのみ指定可能。
+    """
+
     organization_name: Optional[str] = Field(None, min_length=1, max_length=255)
     organization_type: Optional[str] = Field(None, min_length=1, max_length=100)
     representative_name: Optional[str] = Field(None, min_length=1, max_length=255)
@@ -34,6 +51,12 @@ class PoliticalFundsUpdate(BaseModel):
 
 
 class PoliticalFunds(PoliticalFundsBase):
+    """政治資金データの完全スキーマ
+
+    政治資金データの全フィールドを含むレスポンス用スキーマ。
+    データベースから取得した政治資金情報を表現する。
+    """
+
     id: int
     user_id: int
     created_at: datetime

@@ -7,6 +7,10 @@ from app.core.security import verify_password
 
 
 class TestAuthService:
+    """AuthServiceのテストケース
+
+    AuthServiceクラスの機能をテストするクラス。
+    """
     def test_register_user_success(self, db_session: Session):
         """正常なユーザー登録テスト"""
         auth_service = AuthService(db_session)

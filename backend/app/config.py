@@ -1,9 +1,14 @@
-from pydantic_settings import BaseSettings
-from typing import List, Optional
 import os
+from typing import List, Optional
+
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
+    """アプリケーション設定
+
+    アプリケーション全体の設定を管理するクラス。
+    """
     # Database settings
     database_server: str = "your-server.database.windows.net"
     database_name: str = "your-database-name"
@@ -36,12 +41,22 @@ class Settings(BaseSettings):
     admin_password: str = "admin123"
 
     class Config:
+        """Pydantic設定
+
+        Pydanticの設定クラス。
+        """
         env_file = ".env"
         case_sensitive = False
 
     @property
     def sqlalchemy_database_url(self) -> str:
-        """Generate SQLAlchemy database URL for Azure SQL Database"""
+        """SQLAlchemyデータベースURLを生成する
+
+        Azure SQL Database用の接続文字列を生成する。
+
+        Returns:
+            str: SQLAlchemyデータベースURL
+        """
         if self.database_url:
             return self.database_url
 
