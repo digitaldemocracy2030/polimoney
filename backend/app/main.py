@@ -1,12 +1,13 @@
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import settings
 from app.database import create_tables, init_db
+from app.dependencies.auth import get_current_admin_user
 from app.routers import auth, election_funds, health, political_funds, profile, users
 
 # Configure logging
@@ -133,7 +134,7 @@ app.include_router(
     users.router,
     prefix="/api/v1/admin",
     tags=["users"],
-    dependencies=[],  # Will be protected by individual endpoints
+    dependencies=[Depends(get_current_admin_user)],
 )
 
 app.include_router(profile.router, prefix="/api/v1", tags=["profile"])
@@ -142,14 +143,18 @@ app.include_router(
     political_funds.router,
     prefix="/api/v1/admin",
     tags=["political-funds"],
-    dependencies=[],  # Will be protected by individual endpoints
+    dependencies=[
+        Depends(get_current_admin_user)
+    ],  # Will be protected by individual endpoints
 )
 
 app.include_router(
     election_funds.router,
     prefix="/api/v1/admin",
     tags=["election-funds"],
-    dependencies=[],  # Will be protected by individual endpoints
+    dependencies=[
+        Depends(get_current_admin_user)
+    ],  # Will be protected by individual endpoints
 )
 
 
