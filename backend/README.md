@@ -65,15 +65,22 @@ docker-compose up --build
 Docker Composeを使わずにローカルで実行する場合：
 
 1. **Pythonのインストール**
-   Python 3.11以上をインストールしてください。
+   Python 3.13以上をインストールしてください。
 
-2. **依存パッケージのインストール**
+2. **依存パッケージ・環境変数のインストール**
 
    ```bash
    uv pip install -r requirements.txt
+
+   # mac, linux
+   cp -i .env.example .env
+
+   # windows
+   Copy-Item .env.example .env
+
    ```
 
-3. **データベースマイグレーション**
+3. **データベースマイグレーション** (必要なら)
 
    ```bash
    # マイグレーション実行
@@ -83,7 +90,7 @@ Docker Composeを使わずにローカルで実行する場合：
 4. **サーバーの起動**
 
    ```bash
-   uvicorn app.main:app --reload
+   python -m uvicorn app.main:app --reload
    ```
 
 ## 環境変数

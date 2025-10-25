@@ -36,13 +36,16 @@ async def lifespan(app: FastAPI):
     logger.info("Starting Polimoney API server...")
 
     # Create database tables
-    try:
-        create_tables()
-        init_db()
-        logger.info("Database initialized successfully")
-    except Exception as e:
-        logger.error(f"Failed to initialize database: {e}")
-        raise
+    if not settings.debug:
+        try:
+            create_tables()
+            init_db()
+            logger.info("Database initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize database: {e}")
+            raise
+    else:
+        logger.warning("Database initialization skipped (DEBUG=true)")
 
     yield
 
@@ -166,7 +169,6 @@ async def root():
     """
     return {
         "message": "Welcome to Polimoney API",
-        "version": "1.0.0",
         "docs": "/docs",
         "health": "/api/v1/health",
     }
