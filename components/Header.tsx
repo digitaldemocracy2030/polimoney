@@ -1,19 +1,45 @@
 'use client';
-import { Box, Heading, HStack, Text } from '@chakra-ui/react';
+
+import { useAuth0 } from '@auth0/auth0-react';
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  Menu,
+  Text,
+} from '@chakra-ui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 import SNSSharePanel from './SNSSharePanel';
 
 export function Header({ profileName }: { profileName?: string }) {
   const pathname = usePathname();
+  const { error, logout } = useAuth0();
+
+  // 認証エラーがある場合、ローカルストレージをクリアしてログアウト
+  useEffect(() => {
+    if (error) {
+      Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith('auth0.')) {
+          localStorage.removeItem(key);
+        }
+      });
+      logout({ logoutParams: { returnTo: window.location.origin } });
+    }
+  }, [error, logout]);
 
   return (
     <Box>
       <Box w="full" position="relative">
-        <HStack
-          justify="space-between"
-          position="relative"
+        <Flex
+          justify={{ base: 'center', lg: 'space-between' }}
+          align="center"
           w="full"
+          h="60px"
           px={{ base: 6, md: 10 }}
           py={5}
           background={'linear-gradient(90deg, #FDD2F8 0%, #A6D1FF 100%)'}
@@ -21,55 +47,38 @@ export function Header({ profileName }: { profileName?: string }) {
           color={'#ffffff'}
           textShadow={'0 0 1px #00000077'}
         >
-          {/* タイトル（デスクトップでは左端、モバイルでは非表示） */}
-          <Box display={{ base: 'none', lg: 'block' }}>
+          {/* タイトル */}
+          <Box>
             <Link href={'/'}>
-              <Heading fontSize={'3xl'}>Polimoney</Heading>
+              <Heading fontSize={'2xl'}>Polimoney</Heading>
             </Link>
           </Box>
 
-          {/* モバイル用：中央のタイトル */}
-          <Box
-            display={{ base: 'block', lg: 'none' }}
-            position="absolute"
-            left="50%"
-            transform="translateX(-50%)"
+          {/* ナビゲーションボタン */}
+          <HStack
+            gap={{ base: 4, lg: 6 }}
+            align="center"
+            position={{ base: 'absolute', lg: 'static' }}
+            right={{ base: 6, lg: 'auto' }}
           >
-            <Link href={'/'}>
-              <Heading fontSize={'3xl'}>Polimoney</Heading>
-            </Link>
-          </Box>
-          {pathname !== '/' && (
-            <>
-              {/* デスクトップ用：右寄せナビゲーション */}
-              <HStack
-                display={{ base: 'none', lg: 'flex' }}
-                gap={8}
-                position="absolute"
-                right={{ base: 6, md: 10 }}
-              >
-                <HStack fontSize={'sm'} fontWeight={'bold'} gap={8}>
+            {pathname !== '/' && (
+              <>
+                <HStack
+                  display={{ base: 'none', lg: 'flex' }}
+                  fontSize={'sm'}
+                  fontWeight={'bold'}
+                  gap={6}
+                >
                   <Link href={'#summary'}>収支の流れ</Link>
                   <Link href={'#income'}>収入の一覧</Link>
                   <Link href={'#expense'}>支出の一覧</Link>
                 </HStack>
-                <Box>
-                  <SNSSharePanel profileName={profileName ?? ''} />
-                </Box>
-              </HStack>
-              {/* モバイル用：共有ボタン（右端に固定配置） */}
-              <Box
-                display={{ base: 'block', lg: 'none' }}
-                position="absolute"
-                right={{ base: 6, md: 10 }}
-                top="50%"
-                transform="translateY(-50%)"
-              >
                 <SNSSharePanel profileName={profileName ?? ''} />
-              </Box>
-            </>
-          )}
-        </HStack>
+              </>
+            )}
+            <AccountControl />
+          </HStack>
+        </Flex>
       </Box>
       <Text fontSize={'xs'} textAlign={'center'} my={6}>
         政治資金の流れを見える化するプラットフォームです。透明性の高い政治実現を目指して、オープンソースで開発されています。
@@ -77,3 +86,47 @@ export function Header({ profileName }: { profileName?: string }) {
     </Box>
   );
 }
+
+const AccountControl = () => {
+  const { loginWithRedirect, logout } = useAuth0();
+  const { user, isAuthenticated, isLoading } = useAuth0();
+
+  if (isLoading) {
+    return null;
+  }
+
+  return (
+    <>
+      {isAuthenticated ? (
+        <Menu.Root positioning={{ placement: 'bottom' }}>
+          <Menu.Trigger>
+            <Avatar.Root size="xs">
+              <Avatar.Fallback name={user?.name} />
+              <Avatar.Image src={user?.picture} />
+            </Avatar.Root>
+          </Menu.Trigger>
+          <Menu.Positioner>
+            <Menu.Content>
+              <Menu.Item
+                value="logout"
+                onClick={() =>
+                  logout({ logoutParams: { returnTo: window.location.origin } })
+                }
+              >
+                ログアウト
+              </Menu.Item>
+            </Menu.Content>
+          </Menu.Positioner>
+        </Menu.Root>
+      ) : (
+        <Button
+          variant="ghost"
+          color="white"
+          onClick={() => loginWithRedirect()}
+        >
+          ログイン
+        </Button>
+      )}
+    </>
+  );
+};

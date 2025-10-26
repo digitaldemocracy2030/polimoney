@@ -6,10 +6,14 @@ import {
   type SankeyLayerId,
   type SankeyNodeDatum,
 } from '@nivo/sankey';
-import type { Flow } from '@/models/type';
+import { useMemo } from 'react';
+import type { Category } from '@/data/uniformed/common';
+import type { Transaction } from '@/models/uniformed/type';
+import { generateFlowsFromTransactions } from '@/utils/flowGenerator';
 
 type Props = {
-  flows: Flow[];
+  transactions: Transaction[];
+  categories?: { income: Category[]; expense: Category[] };
 };
 type Data = {
   nodes: DataNode[];
@@ -17,7 +21,6 @@ type Data = {
 };
 type DataNode = {
   id: string;
-  name: string;
   direction: string;
   value: number;
 };
@@ -27,20 +30,45 @@ type DataLink = {
   value: number;
 };
 
-export function BoardChartFixed({ flows }: Props) {
+export function BoardChart({ transactions, categories }: Props) {
+  // Flowを生成
+  const computedFlows = useMemo(() => {
+    if (!categories) {
+      return [];
+    }
+    const flows = generateFlowsFromTransactions(transactions, categories);
+    return flows;
+  }, [transactions, categories]);
+
+  // flowsがない場合は空のデータを返す
+  if (computedFlows.length === 0) {
+    return (
+      <Box w={'full'} h={'600px'}>
+        Flow data not available
+      </Box>
+    );
+  }
+
   const data: Data = {
-    nodes: flows.map((item) => ({
-      id: item.id,
-      name: item.name,
+    nodes: computedFlows.map((item) => ({
+      id: item.name,
       direction: item.direction,
       value: item.value,
     })),
-    links: flows
-      .filter((item) => item.name !== '総収入')
+    links: computedFlows
       .map((item) => {
+        // 総収入ノードはリンクを作らない
+        if (item.name === '総収入') {
+          return null;
+        }
+        // parentがnullやundefinedの場合はリンクを作らない
+        if (!item.parent) {
+          return null;
+        }
+
         if (item.direction === 'income') {
           return {
-            source: item.id,
+            source: item.name,
             target: item.parent,
             value: item.value,
           };
@@ -48,7 +76,7 @@ export function BoardChartFixed({ flows }: Props) {
         if (item.direction === 'expense') {
           return {
             source: item.parent,
-            target: item.id,
+            target: item.name,
             value: item.value,
           };
         }
@@ -65,7 +93,7 @@ export function BoardChartFixed({ flows }: Props) {
           colors={(node) =>
             node.direction === 'income' ? '#00BCD4' : '#E91E63'
           }
-          label={(node) => `${node.name}: ${node.value.toLocaleString()}`}
+          label={(node) => `${node.id}: ${node.value.toLocaleString()}`}
           margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
           layers={[
             'links',
@@ -133,7 +161,7 @@ const CustomLabelsLayer = ({
                 textAnchor: 'middle',
               }}
             >
-              {node.name}
+              {node.id}
             </text>
             <text
               x={labelX + labelWidth / 2}

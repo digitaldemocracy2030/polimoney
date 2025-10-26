@@ -6,10 +6,14 @@ import {
   type SankeyLayerId,
   type SankeyNodeDatum,
 } from '@nivo/sankey';
-import type { Flow } from '@/models/type';
+import { useMemo } from 'react';
+import type { Category } from '@/data/uniformed/common';
+import type { Transaction } from '@/models/uniformed/type';
+import { generateFlowsFromTransactions } from '@/utils/flowGenerator';
 
 type Props = {
-  flows: Flow[];
+  transactions: Transaction[];
+  categories?: { income: Category[]; expense: Category[] };
 };
 type Data = {
   nodes: DataNode[];
@@ -27,30 +31,65 @@ type DataLink = {
   value: number;
 };
 
-export function BoardChartFixed({ flows }: Props) {
+export function BoardChartFixed({ transactions, categories }: Props) {
+  // Flowを生成（transactions優先、flowsはフォールバック）
+  const computedFlows = useMemo(() => {
+    if (!transactions || transactions.length === 0) {
+      return [];
+    }
+    if (!categories) {
+      return [];
+    }
+    const flows = generateFlowsFromTransactions(transactions, categories);
+    return flows;
+  }, [transactions, categories]);
+
+  // flowsがない場合は空のデータを返す
+  if (computedFlows.length === 0) {
+    return (
+      <Box w={'full'} h={'600px'}>
+        Flow data not available
+      </Box>
+    );
+  }
+
   const data: Data = {
-    nodes: flows.map((item) => ({
+    nodes: computedFlows.map((item) => ({
       id: item.id,
       name: item.name,
       direction: item.direction,
       value: item.value,
     })),
-    links: flows
-      .filter((item) => item.name !== '総収入')
+    links: computedFlows
       .map((item) => {
+        if (item.name === '総収入') {
+          return null;
+        }
+        if (!item.parent) {
+          return null;
+        }
+
+        // parentの名前からidを取得
+        const parentFlow = computedFlows.find((f) => f.name === item.parent);
+        if (!parentFlow) {
+          return null;
+        }
+
         if (item.direction === 'income') {
-          return {
+          const link = {
             source: item.id,
-            target: item.parent,
+            target: parentFlow.id,
             value: item.value,
           };
+          return link;
         }
         if (item.direction === 'expense') {
-          return {
-            source: item.parent,
+          const link = {
+            source: parentFlow.id,
             target: item.id,
             value: item.value,
           };
+          return link;
         }
         return null;
       })
