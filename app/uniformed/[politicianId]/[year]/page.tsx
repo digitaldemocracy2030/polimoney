@@ -1,14 +1,8 @@
-import { Box } from '@chakra-ui/react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { BoardMetadata } from '@/components/BoardMetadata';
-import { BoardTransactions } from '@/components/BoardTransactions';
-import { Footer } from '@/components/Footer';
-import { Header } from '@/components/Header';
-import { Notice } from '@/components/Notice';
-import { BoardSummary } from '@/components/uniformed/BoardSummary';
+import { Main } from '@/components/uniformed/Main';
 import { politicianDataMap } from '@/data/uniformed/politician-data';
-import type { Report, Transaction } from '@/models/uniformed/type';
+import type { Report } from '@/models/uniformed/type';
 
 type Props = {
   params: Promise<{
@@ -93,37 +87,11 @@ export default async function Page({ params }: Props) {
   const reportData = yearData.data[0];
 
   return (
-    <Box>
-      <Header profileName={data.yearData.profile.name} />
-      <BoardSummary
-        politicianId={politicianId}
-        profile={yearData.profile}
-        report={reportData.report}
-        otherReports={allReports}
-        transactions={reportData.transactions}
-        categories={reportData.categories}
-      />
-      <BoardTransactions
-        direction={'income'}
-        total={reportData.report.totalIncome}
-        transactions={reportData.transactions.filter(
-          (t: Transaction) => t.direction === 'income',
-        )}
-        showPurpose={false}
-        showDate={false}
-      />
-      <BoardTransactions
-        direction={'expense'}
-        total={reportData.report.totalExpense}
-        transactions={reportData.transactions.filter(
-          (t: Transaction) => t.direction === 'expense',
-        )}
-        showPurpose={false}
-        showDate={false}
-      />
-      <BoardMetadata report={reportData.report} />
-      <Notice />
-      <Footer />
-    </Box>
+    <Main
+      politicianId={politicianId}
+      yearData={yearData}
+      allReports={allReports}
+      reportData={reportData}
+    />
   );
 }
