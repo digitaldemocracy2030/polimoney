@@ -34,10 +34,8 @@ export function BoardChart({ flows }: Props) {
       value: item.value,
     })),
     links: flows
+      .filter((item) => item.name !== '総収入')
       .map((item) => {
-        if (item.name === '総収入') {
-          return null;
-        }
         if (item.direction === 'income') {
           return {
             source: item.name,
@@ -52,6 +50,7 @@ export function BoardChart({ flows }: Props) {
             value: item.value,
           };
         }
+        return null;
       })
       .filter((item): item is DataLink => item !== null),
   };

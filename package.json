@@ -10,6 +10,7 @@
     "check": "biome check --write ."
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.8.0",
     "@chakra-ui/react": "^3.20.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
