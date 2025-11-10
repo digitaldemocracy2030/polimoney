@@ -4,11 +4,18 @@ from util import B_COL, C_COL, E_COL, H_COL, I_COL, extract_number
 
 
 def get_individual_total(total: Worksheet):
-    """合計の個別データを取得する
-    合計に関しては、データの追加はないため、4~13列目を指定するだけで取得できる
+    """合計の個別データを取得する。
+
+    Excelシートの2行目から10行目までを読み込み、今回計・前回計・総計の各項目を取得する。
+    合計に関しては、データの追加はないため、固定の行範囲を指定するだけで取得できる。
 
     Args:
-        total (Worksheet): 合計のシート
+        total (Worksheet): 合計のExcelシート。
+
+    Returns:
+        list[dict]: 合計のデータリスト。各要素は以下のキーを持つ辞書:
+            - name (str): カテゴリ名と項目名を結合した文字列（例: "今回計 印刷費"）。
+            - price (int or float): 金額。
     """
 
     total_data = []
@@ -29,10 +36,21 @@ def get_individual_total(total: Worksheet):
 
 
 def get_public_expense_equivalent_total(total: Worksheet):
-    """支出のうち公費負担相当額のデータを取得する
+    """支出のうち公費負担相当額のデータを取得する。
+
+    Excelシートの12行目以降から、公費負担相当額の内訳を取得する。
+    「計」行に到達したら処理を終了する。
 
     Args:
-        total (Worksheet): 合計のシート
+        total (Worksheet): 合計のExcelシート。
+
+    Returns:
+        list[dict]: 公費負担相当額のデータリスト。各要素は以下のキーを持つ辞書:
+            - item (str): 項目名。「計」の場合は"total"キーを持つ辞書になる。
+            - unit_price (int or float): 単価。
+            - quantity (int or float): 数量（枚数）。
+            - price (int or float): 金額。
+            - total (int or float): 「計」行の場合のみ存在する合計金額。
     """
 
     get_public_expense_equivalent_total_data = []
@@ -60,10 +78,17 @@ def get_public_expense_equivalent_total(total: Worksheet):
 
 
 def get_total(total: Worksheet):
-    """合計のデータを取得する
+    """合計の全データを取得する。
+
+    個別の合計データと公費負担相当額の合計データを取得し、1つの辞書にまとめて返す。
 
     Args:
-        total (Worksheet): 合計のシート
+        total (Worksheet): 合計のExcelシート。
+
+    Returns:
+        dict: 以下のキーを持つ辞書:
+            - individual_total (list[dict]): 合計の個別データリスト。
+            - public_expense_equivalent_total (list[dict]): 公費負担相当額の合計データリスト。
     """
 
     individual_total = get_individual_total(total)

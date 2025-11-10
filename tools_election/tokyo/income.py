@@ -18,9 +18,10 @@ def get_individual_income(income: Worksheet):
         list: 収入の部のデータ
     """
     income_data = []
+    json_checksum = 0  # jsonファイルの検証に使用
 
-    # 4行目以降, AからJの列を取得
-    min_row = 4
+    # 3行目以降, AからJの列を取得
+    min_row = 3
 
     for row in income.iter_rows(min_row=min_row, max_col=H_COL + 1):
         date_cell = row[A_COL]
@@ -34,7 +35,7 @@ def get_individual_income(income: Worksheet):
 
         # 小計になったら終了
         if date_cell.value == "小計":
-            income_data.append({"total": extract_number(price_cell.value)})
+            json_checksum = extract_number(price_cell.value)
             break
 
         income_data.append(
@@ -50,12 +51,25 @@ def get_individual_income(income: Worksheet):
             }
         )
 
-    return income_data
+    return income_data, json_checksum
 
 
 def get_income(income: Worksheet):
-    individual_income = get_individual_income(income)
+    """収入の部の全データを取得する。
+
+    個別の収入データとチェックサムを取得し、1つの辞書にまとめて返す。
+
+    Args:
+        income (Worksheet): 収入の部のExcelシート。
+
+    Returns:
+        dict: 以下のキーを持つ辞書:
+            - individual_income (list[dict]): 収入の個別データリスト。
+            - json_checksum (int or float): チェックサム（小計の金額）。
+    """
+    individual_income, json_checksum = get_individual_income(income)
 
     return {
         "individual_income": individual_income,
+        "json_checksum": json_checksum,
     }

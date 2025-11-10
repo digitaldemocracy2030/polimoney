@@ -4,10 +4,21 @@ from util import A_COL, B_COL, C_COL, E_COL, F_COL, K_COL, extract_number
 
 
 def get_individual_general(general: Worksheet):
-    """共通フォーマットの個別データを取得する
+    """共通フォーマットの個別データを取得する。
+
+    Excelシートの4行目以降から、日付、金額、カテゴリ、目的、備考を取得する。
+    金額セルがNoneになったら処理を終了する。
 
     Args:
-        general (Worksheet): 共通フォーマットのシート
+        general (Worksheet): 共通フォーマットのExcelシート。
+
+    Returns:
+        list[dict]: 個別データのリスト。各要素は以下のキーを持つ辞書:
+            - date (str or None): 日付（YYYY-MM-DD形式）。日付がない場合はNone。
+            - price (int or float): 金額。
+            - category (str): カテゴリ。
+            - purpose (str): 目的。
+            - note (str): 備考。
     """
 
     general_data = []
@@ -40,15 +51,24 @@ def get_individual_general(general: Worksheet):
 
 
 def get_total_general(general: Worksheet):
-    """共通フォーマットの合計データを取得する
-    合計に関する記述は3行あり、位置は個別データの数によって変わるので、動的に取得する
+    """共通フォーマットの合計データを取得する。
+
+    Excelシートの16行目以降から、「立候補準備のための支出」「選挙運動のための支出」「計」の
+    3行を動的に検索して取得する。位置は個別データの数によって変わるため、動的に取得する。
 
     Args:
-        general (Worksheet): 共通フォーマットのシート
+        general (Worksheet): 共通フォーマットのExcelシート。
+
+    Returns:
+        tuple[list[dict], int or float]: 合計データのリストとチェックサム（「計」の金額）のタプル。
+            合計データの各要素は以下のキーを持つ辞書:
+            - name (str): 項目名（「立候補準備のための支出」「選挙運動のための支出」「計」のいずれか）。
+            - price (int or float): 金額。
     """
 
     total_general_data = []
     count = 0
+    json_checksum = 0  # jsonファイルの検証に使用
 
     # 合計に関する記述は16行目より下にある
     min_row = 16
@@ -72,16 +92,31 @@ def get_total_general(general: Worksheet):
         price_value = extract_number(price_value)
         total_general_data.append({"name": value_str, "price": price_value})
         count += 1
+        if value_str == "計":
+            json_checksum = price_value
 
-    return total_general_data
+    return total_general_data, json_checksum
 
 
 def get_general(general: Worksheet, name: str):
+    """共通フォーマットのシートからデータを取得し、辞書形式で返す。
+
+    Args:
+        general (Worksheet): 共通フォーマットのExcelシート。
+        name (str): データの種類を表す名前（例: "personnel", "communication"）。
+
+    Returns:
+        dict: 以下のキーを持つ辞書:
+            - individual_{name} (list[dict]): 個別データのリスト。
+            - total_{name} (list[dict]): 合計データのリスト。
+            - json_checksum (int or float): チェックサム（「計」の金額）。
+    """
     individual_general = get_individual_general(general)
 
-    total_general = get_total_general(general)
+    total_general, json_checksum = get_total_general(general)
 
     return {
         f"individual_{name}": individual_general,
         f"total_{name}": total_general,
+        "json_checksum": json_checksum,
     }

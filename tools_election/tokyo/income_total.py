@@ -6,10 +6,18 @@ from util import B_COL, C_COL
 
 
 def get_individual_income_total(income_total: Worksheet):
-    """収入計を取得する
+    """収入計の個別データを取得する。
+
+    Excelシートの2行目から10行目までを読み込み、今回計・前回計・総計の各項目を取得する。
+    各行にはカテゴリ名（今回計/前回計/総計）と項目名、金額が含まれる。
 
     Args:
-        income_total (Worksheet): 収入計のシート
+        income_total (Worksheet): 収入計のExcelシート。
+
+    Returns:
+        list[dict]: 収入計のデータリスト。各要素は以下のキーを持つ辞書:
+            - name (str): カテゴリ名と項目名を結合した文字列（例: "今回計 寄附"）。
+            - price: 金額。
     """
     income_total_data = []
 
@@ -33,10 +41,17 @@ def get_individual_income_total(income_total: Worksheet):
 
 
 def get_public_expense_equivalent(income_total: Worksheet):
-    """公費負担相当額を取得する
+    """公費負担相当額を取得する。
+
+    Excelシートの12行目C列から「公費負担相当額」の文字列を検索し、
+    正規表現を使用して金額を抽出する。
 
     Args:
-        income_total (Worksheet): 収入計のシート
+        income_total (Worksheet): 収入計のExcelシート。
+
+    Returns:
+        dict: 公費負担相当額のデータ。以下のキーを持つ:
+            - total (int): 公費負担相当額の総額。見つからない場合は空の辞書を返す。
     """
     public_expense_equivalent_data = {}
 
@@ -55,10 +70,17 @@ def get_public_expense_equivalent(income_total: Worksheet):
 
 
 def get_income_total(income_total: Worksheet):
-    """収入計を取得する
+    """収入計の全データを取得する。
+
+    個別の収入計データと公費負担相当額を取得し、1つの辞書にまとめて返す。
 
     Args:
-        income_total (Worksheet): 収入計のシート
+        income_total (Worksheet): 収入計のExcelシート。
+
+    Returns:
+        dict: 以下のキーを持つ辞書:
+            - individual_income_total (list[dict]): 収入計の個別データリスト。
+            - public_expense_equivalent (dict): 公費負担相当額のデータ。
     """
     individual_income_total = get_individual_income_total(income_total)
     public_expense_equivalent = get_public_expense_equivalent(income_total)
