@@ -1,5 +1,6 @@
 'use client';
 
+import { Group, Menu } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import {
@@ -11,88 +12,8 @@ import {
   XIcon,
 } from 'react-share';
 
-const SNSButtons = ({
-  url,
-  shareTitle,
-  hashTags,
-  copied,
-  onCopy,
-}: {
-  url: string;
-  shareTitle: string;
-  hashTags: string[];
-  copied: boolean;
-  onCopy: () => void;
-}) => (
-  <>
-    {/* コピー用ボタン */}
-    <button
-      onClick={onCopy}
-      className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 border transition"
-      aria-label="URLをコピー"
-      type="button"
-    >
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <title>{copied ? 'コピー済み' : 'URLをコピー'}</title>
-        <circle
-          cx="16"
-          cy="16"
-          r="16"
-          fill={copied ? '#4ade80' : '#f3f4f6'}
-          stroke="#e5e7eb"
-        />
-        {copied ? (
-          // コピー済みアイコン（チェックマーク）
-          <path
-            d="M12 17l4 4 7-7"
-            stroke="#fff"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        ) : (
-          // コピーアイコン
-          <>
-            <rect
-              x="10"
-              y="12"
-              width="10"
-              height="10"
-              rx="2"
-              stroke="#555"
-              strokeWidth="2"
-              fill="none"
-            />
-            <rect
-              x="13"
-              y="9"
-              width="10"
-              height="10"
-              rx="2"
-              stroke="#555"
-              strokeWidth="2"
-              opacity="0.3"
-              fill="none"
-            />
-          </>
-        )}
-      </svg>
-    </button>
-    <LineShareButton url={url} title={shareTitle}>
-      <LineIcon size={32} round />
-    </LineShareButton>
-    <FacebookShareButton url={url} title={shareTitle} hashtag={hashTags[0]}>
-      <FacebookIcon size={32} round />
-    </FacebookShareButton>
-    <TwitterShareButton url={url} title={shareTitle} hashtags={hashTags}>
-      <XIcon size={32} round />
-    </TwitterShareButton>
-  </>
-);
-
 export default function SNSSharePanel({
   profileName,
-  className = '',
 }: {
   profileName: string;
   className?: string;
@@ -111,7 +32,6 @@ export default function SNSSharePanel({
   const url = `${origin}${pathname}`;
   const hashTags = ['Polimoney', 'デジタル民主主義2030'];
 
-  const [visible, setVisible] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -125,65 +45,131 @@ export default function SNSSharePanel({
   };
 
   return (
-    <div className={`relative flex items-center ${className}`}>
-      {/* SNSボタン：SHAREボタンの左横に表示（中央揃え） */}
-      {visible && (
-        <div className="absolute right-full mr-2 top-1/2 -translate-y-1/2 flex gap-2 bg-white rounded shadow-lg p-2 z-20">
-          <SNSButtons
+    <Menu.Root closeOnSelect={false} positioning={{ placement: 'bottom' }}>
+      <Menu.Trigger asChild>
+        <button
+          type="button"
+          className={`text-sm font-normal px-3 py-0.5 rounded-none transition z-10
+                  bg-black text-white border border-black hover:bg-gray-700 hover:text-white`}
+          aria-label="共有"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <title>共有</title>
+            <rect
+              x="4"
+              y="9"
+              width="12"
+              height="10"
+              rx="2"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M10 15V3"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            <path
+              d="M7 6l3-3 3 3"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+      </Menu.Trigger>
+      <Menu.Positioner>
+        <Menu.Content>
+          <ShareButtons
             url={url}
             shareTitle={shareTitle}
             hashTags={hashTags}
             copied={copied}
             onCopy={handleCopy}
           />
-          {/* ポップアップでコピー通知 */}
-          {copied && (
-            <div className="absolute left-1/2 -translate-x-1/2 -top-8 bg-black text-white text-xs rounded px-3 py-1 shadow z-30 whitespace-nowrap animate-fade-in">
-              リンクをコピーしました
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* SHAREボタン */}
-      <button
-        type="button"
-        className={`text-sm font-normal px-3 py-0.5 rounded-none transition z-10
-                ${
-                  visible
-                    ? 'bg-white text-black border border-black'
-                    : 'bg-black text-white border border-black hover:bg-gray-700 hover:text-white'
-                }`}
-        onClick={() => setVisible((v) => !v)}
-        aria-label="共有"
-      >
-        {/* 共有アイコン（四角＋上矢印） */}
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <title>共有</title>
-          <rect
-            x="4"
-            y="9"
-            width="12"
-            height="10"
-            rx="2"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          />
-          <path
-            d="M10 15V3"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-          <path
-            d="M7 6l3-3 3 3"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </button>
-    </div>
+        </Menu.Content>
+      </Menu.Positioner>
+    </Menu.Root>
   );
 }
+
+const ShareButtons = ({
+  url,
+  shareTitle,
+  hashTags,
+  copied,
+  onCopy,
+}: {
+  url: string;
+  shareTitle: string;
+  hashTags: string[];
+  copied: boolean;
+  onCopy: () => void;
+}) => (
+  <Group grow gap="0">
+    <Menu.Item value="copy" onClick={onCopy}>
+      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 border transition">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <title>{copied ? 'コピー済み' : 'URLをコピー'}</title>
+          <circle
+            cx="16"
+            cy="16"
+            r="16"
+            fill={copied ? '#4ade80' : '#f3f4f6'}
+            stroke="#e5e7eb"
+          />
+          {copied ? (
+            <path
+              d="M10 16l4 4 7-7"
+              stroke="#fff"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          ) : (
+            <>
+              <rect
+                x="10"
+                y="12"
+                width="10"
+                height="10"
+                rx="2"
+                stroke="#555"
+                strokeWidth="2"
+                fill="none"
+              />
+              <rect
+                x="13"
+                y="9"
+                width="10"
+                height="10"
+                rx="2"
+                stroke="#555"
+                strokeWidth="2"
+                opacity="0.3"
+                fill="none"
+              />
+            </>
+          )}
+        </svg>
+      </div>
+    </Menu.Item>
+    <Menu.Item value="line">
+      <LineShareButton url={url} title={shareTitle}>
+        <LineIcon size={32} round />
+      </LineShareButton>
+    </Menu.Item>
+    <Menu.Item value="facebook">
+      <FacebookShareButton url={url} title={shareTitle} hashtag={hashTags[0]}>
+        <FacebookIcon size={32} round />
+      </FacebookShareButton>
+    </Menu.Item>
+    <Menu.Item value="twitter">
+      <TwitterShareButton url={url} title={shareTitle} hashtags={hashTags}>
+        <XIcon size={32} round />
+      </TwitterShareButton>
+    </Menu.Item>
+  </Group>
+);
