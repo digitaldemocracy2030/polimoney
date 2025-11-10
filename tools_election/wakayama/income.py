@@ -147,3 +147,4 @@ def get_income(income: Worksheet):
         "total_income": total_income,
         "public_expense_equivalent": public_expense_equivalent,
     }
+    # 収入に関しては、前回計・総額などのdiffデータを取り扱っているので、checksumは用意していない

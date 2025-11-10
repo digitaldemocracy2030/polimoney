@@ -48,6 +48,7 @@ def get_total_election_office(building: Worksheet):
 
     total_building_data = []
     count = 0
+    json_checksum = 0  # jsonファイルの検証に使用
 
     # 合計に関する記述は16行目より下にある
     min_row = 16
@@ -71,8 +72,10 @@ def get_total_election_office(building: Worksheet):
         price_value = extract_number(price_value)
         total_building_data.append({"name": value_str, "price": price_value})
         count += 1
+        if value_str == "計":
+            json_checksum = price_value
 
-    return total_building_data
+    return total_building_data, json_checksum
 
 
 def get_individual_meeting_venue(building: Worksheet):
@@ -139,6 +142,7 @@ def get_total_meeting_venue(building: Worksheet):
 
     total_meeting_venue_data = []
     count = 0
+    json_checksum = 0  # jsonファイルの検証に使用
 
     # 合計に関する記述は34行目より下にある
     min_row = 34
@@ -162,22 +166,27 @@ def get_total_meeting_venue(building: Worksheet):
         price_value = extract_number(price_value)
         total_meeting_venue_data.append({"name": value_str, "price": price_value})
         count += 1
+        if value_str == "計":
+            json_checksum = price_value
 
-    return total_meeting_venue_data
+    return total_meeting_venue_data, json_checksum
 
 
 def get_building(building: Worksheet):
     individual_election_office = get_individual_election_office(building)
 
-    total_election_office = get_total_election_office(building)
+    total_election_office, json_checksum1 = get_total_election_office(building)
 
     individual_meeting_venue = get_individual_meeting_venue(building)
 
-    total_meeting_venue = get_total_meeting_venue(building)
+    total_meeting_venue, json_checksum2 = get_total_meeting_venue(building)
+
+    json_checksum = json_checksum1 + json_checksum2
 
     return {
         "individual_election_office": individual_election_office,
         "total_election_office": total_election_office,
         "individual_meeting_venue": individual_meeting_venue,
         "total_meeting_venue": total_meeting_venue,
+        "json_checksum": json_checksum,
     }

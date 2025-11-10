@@ -13,6 +13,7 @@ def get_individual_general(general: Worksheet):
     """
 
     general_data = []
+    json_checksum = 0  # jsonファイルの検証に使用
 
     # 4行目以降, AからJの列を取得
     min_row = 4
@@ -25,7 +26,7 @@ def get_individual_general(general: Worksheet):
 
         # 小計になったら終了
         if date_cell.value == "小計":
-            general_data.append({"total": extract_number(price_cell.value)})
+            json_checksum = extract_number(price_cell.value)
             break
 
         general_data.append(
@@ -42,12 +43,13 @@ def get_individual_general(general: Worksheet):
             }
         )
 
-    return general_data
+    return general_data, json_checksum
 
 
 def get_general(general: Worksheet, name: str):
-    individual_general = get_individual_general(general)
+    individual_general, json_checksum = get_individual_general(general)
 
     return {
         f"individual_{name}": individual_general,
+        "json_checksum": json_checksum,
     }

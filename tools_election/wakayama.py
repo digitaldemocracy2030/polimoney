@@ -1,4 +1,3 @@
-import json
 import logging
 import sys
 
@@ -73,10 +72,12 @@ def analyze(input_file):
         ("total_data.json", total_data),
     ]
 
-    for file_name, data in data_list:
-        path = f"output_json/{safe_input_file}/{file_name}"
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=4, ensure_ascii=False)
+    util.create_individual_json(data_list, safe_input_file)
+
+    file_path_list = [
+        f"output_json/{safe_input_file}/{file_name}" for file_name, _ in data_list
+    ]
+    util.create_combined_json(file_path_list, safe_input_file)
 
 
 def main():
