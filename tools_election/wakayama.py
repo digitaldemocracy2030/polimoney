@@ -81,6 +81,14 @@ def analyze(input_file):
 
 
 def main():
+    """メイン関数。コマンドライン引数から入力ファイルを取得し、解析処理を実行する。
+
+    Returns:
+        int: 正常終了時は0を返す。
+
+    Raises:
+        SystemExit: コマンドライン引数が不正な場合、エラーメッセージを表示して終了する。
+    """
     if len(sys.argv) != 2:
         logging.error("python wakayama.py <input_file> と入力してください")
         sys.exit(1)

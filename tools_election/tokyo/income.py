@@ -55,6 +55,18 @@ def get_individual_income(income: Worksheet):
 
 
 def get_income(income: Worksheet):
+    """収入の部の全データを取得する。
+
+    個別の収入データとチェックサムを取得し、1つの辞書にまとめて返す。
+
+    Args:
+        income (Worksheet): 収入の部のExcelシート。
+
+    Returns:
+        dict: 以下のキーを持つ辞書:
+            - individual_income (list[dict]): 収入の個別データリスト。
+            - json_checksum (int or float): チェックサム（小計の金額）。
+    """
     individual_income, json_checksum = get_individual_income(income)
 
     return {

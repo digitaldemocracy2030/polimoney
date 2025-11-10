@@ -6,10 +6,21 @@ from util import A_COL, B_COL, C_COL, E_COL, F_COL, K_COL, extract_number
 
 
 def get_individual_election_office(building: Worksheet):
-    """家屋費(選挙事務所費)の個別データを取得する
+    """家屋費（選挙事務所費）の個別データを取得する。
+
+    Excelシートの4行目以降から、日付、金額、カテゴリ、目的、備考を取得する。
+    日付セルがNoneになったら処理を終了する。
 
     Args:
-        building (Worksheet): 人件の部のシート
+        building (Worksheet): 家屋費のExcelシート。
+
+    Returns:
+        list[dict]: 選挙事務所費の個別データリスト。各要素は以下のキーを持つ辞書:
+            - date (str): 日付（YYYY-MM-DD形式）。
+            - price (int or float): 金額。
+            - category (str): カテゴリ。
+            - purpose (str): 目的。
+            - note (str): 備考。
     """
 
     building_data = []
@@ -39,11 +50,19 @@ def get_individual_election_office(building: Worksheet):
 
 
 def get_total_election_office(building: Worksheet):
-    """家屋費(選挙事務所費)の合計データを取得する
-    合計に関する記述は3行あり、位置は個別データの数によって変わるので、動的に取得する
+    """家屋費（選挙事務所費）の合計データを取得する。
+
+    Excelシートの16行目以降から、「立候補準備のための支出」「選挙運動のための支出」「計」の
+    3行を動的に検索して取得する。位置は個別データの数によって変わるため、動的に取得する。
 
     Args:
-        building (Worksheet): 家屋の部のシート
+        building (Worksheet): 家屋費のExcelシート。
+
+    Returns:
+        tuple[list[dict], int or float]: 合計データのリストとチェックサム（「計」の金額）のタプル。
+            合計データの各要素は以下のキーを持つ辞書:
+            - name (str): 項目名（「立候補準備のための支出」「選挙運動のための支出」「計」のいずれか）。
+            - price (int or float): 金額。
     """
 
     total_building_data = []
@@ -79,13 +98,23 @@ def get_total_election_office(building: Worksheet):
 
 
 def get_individual_meeting_venue(building: Worksheet):
-    """集会会場費の個別データを取得する
+    """集会会場費の個別データを取得する。
+
+    Excelシートの20行目以降から「月　　日」という文字列を検索し、
+    その2行下から個別データの取得を開始する。
+    日付セルがdatetime型でない場合はスキップし、Noneになったら処理を終了する。
 
     Args:
-        building (Worksheet): 集会会場費のシート
+        building (Worksheet): 家屋費のExcelシート。
 
     Returns:
-        list: 集会会場費の個別データのリスト
+        list[dict]: 集会会場費の個別データリスト。各要素は以下のキーを持つ辞書:
+            - date (str): 日付（YYYY-MM-DD形式）。
+            - price (int or float): 金額。
+            - category (str): カテゴリ。
+            - purpose (str): 目的。
+            - note (str): 備考。
+            「月　　日」が見つからない場合は空のリストを返す。
     """
     meeting_venue_data = []
 
@@ -133,11 +162,19 @@ def get_individual_meeting_venue(building: Worksheet):
 
 
 def get_total_meeting_venue(building: Worksheet):
-    """集会会場費の合計データを取得する
-    合計に関する記述は3行あり、位置は個別データの数によって変わるので、動的に取得する
+    """集会会場費の合計データを取得する。
+
+    Excelシートの34行目以降から、「立候補準備のための支出」「選挙運動のための支出」「計」の
+    3行を動的に検索して取得する。位置は個別データの数によって変わるため、動的に取得する。
 
     Args:
-        building (Worksheet): 集会会場費のシート
+        building (Worksheet): 家屋費のExcelシート。
+
+    Returns:
+        tuple[list[dict], int or float]: 合計データのリストとチェックサム（「計」の金額）のタプル。
+            合計データの各要素は以下のキーを持つ辞書:
+            - name (str): 項目名（「立候補準備のための支出」「選挙運動のための支出」「計」のいずれか）。
+            - price (int or float): 金額。
     """
 
     total_meeting_venue_data = []
@@ -173,6 +210,22 @@ def get_total_meeting_venue(building: Worksheet):
 
 
 def get_building(building: Worksheet):
+    """家屋費の全データを取得する。
+
+    選挙事務所費と集会会場費の個別データおよび合計データを取得し、
+    チェックサムを合算して1つの辞書にまとめて返す。
+
+    Args:
+        building (Worksheet): 家屋費のExcelシート。
+
+    Returns:
+        dict: 以下のキーを持つ辞書:
+            - individual_election_office (list[dict]): 選挙事務所費の個別データリスト。
+            - total_election_office (list[dict]): 選挙事務所費の合計データリスト。
+            - individual_meeting_venue (list[dict]): 集会会場費の個別データリスト。
+            - total_meeting_venue (list[dict]): 集会会場費の合計データリスト。
+            - json_checksum (int or float): チェックサム（選挙事務所費と集会会場費の合計の合計）。
+    """
     individual_election_office = get_individual_election_office(building)
 
     total_election_office, json_checksum1 = get_total_election_office(building)

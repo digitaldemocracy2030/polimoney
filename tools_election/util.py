@@ -49,8 +49,16 @@ def extract_number(value):
 
 
 def create_output_folder(input_file: str):
-    """
-    ファイル名に使えない文字を_に変換（絶対パスではなくファイル名のみを使用）
+    """ファイル名に使えない文字をアンダースコアに変換し、出力フォルダを作成する。
+
+    絶対パスではなくファイル名のみを使用して、安全なファイル名を生成する。
+    出力フォルダは `output_json/{safe_input_file}` に作成される。
+
+    Args:
+        input_file (str): 入力ファイルのパス。
+
+    Returns:
+        str: ファイル名に使えない文字をアンダースコアに変換したファイル名。
     """
     base_filename = os.path.basename(input_file)
     safe_input_file = re.sub(r'[\\/:*?"<>|]', "_", base_filename)
@@ -59,12 +67,14 @@ def create_output_folder(input_file: str):
 
 
 def create_individual_json(data_list: list[tuple[str, dict]], safe_input_file: str):
-    """
-    個別データをJSONファイルとして出力する
+    """個別データをJSONファイルとして出力する。
+
+    各データを個別のJSONファイルとして `output_json/{safe_input_file}/` ディレクトリに保存する。
+    JSONファイルはUTF-8エンコーディングで、インデント4スペース、非ASCII文字をそのまま出力する形式で保存される。
 
     Args:
-        data_list (list[tuple[str, dict]]): 個別データのリスト
-        safe_input_file (str): ファイル名に使えない文字を変換したファイル名
+        data_list (list[tuple[str, dict]]): ファイル名とデータの辞書のタプルのリスト。
+        safe_input_file (str): ファイル名に使えない文字を変換したファイル名。
     """
     for file_name, data in data_list:
         path = f"output_json/{safe_input_file}/{file_name}"
@@ -73,18 +83,21 @@ def create_individual_json(data_list: list[tuple[str, dict]], safe_input_file: s
 
 
 def validate_sum(data: dict, file_path: str):
-    """
-    データの合計を検証する
+    """データの合計を検証する。
+
+    個別データの合計（`individual_*`キーに含まれる各アイテムの`price`の合計）と
+    `json_checksum`の値が一致しているかを検証する。
+    合計が一致しない場合や0の場合は、警告またはエラーログを出力する。
 
     Args:
-        data: 検証対象のデータ
-        file_path: ファイルパス
+        data (dict): 検証対象のデータ。`individual_*`キーと`json_checksum`キーを含む。
+        file_path (str): 検証対象のファイルパス。ログ出力時に使用される。
 
     Returns:
-        bool: 合計が一致しているかどうか
+        None: 戻り値は使用されない。検証結果はログに出力される。
 
     Notes:
-        total_data.jsonは合計が一致しているかどうかを検証しない
+        `total`を含むファイルパスの場合は検証をスキップする。
     """
     if "total" in file_path:
         return
@@ -113,8 +126,19 @@ def validate_sum(data: dict, file_path: str):
 
 
 def create_combined_json(file_path_list: list[str], input_file: str):
-    """
-    複数のJSONファイルを結合して新しいJSONファイルを作成する
+    """複数のJSONファイルを結合して新しいJSONファイルを作成する。
+
+    指定されたJSONファイルリストから、`total`を含まないファイルを読み込み、
+    各ファイルの`individual_*`キーに含まれるデータを結合して1つのリストにする。
+    結合されたデータは、タイムスタンプ付きのファイル名で保存される。
+    各ファイルの合計値は`validate_sum()`関数で検証される。
+
+    Args:
+        file_path_list (list[str]): 結合対象のJSONファイルパスのリスト。
+        input_file (str): 出力ファイル名に使用する入力ファイル名。
+
+    Returns:
+        None: 戻り値は使用されない。結合されたJSONファイルが保存される。
     """
     combined_data = []
 

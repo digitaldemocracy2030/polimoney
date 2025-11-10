@@ -6,16 +6,21 @@ from util import A_COL, B_COL, C_COL, E_COL, J_COL, extract_number
 
 
 def get_individual_income(income: Worksheet):
-    """収入の部の個別データを取得する
+    """収入の部の個別データを取得する。
 
-    A列 = 0, B列 = 1, ...
-    結合されているセルは、左端のセルに情報が入っている
+    Excelシートの4行目以降から、日付、金額、カテゴリ、備考を取得する。
+    日付セルがNoneの場合はスキップし、日付セルが「小計」になったら処理を終了する。
+    結合されているセルは、左端のセルに情報が入っている。
 
     Args:
-        income (Worksheet): 収入の部のシート
+        income (Worksheet): 収入の部のExcelシート。
 
     Returns:
-        list: 収入の部のデータ
+        list[dict]: 収入の部のデータリスト。各要素は以下のキーを持つ辞書:
+            - date (str): 日付（YYYY-MM-DD形式）。
+            - price (int or float): 金額。
+            - category (str): カテゴリ。
+            - note (str): 備考。
     """
     income_data = []
 
@@ -44,11 +49,19 @@ def get_individual_income(income: Worksheet):
 
 
 def get_total_income(income: Worksheet):
-    """総収入を取得する
-    合計に関する記述は9行あり、位置は個別データの数によって変わるので、動的に取得する
+    """総収入を取得する。
+
+    Excelシートの7行目以降から、「寄附」「その他の収入」「計」「総計」の項目を
+    動的に検索して取得する。合計に関する記述は9行あり、位置は個別データの数によって変わるため、
+    動的に取得する。
 
     Args:
-        income (Worksheet): 収入の部のシート
+        income (Worksheet): 収入の部のExcelシート。
+
+    Returns:
+        list[dict]: 総収入のデータリスト。各要素は以下のキーを持つ辞書:
+            - name (str): 項目名（「寄附」「その他の収入」「計」「総計」のいずれか）。
+            - price (int or float): 金額。
     """
 
     total_income_data = []
@@ -76,12 +89,21 @@ def get_total_income(income: Worksheet):
 
 
 def get_public_expense_equivalent(income: Worksheet):
-    """公費負担相当額を取得する
-    位置は個別データの数によって変わるので、動的に取得する
-    ここだけ文章で記述されているため、正規表現でパースして辞書形式で返す
+    """公費負担相当額を取得する。
+
+    Excelシートの18行目以降から「参考」という文字列を検索し、
+    その行のB列から公費負担相当額の文字列を取得する。
+    位置は個別データの数によって変わるため、動的に取得する。
+    ここだけ文章で記述されているため、正規表現でパースして辞書形式で返す。
 
     Args:
-        income (Worksheet): _description_
+        income (Worksheet): 収入の部のExcelシート。
+
+    Returns:
+        dict: 公費負担相当額のデータ。以下のキーを持つ:
+            - total (int): 公費負担相当額の総額。
+            - breakdown (dict): 内訳の辞書。項目名をキー、金額を値とする。
+            「参考」が見つからない場合は空の辞書を返す。
     """
 
     # 公費負担相当額に関する記述は7 + 9 + 2 = 18行目より下にある
@@ -136,6 +158,20 @@ def get_public_expense_equivalent(income: Worksheet):
 
 
 def get_income(income: Worksheet):
+    """収入の部の全データを取得する。
+
+    個別の収入データ、総収入データ、公費負担相当額を取得し、1つの辞書にまとめて返す。
+    収入に関しては、前回計・総額などのdiffデータを取り扱っているため、checksumは用意していない。
+
+    Args:
+        income (Worksheet): 収入の部のExcelシート。
+
+    Returns:
+        dict: 以下のキーを持つ辞書:
+            - individual_income (list[dict]): 収入の個別データリスト。
+            - total_income (list[dict]): 総収入のデータリスト。
+            - public_expense_equivalent (dict): 公費負担相当額のデータ。
+    """
     individual_income = get_individual_income(income)
 
     total_income = get_total_income(income)
