@@ -1,3 +1,4 @@
+import json
 import logging
 import sys
 
@@ -15,7 +16,7 @@ logging.basicConfig(
 )
 
 
-def analyze(input_file):
+def analyze(income_file_path):
     """
     指定されたExcelファイルを解析し、各シートのデータをJSONファイルとして出力する。
 
@@ -24,7 +25,7 @@ def analyze(input_file):
     Args:
         input_file (str): 解析対象のExcelファイルのパス
     """
-    wb = openpyxl.load_workbook(input_file, data_only=True)
+    wb = openpyxl.load_workbook(income_file_path, data_only=True)
 
     # 各シートを取得
     income = wb["収入"]
@@ -55,7 +56,7 @@ def analyze(input_file):
     total_data = get_total(total)  # 合計
 
     # フォルダを作成
-    safe_input_file = util.create_output_folder(input_file)
+    safe_input_file = util.create_output_folder(income_file_path)
 
     data_list = [
         ("income_data.json", income_data),
@@ -77,7 +78,57 @@ def analyze(input_file):
     file_path_list = [
         f"output_json/{safe_input_file}/{file_name}" for file_name, _ in data_list
     ]
-    util.create_combined_json(file_path_list, safe_input_file)
+    combined_data, combined_file_path = util.create_combined_json(
+        file_path_list, safe_input_file
+    )
+    if not util.has_income_data(combined_data):
+        logging.info(
+            "入力したExcelファイルに収入データが含まれていないため、収入データを追加します"
+        )
+        income_file_path = (
+            input("収入データが含まれているExcelファイルのパスを入力してください: ")
+            .strip()
+            .strip('"')
+            .strip("'")
+        )
+        analyze_income(income_file_path, combined_file_path)
+
+
+def analyze_income(income_file_path: str, combined_file_path: str):
+    """
+    最初に入力したExcelファイルに収入データが含まれていない場合、収入データを追加して結合データを更新する。
+
+    収支報告書Excelファイルが複数あり、かつ収入と支出のデータが分かれている場合に使用する。
+
+    Args:
+        income_file_path (str): 収入データが含まれているExcelファイルのパス
+        combined_file_path (str): 結合データのパス
+    """
+    wb = openpyxl.load_workbook(income_file_path, data_only=True)
+
+    # 各シートを取得
+    income = wb["収入"]
+    income_data = get_income(income)
+
+    # フォルダを作成
+    safe_input_file = util.create_output_folder(income_file_path)
+
+    # 収入データのみを個別データとして出力
+    data_list = [
+        ("income_data.json", income_data),
+    ]
+    util.create_individual_json(data_list, safe_input_file)
+
+    # 支出データを取り出す
+    with open(combined_file_path, "r", encoding="utf-8") as f:
+        combined_data = json.load(f)
+
+    # 収入データを追加
+    combined_data.extend(income_data["individual_income"])
+
+    # 上書き保存
+    with open(combined_file_path, "w", encoding="utf-8") as f:
+        json.dump(combined_data, f, indent=4, ensure_ascii=False)
 
 
 def main():
