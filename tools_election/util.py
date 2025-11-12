@@ -82,6 +82,20 @@ def create_individual_json(data_list: list[tuple[str, dict]], safe_input_file: s
             json.dump(data, f, indent=4, ensure_ascii=False)
 
 
+def has_income_data(data: list[dict]):
+    """データに収入データが含まれているかを検証する。
+
+    収入データにはpurposeが無いことを利用している
+
+    Args:
+        data (list[dict]): 検証対象のデータ。
+
+    Returns:
+        bool: 収入データが含まれている場合はTrue、含まれていない場合はFalse。
+    """
+    return any(item.get("purpose") is None for item in data)
+
+
 def validate_sum(data: dict, file_path: str):
     """データの合計を検証する。
 
@@ -125,7 +139,7 @@ def validate_sum(data: dict, file_path: str):
     return
 
 
-def create_combined_json(file_path_list: list[str], input_file: str):
+def create_combined_json(file_path_list: list[str], safe_input_file: str):
     """複数のJSONファイルを結合して新しいJSONファイルを作成する。
 
     指定されたJSONファイルリストから、`total`を含まないファイルを読み込み、
@@ -156,13 +170,12 @@ def create_combined_json(file_path_list: list[str], input_file: str):
                 combined_data.extend(value)
 
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    combined_file_path = f"output_json/{safe_input_file}/{timestamp}_combined.json"
 
-    with open(
-        f"output_json/{input_file}/{timestamp}_combined.json", "w", encoding="utf-8"
-    ) as f:
+    with open(combined_file_path, "w", encoding="utf-8") as f:
         json.dump(combined_data, f, indent=4, ensure_ascii=False)
 
-    return
+    return combined_data, combined_file_path
 
 
 # なぜか1つズレているので、-1をしている
