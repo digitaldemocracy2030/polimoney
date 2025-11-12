@@ -82,23 +82,18 @@ def create_individual_json(data_list: list[tuple[str, dict]], safe_input_file: s
             json.dump(data, f, indent=4, ensure_ascii=False)
 
 
-def has_income_data(data: dict):
+def has_income_data(data: list[dict]):
     """データに収入データが含まれているかを検証する。
 
     収入データにはpurposeが無いことを利用している
 
     Args:
-        data (dict): 検証対象のデータ。
+        data (list[dict]): 検証対象のデータ。
 
     Returns:
         bool: 収入データが含まれている場合はTrue、含まれていない場合はFalse。
     """
-    for item in data:
-        try:
-            _ = item["purpose"]
-        except KeyError:
-            return True
-    return False
+    return any(item.get("purpose") is None for item in data)
 
 
 def validate_sum(data: dict, file_path: str):
