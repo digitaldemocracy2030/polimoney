@@ -32,10 +32,13 @@
 
 - **`individual_*`**: 個別の取引明細をまとめた配列。`*`部分はカテゴリ名やサブカテゴリ名が入る（例: `individual_income`, `individual_advertising`）
 - **`total_*`**: 集計済みの合計情報をまとめた配列。`*`部分はカテゴリ名が入る（例: `total_income`, `total_advertising`）
-- **`public_expense_equivalent`**: 公費負担相当額に関する情報を格納する辞書
-- **`purpose`**: 支出の用途。支出データの場合のみ存在する場合がある。収入データの場合は通常存在しない
-- **`note`**: 備考欄。レシート番号やその他の補足情報を格納する
-- **`category`**: カテゴリ分類。Excel上の分類名（例: "立候補準備"、"選挙運動"、"寄附"、"その他の収入"）
+- **`public_expense_summary`**: 公費負担相当額の総額および内訳をまとめた辞書（オプショナル）
+- **`public_expense_amount`**: 個別明細に付与される公費負担額を表す数値（`price`と同額の場合は全額公費負担、`-1`は不明を示す）
+- **`category`**: データの大分類。シート名や処理名を英語で表したもの（例: `"personnel"`, `"communication"`, `"income"`）
+- **`type`**: Excel上の細分類（例: `"立候補準備"`, `"選挙運動"`, `"寄附"`）。
+- **`purpose`**: 支出の用途。支出データではキーが必ず存在し、値がない場合は`null`または空文字になる。収入データでは用途欄が存在しないため、このキー自体が出力されない
+- **`non_monetary_basis`**: 金銭以外の見積もり（寄附）の根拠。該当しない場合は空文字または`null`が設定される。Excel上で「－」などのプレースホルダーが入力されている場合はその値を保持する
+- **`note`**: 備考欄。レシート番号やその他の補足情報を格納する。入力がない場合は空文字または`null`。Excel上で「－」などのプレースホルダーが入力されている場合はその値を保持する。複数行テキストは改行コード（`\n`）を含んだまま保存される
 - **`date`**: 取引日。`YYYY-MM-DD`形式の文字列。日付がない場合は`null`
 - **`price`**: 金額。整数または浮動小数点数。カンマ区切りの文字列から数値が抽出される
 - **`name`**: 合計項目の名称。地域によって異なる値が設定される（例: "計"、"総計"、"寄附"、"その他の収入"）
@@ -64,11 +67,12 @@
 {
     "individual_<カテゴリ名>": [
         {
-            "date": "YYYY-MM-DD" | null,
-            "price": number,
             "category": string,
-            "purpose": string | null,
-            "note": string | null
+            "date": "YYYY-MM-DD",
+            "price": number,
+            "type": string,
+            "non_monetary_basis": string,
+            "note": string
         },
         ...
     ],
@@ -78,11 +82,13 @@
 
 **用語説明**:
 - **`individual_<カテゴリ名>`**: 個別の取引明細をまとめた配列。カテゴリ名は英訳される（例: `individual_advertising`, `individual_transportation`）
+- **`category`**: データの大分類。シート名などを英語で表した値（例: `"advertising"`, `"transportation"`）
 - **`date`**: 取引日。`YYYY-MM-DD`形式。取得できない場合は`null`
 - **`price`**: 金額
-- **`category`**: Excel上の分類名（例: "立候補準備"、"選挙運動"）
-- **`purpose`**: 支出の用途。支出データの場合のみ存在する場合がある
-- **`note`**: 備考。レシート番号やその他のメモ
+- **`type`**: Excel上の分類名（例: "立候補準備"、"選挙運動"）
+- **`purpose`**: 支出の用途。値がない場合でもキーを保持し、`null`または空文字になる
+- **`non_monetary_basis`**: 金銭以外の見積もりの根拠。該当しない場合は空文字または`null`。Excel上で「－」などのプレースホルダーが入力されている場合はその値を保持する
+- **`note`**: 備考。レシート番号やその他のメモ。入力がない場合は空文字または`null`。Excel上で「－」などのプレースホルダーが入力されている場合はその値を保持する。複数行テキストは改行コード（`\n`）を含んだまま保存される
 - **`json_checksum`**: `individual_<カテゴリ名>`配列内のすべての`price`の合計値
 
 **注意**: 個別データの配列の最後に`{"total": number}`要素は含まれません。代わりに、`json_checksum`フィールドが別フィールドとして存在します。
@@ -95,11 +101,12 @@
 {
     "individual_<カテゴリ名>": [
         {
-            "date": "YYYY-MM-DD" | null,
-            "price": number,
             "category": string,
-            "purpose": string | null,
-            "note": string | null
+            "date": "YYYY-MM-DD",
+            "price": number,
+            "type": string,
+            "non_monetary_basis": string,
+            "note": string
         },
         ...
     ],
@@ -129,11 +136,12 @@
 {
     "individual_<サブカテゴリ名1>": [
         {
-            "date": "YYYY-MM-DD" | null,
-            "price": number,
             "category": string,
-            "purpose": string | null,
-            "note": string | null
+            "date": "YYYY-MM-DD",
+            "price": number,
+            "type": string,
+            "non_monetary_basis": string,
+            "note": string
         },
         ...
     ],
@@ -146,11 +154,12 @@
     ],
     "individual_<サブカテゴリ名2>": [
         {
-            "date": "YYYY-MM-DD" | null,
-            "price": number,
             "category": string,
-            "purpose": string | null,
-            "note": string | null
+            "date": "YYYY-MM-DD",
+            "price": number,
+            "type": string,
+            "non_monetary_basis": string,
+            "note": string
         },
         ...
     ],
@@ -177,7 +186,7 @@
 
 ### 2. 収入ファイル（`income_data.json`）
 
-収入の個別データを扱うファイル。地域によって2種類の形式が存在する。収入データでは通常`purpose`フィールドを使用しない。
+収入の個別データを扱うファイル。地域によって2種類の形式が存在する。収入データでは用途が記録されないため、`purpose`キーは出力されない。
 
 #### 形式A: json_checksumを含む形式
 
@@ -185,10 +194,12 @@
 {
     "individual_income": [
         {
-            "date": "YYYY-MM-DD" | null,
-            "price": number,
             "category": string,
-            "note": string | null
+            "date": "YYYY-MM-DD",
+            "price": number,
+            "type": string,
+            "non_monetary_basis": string,
+            "note": string
         },
         ...
     ],
@@ -198,10 +209,12 @@
 
 **用語説明**:
 - **`individual_income`**: 収入の個別明細をまとめた配列
+- **`category`**: データの大分類。収入の場合は常に`"income"`
 - **`date`**: 取引日。`YYYY-MM-DD`形式。取得できない場合は`null`
 - **`price`**: 金額
-- **`category`**: 収入区分（例: "寄附"、"その他の収入"）
-- **`note`**: 備考（例: "自己資金"）
+- **`type`**: 収入区分（例: "寄附"、"その他の収入"）
+- **`non_monetary_basis`**: 金銭以外の寄附等の見積もり根拠。該当しない場合は空文字または`null`。Excel上で「－」などのプレースホルダーが入力されている場合はその値を保持する
+- **`note`**: 備考（例: "自己資金"）。入力がない場合は空文字または`null`。Excel上で「－」などのプレースホルダーが入力されている場合はその値を保持する。複数行テキストは改行コード（`\n`）を含んだまま保存される
 - **`json_checksum`**: `individual_income`配列内のすべての`price`の合計値
 
 **使用例**: 東京の`income_data.json`
@@ -212,10 +225,13 @@
 {
     "individual_income": [
         {
-            "date": "YYYY-MM-DD" | null,
-            "price": number,
             "category": string,
-            "note": string | null
+            "date": "YYYY-MM-DD",
+            "price": number,
+            "type": string,
+            "purpose": string,
+            "non_monetary_basis": string,
+            "note": string
         },
         ...
     ],
@@ -226,7 +242,7 @@
         },
         ...
     ],
-    "public_expense_equivalent": {
+    "public_expense_summary": {
         "total": number,
         "breakdown": {
             "<項目名>": number,
@@ -241,11 +257,9 @@
 - **`total_income`**: 収入の合計情報。各要素は`name`と`price`を持つ
   - **`name`**: 項目名（例: "寄附"、"その他の収入"、"計"、"総計"など）
   - **`price`**: 合計金額
-- **`public_expense_equivalent`**: 公費負担相当額の情報
+- **`public_expense_summary`**: 公費負担相当額の情報をまとめた辞書（optional）
   - **`total`**: 公費負担相当額の総額（必須、存在する場合）
   - **`breakdown`**: 項目ごとの内訳。項目名をキー、金額を値とする辞書（optional: 内訳がある場合のみ存在）
-
-**注意**: 前回計・総額などの差分データを取り扱う地域では、`json_checksum`の代わりに`total_income`や`public_expense_equivalent`が使用される。
 
 **使用例**: 和歌山の`income_data.json`
 
@@ -264,7 +278,7 @@
         },
         ...
     ],
-    "public_expense_equivalent": {
+    "public_expense_summary": {
         "total": number
     }
 }
@@ -274,7 +288,7 @@
 - **`individual_income_total`**: 収入計の情報。各要素は`name`と`price`を持つ
   - **`name`**: 項目名。地域によって異なる値が設定される
   - **`price`**: 合計金額
-- **`public_expense_equivalent`**: 公費負担相当額の合計
+- **`public_expense_summary`**: 公費負担相当額の合計
   - **`total`**: 公費負担相当額の総額
 
 **使用例**: 東京の`income_total_data.json`
@@ -356,11 +370,14 @@
 ```json
 [
     {
-        "date": "YYYY-MM-DD" | null,
-        "price": number,
         "category": string,
-        "purpose": string | null,
-        "note": string | null
+        "date": "YYYY-MM-DD",
+        "price": number,
+        "type": string,
+        "purpose": string,
+        "non_monetary_basis": string,
+        "note": string,
+        "public_expense_amount": number
     },
     ...
 ]
@@ -368,11 +385,14 @@
 
 **用語説明**:
 - **各要素**: `individual_*`配列から抽出したオブジェクト。個別データの形式と同じ構造を持つ
+- **`category`**: データの大分類。元のシートや処理名を英語で表した値
 - **`date`**: 取引日。`YYYY-MM-DD`形式。日付がない場合は`null`
 - **`price`**: 金額
-- **`category`**: カテゴリ分類
-- **`purpose`**: 支出の用途（optional: 支出データの場合のみ存在する。収入データの場合は存在しない）
-- **`note`**: 備考
+- **`type`**: Excel上の分類名（例: "立候補準備"、"選挙運動"、"寄附"）
+- **`purpose`**: 支出の用途。支出データではキーが存在し、値がない場合は`null`または空文字で表現される。収入データ由来の要素にはこのキー自体が含まれない
+- **`non_monetary_basis`**: 金銭以外の見積もりの根拠。該当しない場合は空文字または`null`。Excel上で「－」などのプレースホルダーが入力されている場合はその値を保持する
+- **`note`**: 備考。Excel上で「－」などのプレースホルダーが入力されている場合はその値を保持する。複数行テキストは改行コード（`\n`）を含んだまま保存される
+- **`public_expense_amount`** (optional): 公費負担額。公費負担が不明な場合は-1が設定され、logging.errorを返す。
 - **`{timestamp}`**: ファイル名の`YYYYMMDDHHMMSS`部分。生成時刻を表す（例: `20251110152950`）
 
 **生成ルール**:
