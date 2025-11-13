@@ -50,10 +50,9 @@ def get_individual_income(income: Worksheet):
                 ),
                 "price": extract_number(price_cell.value),  # 金額
                 "type": type_cell.value,  # 種別
-                "purpose": "",  # 収入に目的はない
                 # 金銭以外の見積もりの根拠
-                "non_monetary_basis": non_monetary_basis_cell.value or "",
-                "note": note_cell.value or "",  # 備考
+                "non_monetary_basis": non_monetary_basis_cell.value,
+                "note": note_cell.value,  # 備考
             }
         )
 

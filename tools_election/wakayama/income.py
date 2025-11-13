@@ -44,10 +44,9 @@ def get_individual_income(income: Worksheet):
                 "date": date_cell.value.strftime("%Y-%m-%d"),  # 日付
                 "price": extract_number(price_cell.value),  # 金額
                 "type": type_cell.value,  # 種別
-                "purpose": "",  # 収入に目的はない
                 # 金銭以外の見積もりの根拠
-                "non_monetary_basis": non_monetary_basis_cell.value or "",
-                "note": note_cell.value or "",  # 備考
+                "non_monetary_basis": non_monetary_basis_cell.value,
+                "note": note_cell.value,  # 備考
             }
         )
 
@@ -94,8 +93,8 @@ def get_total_income(income: Worksheet):
     return total_income_data
 
 
-def get_public_expense_equivalent(income: Worksheet):
-    """公費負担相当額を取得する。
+def get_public_expense_summary(income: Worksheet):
+    """公費負担相当額のサマリーを取得する。
 
     Excelシートの18行目以降から「参考」という文字列を検索し、
     その行のB列から公費負担相当額の文字列を取得する。
@@ -114,30 +113,30 @@ def get_public_expense_equivalent(income: Worksheet):
 
     # 公費負担相当額に関する記述は7 + 9 + 2 = 18行目より下にある
     min_row = 18
-    public_expense_equivalent_str = ""
+    public_expense_summary_str = ""
 
     # ここではBしか取得しないため、row[0]で取得できる
     for row in income.iter_rows(min_row=min_row, max_col=B_COL + 1):
         if row[A_COL].value == "参考":
-            public_expense_equivalent_str = row[B_COL].value
+            public_expense_summary_str = row[B_COL].value
             break
     else:
         return {}
 
     # 総額を取得する正規表現
     total_pattern = r"公費負担相当額\s+(\d+(?:,\d+)*)円"
-    total_match = re.search(total_pattern, public_expense_equivalent_str)
+    total_match = re.search(total_pattern, public_expense_summary_str)
 
     # 内訳を取得する正規表現
     breakdown_pattern = r"内訳\s+(.+)"
-    breakdown_match = re.search(breakdown_pattern, public_expense_equivalent_str)
+    breakdown_match = re.search(breakdown_pattern, public_expense_summary_str)
 
-    public_expense_equivalent_data = {}
+    public_expense_summary_data = {}
 
     # 総額を追加
     if total_match:
         total_amount = int(total_match.group(1).replace(",", ""))
-        public_expense_equivalent_data["total"] = total_amount
+        public_expense_summary_data["total"] = total_amount
 
     # 内訳をパース
     if breakdown_match:
@@ -158,15 +157,14 @@ def get_public_expense_equivalent(income: Worksheet):
             amount = int(amount_str)
             breakdown_data[item_name] = amount
 
-        public_expense_equivalent_data["breakdown"] = breakdown_data
-
-    return public_expense_equivalent_data
+        public_expense_summary_data["breakdown"] = breakdown_data
+    return public_expense_summary_data
 
 
 def get_income(income: Worksheet):
     """収入の部の全データを取得する。
 
-    個別の収入データ、総収入データ、公費負担相当額を取得し、1つの辞書にまとめて返す。
+    個別の収入データ、総収入データ、公費負担相当額のサマリーを取得し、1つの辞書にまとめて返す。
     収入に関しては、前回計・総額などのdiffデータを取り扱っているため、checksumは用意していない。
 
     Args:
@@ -176,17 +174,17 @@ def get_income(income: Worksheet):
         dict: 以下のキーを持つ辞書:
             - individual_income (list[dict]): 収入の個別データリスト。
             - total_income (list[dict]): 総収入のデータリスト。
-            - public_expense_equivalent (dict): 公費負担相当額のデータ。
+            - public_expense_summary (dict): 公費負担相当額のサマリーデータ。
     """
     individual_income = get_individual_income(income)
 
     total_income = get_total_income(income)
 
-    public_expense_equivalent = get_public_expense_equivalent(income)
+    public_expense_summary = get_public_expense_summary(income)
 
     return {
         "individual_income": individual_income,
         "total_income": total_income,
-        "public_expense_equivalent": public_expense_equivalent,
+        "public_expense_summary": public_expense_summary,
     }
     # 収入に関しては、前回計・総額などのdiffデータを取り扱っているので、checksumは用意していない

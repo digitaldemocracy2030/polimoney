@@ -32,9 +32,8 @@
 
 - **`individual_*`**: 個別の取引明細をまとめた配列。`*`部分はカテゴリ名やサブカテゴリ名が入る（例: `individual_income`, `individual_advertising`）
 - **`total_*`**: 集計済みの合計情報をまとめた配列。`*`部分はカテゴリ名が入る（例: `total_income`, `total_advertising`）
-- **`public_expense_equivalent`**: 文脈により意味が異なるキー
-  - ファイル直下に配置される場合（例: `income_data.json`）は、公費負担相当額をまとめた辞書（オプショナル）
-  - 個別明細に付与される場合（結合ファイルのみ）は、公費負担額を表す数値（`price`と同額の場合は全額公費負担、`-1`は不明を示す）
+- **`public_expense_summary`**: 公費負担相当額の総額および内訳をまとめた辞書（オプショナル）
+- **`public_expense_amount`**: 個別明細に付与される公費負担額を表す数値（`price`と同額の場合は全額公費負担、`-1`は不明を示す）
 - **`category`**: データの大分類。シート名や処理名を英語で表したもの（例: `"personnel"`, `"communication"`, `"income"`）
 - **`type`**: Excel上の細分類（例: `"立候補準備"`, `"選挙運動"`, `"寄附"`）。
 - **`purpose`**: 支出の用途。支出データで入力がない場合でもキーは必ず存在し、値は`null`または空文字になる。収入データもキーだけは保持し、値は空文字
@@ -249,7 +248,7 @@
         },
         ...
     ],
-    "public_expense_equivalent": {
+    "public_expense_summary": {
         "total": number,
         "breakdown": {
             "<項目名>": number,
@@ -264,11 +263,9 @@
 - **`total_income`**: 収入の合計情報。各要素は`name`と`price`を持つ
   - **`name`**: 項目名（例: "寄附"、"その他の収入"、"計"、"総計"など）
   - **`price`**: 合計金額
-- **`public_expense_equivalent`**: 公費負担相当額の情報をまとめた辞書（optional）
+- **`public_expense_summary`**: 公費負担相当額の情報をまとめた辞書（optional）
   - **`total`**: 公費負担相当額の総額（必須、存在する場合）
   - **`breakdown`**: 項目ごとの内訳。項目名をキー、金額を値とする辞書（optional: 内訳がある場合のみ存在）
-
-**注意**: 前回計・総額などの差分データを取り扱う地域では、`json_checksum`の代わりに`total_income`や`public_expense_equivalent`が使用される。
 
 **使用例**: 和歌山の`income_data.json`
 
@@ -287,7 +284,7 @@
         },
         ...
     ],
-    "public_expense_equivalent": {
+    "public_expense_summary": {
         "total": number
     }
 }
@@ -297,7 +294,7 @@
 - **`individual_income_total`**: 収入計の情報。各要素は`name`と`price`を持つ
   - **`name`**: 項目名。地域によって異なる値が設定される
   - **`price`**: 合計金額
-- **`public_expense_equivalent`**: 公費負担相当額の合計
+- **`public_expense_summary`**: 公費負担相当額の合計
   - **`total`**: 公費負担相当額の総額
 
 **使用例**: 東京の`income_total_data.json`
@@ -386,7 +383,7 @@
         "purpose": string,
         "non_monetary_basis": string,
         "note": string,
-        "public_expense_equivalent": number
+        "public_expense_amount": number
     },
     ...
 ]
@@ -401,7 +398,7 @@
 - **`purpose`**: 支出の用途。値がない場合でもキーが存在し、`null`または空文字で表現される
 - **`non_monetary_basis`**: 金銭以外の見積もりの根拠。該当しない場合は空文字
 - **`note`**: 備考
-- **`public_expense_equivalent`** (optional): 公費負担相当額。公費負担が不明な場合は-1が設定され、エラーを返す。
+- **`public_expense_amount`** (optional): 公費負担額。公費負担が不明な場合は-1が設定され、logging.errorを返す。
 - **`{timestamp}`**: ファイル名の`YYYYMMDDHHMMSS`部分。生成時刻を表す（例: `20251110152950`）
 
 **生成ルール**:

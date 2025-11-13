@@ -139,8 +139,8 @@ def validate_sum(data: dict, file_path: str):
     return
 
 
-def add_public_expense_equivalent_data(data_list: list[dict]):
-    """公費負担相当額がある場合、その情報を追加する。
+def add_public_expense_amount_data(data_list: list[dict]):
+    """公費負担額がある場合、その情報を追加する。
 
     Args:
         data_list (list[dict]): 検証対象のデータ。
@@ -148,23 +148,24 @@ def add_public_expense_equivalent_data(data_list: list[dict]):
 
     # 備考欄に公費と書かれている場合、まず公費100%負担かどうかを確認する
     for data in data_list:
-        if "公費" in data["note"]:
+        note = data.get("note", "")
+        if "公費" in note:
             # 備考欄にある数字をすべて取得する
-            numbers = re.findall(r"[\d,]+", data["note"])
+            numbers = re.findall(r"[\d,]+", note)
             numbers = [int(number.replace(",", "")) for number in numbers]
             # 数字が無い場合、公費100%負担として扱う
             if len(numbers) == 0:
-                data["public_expense_equivalent"] = data["price"]
+                data["public_expense_amount"] = data["price"]
                 continue
             # 数字がある場合、その中に金額と一致する数字があるかを確認する
             else:
                 for number in numbers:
                     if number == data["price"]:
-                        data["public_expense_equivalent"] = data["price"]
+                        data["public_expense_amount"] = data["price"]
                         break
                 # 一致する数字が無い場合、公費負担がどれくらいかわからないため、エラーを返す
                 else:
-                    data["public_expense_equivalent"] = -1
+                    data["public_expense_amount"] = -1
                     logging.error(
                         f"公費負担額が不明なデータが存在するため、-1を設定します データ: {data}"
                     )
@@ -202,8 +203,8 @@ def create_combined_json(file_path_list: list[str], safe_input_file: str):
             if "individual_" in key:
                 combined_data.extend(value)
 
-    # 公費負担相当額の情報を追加する
-    combined_data = add_public_expense_equivalent_data(combined_data)
+    # 公費負担額の情報を追加する
+    combined_data = add_public_expense_amount_data(combined_data)
 
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
     combined_file_path = f"output_json/{safe_input_file}/{timestamp}_combined.json"

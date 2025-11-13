@@ -88,7 +88,7 @@
         "purpose": "ビラ印刷",
         "non_monetary_basis": "",
         "note": "公費負担",
-        "public_expense_equivalent": 123680
+        "public_expense_amount": 123680
     },
     {
         "category": "printing",
@@ -98,7 +98,7 @@
         "purpose": "ポスター印刷",
         "non_monetary_basis": "",
         "note": "公費負担",
-        "public_expense_equivalent": 1012176
+        "public_expense_amount": 1012176
     },
     {
         "category": "printing",

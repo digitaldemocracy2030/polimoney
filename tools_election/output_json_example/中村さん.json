@@ -52,7 +52,7 @@
         "purpose": "ポスター印刷代",
         "non_monetary_basis": "－",
         "note": "1,428円×626枚\n公費負担893,928円",
-        "public_expense_equivalent": 893928
+        "public_expense_amount": 893928
     },
     {
         "category": "printing",
@@ -62,7 +62,7 @@
         "purpose": "ビラ印刷代",
         "non_monetary_basis": "－",
         "note": "7.73円×16,000枚\n公費負担123,680円",
-        "public_expense_equivalent": 123680
+        "public_expense_amount": 123680
     },
     {
         "category": "building",

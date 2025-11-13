@@ -40,8 +40,8 @@ def get_individual_income_total(income_total: Worksheet):
     return income_total_data
 
 
-def get_public_expense_equivalent(income_total: Worksheet):
-    """公費負担相当額を取得する。
+def get_public_expense_summary(income_total: Worksheet):
+    """公費負担相当額のサマリーを取得する。
 
     Excelシートの12行目C列から「公費負担相当額」の文字列を検索し、
     正規表現を使用して金額を抽出する。
@@ -53,26 +53,26 @@ def get_public_expense_equivalent(income_total: Worksheet):
         dict: 公費負担相当額のデータ。以下のキーを持つ:
             - total (int): 公費負担相当額の総額。見つからない場合は空の辞書を返す。
     """
-    public_expense_equivalent_data = {}
+    public_expense_summary_data = {}
 
-    public_expense_equivalent_str = income_total.cell(row=12, column=C_COL + 1).value
+    public_expense_summary_str = income_total.cell(row=12, column=C_COL + 1).value
 
     # 総額を取得する正規表現
     total_pattern = r"公費負担相当額[：:]\s*(\d+(?:,\d+)*)円"
-    total_match = re.search(total_pattern, str(public_expense_equivalent_str))
+    total_match = re.search(total_pattern, str(public_expense_summary_str))
 
     if total_match:
-        public_expense_equivalent_data = {
+        public_expense_summary_data = {
             "total": int(total_match.group(1).replace(",", ""))
         }
 
-    return public_expense_equivalent_data
+    return public_expense_summary_data
 
 
 def get_income_total(income_total: Worksheet):
     """収入計の全データを取得する。
 
-    個別の収入計データと公費負担相当額を取得し、1つの辞書にまとめて返す。
+    個別の収入計データと公費負担相当額のサマリーを取得し、1つの辞書にまとめて返す。
 
     Args:
         income_total (Worksheet): 収入計のExcelシート。
@@ -80,11 +80,11 @@ def get_income_total(income_total: Worksheet):
     Returns:
         dict: 以下のキーを持つ辞書:
             - individual_income_total (list[dict]): 収入計の個別データリスト。
-            - public_expense_equivalent (dict): 公費負担相当額のデータ。
+            - public_expense_summary (dict): 公費負担相当額のサマリーデータ。
     """
     individual_income_total = get_individual_income_total(income_total)
-    public_expense_equivalent = get_public_expense_equivalent(income_total)
+    public_expense_summary = get_public_expense_summary(income_total)
     return {
         "individual_income_total": individual_income_total,
-        "public_expense_equivalent": public_expense_equivalent,
+        "public_expense_summary": public_expense_summary,
     }

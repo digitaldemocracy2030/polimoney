@@ -25,7 +25,7 @@ Excelのシート名などがこれにあたる
 |---------|----------|------|
 | json_checksum | JSON検算用データ | 出力直前の最終チェックで使用 |
 | non_monetary_basis | 金銭以外の見積もり根拠 | |
-| public_expense_equivalent | 公費負担相当額 | |
+| public_expense_summary | 公費負担相当額サマリー | |
+| public_expense_amount | 公費負担額 | |
 | individual_* | 個別データ | Excelの各行のデータを指す |
-| total_* | 合計データ | Excelの最後の「小計」などのデータを指す
- |
+| total_* | 合計データ | Excelの最後の「小計」などのデータを指す |
