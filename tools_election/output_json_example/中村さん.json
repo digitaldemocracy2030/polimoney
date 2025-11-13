@@ -1,0 +1,301 @@
+[
+    {
+        "category": "income",
+        "date": "2025-05-10",
+        "price": 1500000,
+        "type": "その他の収入",
+        "purpose": "",
+        "non_monetary_basis": "",
+        "note": "自己資金"
+    },
+    {
+        "category": "income",
+        "date": "2025-06-12",
+        "price": 1035000,
+        "type": "その他の収入",
+        "purpose": "",
+        "non_monetary_basis": "",
+        "note": "自己資金"
+    },
+    {
+        "category": "income",
+        "date": "2025-06-14",
+        "price": 10000,
+        "type": "寄附",
+        "purpose": "",
+        "non_monetary_basis": "",
+        "note": "－"
+    },
+    {
+        "category": "income",
+        "date": "2025-06-21",
+        "price": 993,
+        "type": "その他の収入",
+        "purpose": "",
+        "non_monetary_basis": "",
+        "note": "自己資金"
+    },
+    {
+        "category": "printing",
+        "date": "2025-05-12",
+        "price": 300,
+        "type": "立候補準備",
+        "purpose": "住民票発行",
+        "non_monetary_basis": "－",
+        "note": "No.1"
+    },
+    {
+        "category": "printing",
+        "date": "2025-06-13",
+        "price": 893928,
+        "type": "選挙運動",
+        "purpose": "ポスター印刷代",
+        "non_monetary_basis": "－",
+        "note": "1,428円×626枚\n公費負担893,928円",
+        "public_expense_equivalent": 893928
+    },
+    {
+        "category": "printing",
+        "date": "2025-06-13",
+        "price": 123680,
+        "type": "選挙運動",
+        "purpose": "ビラ印刷代",
+        "non_monetary_basis": "－",
+        "note": "7.73円×16,000枚\n公費負担123,680円",
+        "public_expense_equivalent": 123680
+    },
+    {
+        "category": "building",
+        "date": "2025-05-20",
+        "price": 1112420,
+        "type": "立候補準備",
+        "purpose": "事務所賃借家賃＋敷金（敷引対象）＋礼金",
+        "non_monetary_basis": "",
+        "note": "No.4"
+    },
+    {
+        "category": "building",
+        "date": "2025-05-20",
+        "price": 209000,
+        "type": "立候補準備",
+        "purpose": "事務所賃借手数料",
+        "non_monetary_basis": "",
+        "note": "No.5"
+    },
+    {
+        "category": "building",
+        "date": "2025-05-22",
+        "price": 350,
+        "type": "立候補準備",
+        "purpose": "事務所水道代５月分",
+        "non_monetary_basis": "",
+        "note": "No.6"
+    },
+    {
+        "category": "building",
+        "date": "2025-05-24",
+        "price": 86900,
+        "type": "立候補準備",
+        "purpose": "事務所什器",
+        "non_monetary_basis": "",
+        "note": "No.7"
+    },
+    {
+        "category": "advertising",
+        "date": "2025-06-10",
+        "price": 56650,
+        "type": "立候補準備",
+        "purpose": "たすき・選挙公報作成費用",
+        "non_monetary_basis": "",
+        "note": "No.61"
+    },
+    {
+        "category": "advertising",
+        "date": "2025-06-13",
+        "price": 25740,
+        "type": "選挙運動",
+        "purpose": "証紙ビラ新聞折込",
+        "non_monetary_basis": "",
+        "note": "No.8"
+    },
+    {
+        "category": "advertising",
+        "date": "2025-06-15",
+        "price": 8580,
+        "type": "選挙運動",
+        "purpose": "証紙ビラ新聞折込 納品・発送代",
+        "non_monetary_basis": "",
+        "note": "No.9"
+    },
+    {
+        "category": "transportation",
+        "date": "2025-06-15",
+        "price": 900,
+        "type": "選挙運動",
+        "purpose": "候補者　タクシー移動",
+        "non_monetary_basis": "",
+        "note": "No.10"
+    },
+    {
+        "category": "transportation",
+        "date": "2025-06-22",
+        "price": 800,
+        "type": "選挙運動",
+        "purpose": "候補者　タクシー移動",
+        "non_monetary_basis": "",
+        "note": "No.11"
+    },
+    {
+        "category": "stationery",
+        "date": "2025-06-11",
+        "price": 50,
+        "type": "立候補準備",
+        "purpose": "コピー代",
+        "non_monetary_basis": "",
+        "note": "No.2"
+    },
+    {
+        "category": "stationery",
+        "date": "2025-06-11",
+        "price": 150,
+        "type": "立候補準備",
+        "purpose": "コピー代",
+        "non_monetary_basis": "",
+        "note": "No.3"
+    },
+    {
+        "category": "stationery",
+        "date": "2025-06-22",
+        "price": 2790,
+        "type": "選挙運動",
+        "purpose": "切手代等",
+        "non_monetary_basis": "",
+        "note": "No.13"
+    },
+    {
+        "category": "stationery",
+        "date": "2025-06-22",
+        "price": 150,
+        "type": "選挙運動",
+        "purpose": "コピー代",
+        "non_monetary_basis": "",
+        "note": "No.14"
+    },
+    {
+        "category": "stationery",
+        "date": "2025-06-22",
+        "price": 40,
+        "type": "選挙運動",
+        "purpose": "コピー代",
+        "non_monetary_basis": "",
+        "note": "No.15"
+    },
+    {
+        "category": "stationery",
+        "date": "2025-06-22",
+        "price": 655,
+        "type": "選挙運動",
+        "purpose": "封筒等",
+        "non_monetary_basis": "",
+        "note": "No.16"
+    },
+    {
+        "category": "stationery",
+        "date": "2025-06-22",
+        "price": 60,
+        "type": "選挙運動",
+        "purpose": "コピー代",
+        "non_monetary_basis": "",
+        "note": "No.17"
+    },
+    {
+        "category": "food",
+        "date": "2025-06-11",
+        "price": 1329,
+        "type": "立候補準備",
+        "purpose": "茶菓",
+        "non_monetary_basis": "",
+        "note": "No.12"
+    },
+    {
+        "category": "miscellaneous",
+        "date": "2025-05-25",
+        "price": 4530,
+        "type": "立候補準備",
+        "purpose": "立候補資料読み取り用外付けCD-R",
+        "non_monetary_basis": "",
+        "note": "No.18"
+    },
+    {
+        "category": "miscellaneous",
+        "date": "2025-06-11",
+        "price": 2904,
+        "type": "立候補準備",
+        "purpose": "ポスター持ち運び用紙袋",
+        "non_monetary_basis": "",
+        "note": "No.19"
+    },
+    {
+        "category": "miscellaneous",
+        "date": "2025-06-11",
+        "price": 8694,
+        "type": "立候補準備",
+        "purpose": "選挙カー備品、電池",
+        "non_monetary_basis": "",
+        "note": "No.20"
+    },
+    {
+        "category": "miscellaneous",
+        "date": "2025-06-11",
+        "price": 553,
+        "type": "立候補準備",
+        "purpose": "ポスター持ち運び用ケース",
+        "non_monetary_basis": "",
+        "note": "No.21"
+    },
+    {
+        "category": "miscellaneous",
+        "date": "2025-06-11",
+        "price": 880,
+        "type": "立候補準備",
+        "purpose": "ポスター持ち運び用紙袋",
+        "non_monetary_basis": "",
+        "note": "No.23"
+    },
+    {
+        "category": "miscellaneous",
+        "date": "2025-06-11",
+        "price": 1188,
+        "type": "立候補準備",
+        "purpose": "事務所用　備品",
+        "non_monetary_basis": "",
+        "note": "No.24"
+    },
+    {
+        "category": "miscellaneous",
+        "date": "2025-06-13",
+        "price": 980,
+        "type": "選挙運動",
+        "purpose": "選挙カー音声用SDカード",
+        "non_monetary_basis": "",
+        "note": "No.25"
+    },
+    {
+        "category": "miscellaneous",
+        "date": "2025-06-13",
+        "price": 1280,
+        "type": "選挙運動",
+        "purpose": "選挙カー音声用SDカード",
+        "non_monetary_basis": "",
+        "note": "No.26"
+    },
+    {
+        "category": "miscellaneous",
+        "date": "2025-06-13",
+        "price": 512,
+        "type": "選挙運動",
+        "purpose": "候補者　飲料、備品",
+        "non_monetary_basis": "",
+        "note": "No.30"
+    }
+]
