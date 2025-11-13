@@ -1,6 +1,8 @@
 'use client';
 
+import { useAuth0 } from '@auth0/auth0-react';
 import { Box } from '@chakra-ui/react';
+import { notFound } from 'next/navigation';
 import { BoardMetadata } from '@/components/BoardMetadata';
 import { BoardTransactions } from '@/components/BoardTransactions';
 import { Footer } from '@/components/Footer';
@@ -8,8 +10,6 @@ import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
 import { BoardSummary } from '@/components/uniformed/BoardSummary';
 import type { Report, Transaction } from '@/models/uniformed/type';
-import { useAuth0 } from '@auth0/auth0-react';
-import { notFound } from 'next/navigation';
 
 interface Props {
   politicianId: string;

@@ -1,0 +1,229 @@
+[
+  {
+    "date": "2025-05-10",
+    "price": 1500000,
+    "category": "その他の収入",
+    "note": "自己資金"
+  },
+  {
+    "date": "2025-06-12",
+    "price": 1035000,
+    "category": "その他の収入",
+    "note": "自己資金"
+  },
+  {
+    "date": "2025-06-14",
+    "price": 10000,
+    "category": "寄附",
+    "note": "－"
+  },
+  {
+    "date": "2025-06-21",
+    "price": 993,
+    "category": "その他の収入",
+    "note": "自己資金"
+  },
+  {
+    "date": "2025-05-12",
+    "price": 300,
+    "category": "立候補準備",
+    "purpose": "住民票発行",
+    "note": "No.1"
+  },
+  {
+    "date": "2025-06-13",
+    "price": 893928,
+    "category": "選挙運動",
+    "purpose": "ポスター印刷代",
+    "note": "1,428円×626枚\n公費負担893,928円"
+  },
+  {
+    "date": "2025-06-13",
+    "price": 123680,
+    "category": "選挙運動",
+    "purpose": "ビラ印刷代",
+    "note": "7.73円×16,000枚\n公費負担123,680円"
+  },
+  {
+    "date": "2025-05-20",
+    "price": 1112420,
+    "category": "立候補準備",
+    "purpose": "事務所賃借家賃＋敷金（敷引対象）＋礼金",
+    "note": "No.4"
+  },
+  {
+    "date": "2025-05-20",
+    "price": 209000,
+    "category": "立候補準備",
+    "purpose": "事務所賃借手数料",
+    "note": "No.5"
+  },
+  {
+    "date": "2025-05-22",
+    "price": 350,
+    "category": "立候補準備",
+    "purpose": "事務所水道代５月分",
+    "note": "No.6"
+  },
+  {
+    "date": "2025-05-24",
+    "price": 86900,
+    "category": "立候補準備",
+    "purpose": "事務所什器",
+    "note": "No.7"
+  },
+  {
+    "date": "2025-06-10",
+    "price": 56650,
+    "category": "立候補準備",
+    "purpose": "たすき・選挙公報作成費用",
+    "note": "No.61"
+  },
+  {
+    "date": "2025-06-13",
+    "price": 25740,
+    "category": "選挙運動",
+    "purpose": "証紙ビラ新聞折込",
+    "note": "No.8"
+  },
+  {
+    "date": "2025-06-15",
+    "price": 8580,
+    "category": "選挙運動",
+    "purpose": "証紙ビラ新聞折込 納品・発送代",
+    "note": "No.9"
+  },
+  {
+    "date": "2025-06-15",
+    "price": 900,
+    "category": "選挙運動",
+    "purpose": "候補者　タクシー移動",
+    "note": "No.10"
+  },
+  {
+    "date": "2025-06-22",
+    "price": 800,
+    "category": "選挙運動",
+    "purpose": "候補者　タクシー移動",
+    "note": "No.11"
+  },
+  {
+    "date": "2025-06-11",
+    "price": 50,
+    "category": "立候補準備",
+    "purpose": "コピー代",
+    "note": "No.2"
+  },
+  {
+    "date": "2025-06-11",
+    "price": 150,
+    "category": "立候補準備",
+    "purpose": "コピー代",
+    "note": "No.3"
+  },
+  {
+    "date": "2025-06-22",
+    "price": 2790,
+    "category": "選挙運動",
+    "purpose": "切手代等",
+    "note": "No.13"
+  },
+  {
+    "date": "2025-06-22",
+    "price": 150,
+    "category": "選挙運動",
+    "purpose": "コピー代",
+    "note": "No.14"
+  },
+  {
+    "date": "2025-06-22",
+    "price": 40,
+    "category": "選挙運動",
+    "purpose": "コピー代",
+    "note": "No.15"
+  },
+  {
+    "date": "2025-06-22",
+    "price": 655,
+    "category": "選挙運動",
+    "purpose": "封筒等",
+    "note": "No.16"
+  },
+  {
+    "date": "2025-06-22",
+    "price": 60,
+    "category": "選挙運動",
+    "purpose": "コピー代",
+    "note": "No.17"
+  },
+  {
+    "date": "2025-06-11",
+    "price": 1329,
+    "category": "立候補準備",
+    "purpose": "茶菓",
+    "note": "No.12"
+  },
+  {
+    "date": "2025-05-25",
+    "price": 4530,
+    "category": "立候補準備",
+    "purpose": "立候補資料読み取り用外付けCD-R",
+    "note": "No.18"
+  },
+  {
+    "date": "2025-06-11",
+    "price": 2904,
+    "category": "立候補準備",
+    "purpose": "ポスター持ち運び用紙袋",
+    "note": "No.19"
+  },
+  {
+    "date": "2025-06-11",
+    "price": 8694,
+    "category": "立候補準備",
+    "purpose": "選挙カー備品、電池",
+    "note": "No.20"
+  },
+  {
+    "date": "2025-06-11",
+    "price": 553,
+    "category": "立候補準備",
+    "purpose": "ポスター持ち運び用ケース",
+    "note": "No.21"
+  },
+  {
+    "date": "2025-06-11",
+    "price": 880,
+    "category": "立候補準備",
+    "purpose": "ポスター持ち運び用紙袋",
+    "note": "No.23"
+  },
+  {
+    "date": "2025-06-11",
+    "price": 1188,
+    "category": "立候補準備",
+    "purpose": "事務所用　備品",
+    "note": "No.24"
+  },
+  {
+    "date": "2025-06-13",
+    "price": 980,
+    "category": "選挙運動",
+    "purpose": "選挙カー音声用SDカード",
+    "note": "No.25"
+  },
+  {
+    "date": "2025-06-13",
+    "price": 1280,
+    "category": "選挙運動",
+    "purpose": "選挙カー音声用SDカード",
+    "note": "No.26"
+  },
+  {
+    "date": "2025-06-13",
+    "price": 512,
+    "category": "選挙運動",
+    "purpose": "候補者　飲料、備品",
+    "note": "No.30"
+  }
+]
