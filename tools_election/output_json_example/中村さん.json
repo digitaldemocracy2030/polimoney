@@ -4,8 +4,7 @@
         "date": "2025-05-10",
         "price": 1500000,
         "type": "その他の収入",
-        "purpose": "",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "自己資金"
     },
     {
@@ -13,8 +12,7 @@
         "date": "2025-06-12",
         "price": 1035000,
         "type": "その他の収入",
-        "purpose": "",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "自己資金"
     },
     {
@@ -22,8 +20,7 @@
         "date": "2025-06-14",
         "price": 10000,
         "type": "寄附",
-        "purpose": "",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "－"
     },
     {
@@ -31,8 +28,7 @@
         "date": "2025-06-21",
         "price": 993,
         "type": "その他の収入",
-        "purpose": "",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "自己資金"
     },
     {
@@ -70,7 +66,7 @@
         "price": 1112420,
         "type": "立候補準備",
         "purpose": "事務所賃借家賃＋敷金（敷引対象）＋礼金",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.4"
     },
     {
@@ -79,7 +75,7 @@
         "price": 209000,
         "type": "立候補準備",
         "purpose": "事務所賃借手数料",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.5"
     },
     {
@@ -88,7 +84,7 @@
         "price": 350,
         "type": "立候補準備",
         "purpose": "事務所水道代５月分",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.6"
     },
     {
@@ -97,7 +93,7 @@
         "price": 86900,
         "type": "立候補準備",
         "purpose": "事務所什器",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.7"
     },
     {
@@ -106,7 +102,7 @@
         "price": 56650,
         "type": "立候補準備",
         "purpose": "たすき・選挙公報作成費用",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.61"
     },
     {
@@ -115,7 +111,7 @@
         "price": 25740,
         "type": "選挙運動",
         "purpose": "証紙ビラ新聞折込",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.8"
     },
     {
@@ -124,7 +120,7 @@
         "price": 8580,
         "type": "選挙運動",
         "purpose": "証紙ビラ新聞折込 納品・発送代",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.9"
     },
     {
@@ -133,7 +129,7 @@
         "price": 900,
         "type": "選挙運動",
         "purpose": "候補者　タクシー移動",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.10"
     },
     {
@@ -142,7 +138,7 @@
         "price": 800,
         "type": "選挙運動",
         "purpose": "候補者　タクシー移動",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.11"
     },
     {
@@ -151,7 +147,7 @@
         "price": 50,
         "type": "立候補準備",
         "purpose": "コピー代",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.2"
     },
     {
@@ -160,7 +156,7 @@
         "price": 150,
         "type": "立候補準備",
         "purpose": "コピー代",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.3"
     },
     {
@@ -169,7 +165,7 @@
         "price": 2790,
         "type": "選挙運動",
         "purpose": "切手代等",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.13"
     },
     {
@@ -178,7 +174,7 @@
         "price": 150,
         "type": "選挙運動",
         "purpose": "コピー代",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.14"
     },
     {
@@ -187,7 +183,7 @@
         "price": 40,
         "type": "選挙運動",
         "purpose": "コピー代",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.15"
     },
     {
@@ -196,7 +192,7 @@
         "price": 655,
         "type": "選挙運動",
         "purpose": "封筒等",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.16"
     },
     {
@@ -205,7 +201,7 @@
         "price": 60,
         "type": "選挙運動",
         "purpose": "コピー代",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.17"
     },
     {
@@ -214,7 +210,7 @@
         "price": 1329,
         "type": "立候補準備",
         "purpose": "茶菓",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.12"
     },
     {
@@ -223,7 +219,7 @@
         "price": 4530,
         "type": "立候補準備",
         "purpose": "立候補資料読み取り用外付けCD-R",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.18"
     },
     {
@@ -232,7 +228,7 @@
         "price": 2904,
         "type": "立候補準備",
         "purpose": "ポスター持ち運び用紙袋",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.19"
     },
     {
@@ -241,7 +237,7 @@
         "price": 8694,
         "type": "立候補準備",
         "purpose": "選挙カー備品、電池",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.20"
     },
     {
@@ -250,7 +246,7 @@
         "price": 553,
         "type": "立候補準備",
         "purpose": "ポスター持ち運び用ケース",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.21"
     },
     {
@@ -259,7 +255,7 @@
         "price": 880,
         "type": "立候補準備",
         "purpose": "ポスター持ち運び用紙袋",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.23"
     },
     {
@@ -268,7 +264,7 @@
         "price": 1188,
         "type": "立候補準備",
         "purpose": "事務所用　備品",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.24"
     },
     {
@@ -277,7 +273,7 @@
         "price": 980,
         "type": "選挙運動",
         "purpose": "選挙カー音声用SDカード",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.25"
     },
     {
@@ -286,7 +282,7 @@
         "price": 1280,
         "type": "選挙運動",
         "purpose": "選挙カー音声用SDカード",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.26"
     },
     {
@@ -295,7 +291,7 @@
         "price": 512,
         "type": "選挙運動",
         "purpose": "候補者　飲料、備品",
-        "non_monetary_basis": "",
+        "non_monetary_basis": null,
         "note": "No.30"
     }
 ]

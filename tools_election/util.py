@@ -148,7 +148,7 @@ def add_public_expense_amount_data(data_list: list[dict]):
 
     # 備考欄に公費と書かれている場合、まず公費100%負担かどうかを確認する
     for data in data_list:
-        note = data.get("note", "")
+        note = data.get("note", "") or ""
         if "公費" in note:
             # 備考欄にある数字をすべて取得する
             numbers = re.findall(r"[\d,]+", note)
