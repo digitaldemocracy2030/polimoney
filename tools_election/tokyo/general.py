@@ -55,9 +55,9 @@ def get_individual_general(general: Worksheet, name: str):
                 "price": extract_number(price_cell.value),  # 金額
                 "type": type_cell.value,  # 種別
                 "purpose": purpose_cell.value,  # 支出の目的
-                # 金銭以外の見積もりの根拠は、存在しない場合空文字列
+                # 金銭以外の見積もりの根拠
                 "non_monetary_basis": non_monetary_basis_cell.value or "",
-                "note": note_cell.value,  # 備考
+                "note": note_cell.value or "",  # 備考
             }
         )
 
