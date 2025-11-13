@@ -2,7 +2,7 @@ import datetime
 
 from openpyxl.worksheet.worksheet import Worksheet
 
-from util import A_COL, B_COL, C_COL, E_COL, F_COL, K_COL, extract_number
+from util import A_COL, B_COL, C_COL, E_COL, F_COL, J_COL, K_COL, extract_number
 
 
 def get_individual_election_office(building: Worksheet):
@@ -32,6 +32,7 @@ def get_individual_election_office(building: Worksheet):
         price_cell = row[C_COL]
         type_cell = row[E_COL]
         purpose_cell = row[F_COL]
+        non_monetary_basis_cell = row[J_COL]
         note_cell = row[K_COL]
         # Noneになったら終了
         if date_cell.value is None:
@@ -39,12 +40,13 @@ def get_individual_election_office(building: Worksheet):
 
         building_data.append(
             {
-                "category": "building",
-                "date": date_cell.value.strftime("%Y-%m-%d"),
-                "price": extract_number(price_cell.value),
-                "type": type_cell.value,
-                "purpose": purpose_cell.value,
-                "note": note_cell.value,
+                "category": "building",  # シート名をカテゴリとして使用
+                "date": date_cell.value.strftime("%Y-%m-%d"),  # 日付
+                "price": extract_number(price_cell.value),  # 金額
+                "type": type_cell.value,  # 種別
+                "purpose": purpose_cell.value,  # 支出の目的
+                "non_monetary_basis": non_monetary_basis_cell.value,  # 金銭以外の見積もりの根拠
+                "note": note_cell.value,  # 備考
             }
         )
 
@@ -142,23 +144,25 @@ def get_individual_meeting_venue(building: Worksheet):
         if not isinstance(date_cell.value, datetime.datetime):
             continue
 
-        date_cell = row[A_COL]
-        price_cell = row[C_COL]
-        type_cell = row[E_COL]
-        purpose_cell = row[F_COL]
-        note_cell = row[K_COL]
+        date_cell = row[A_COL]  # 日付
+        price_cell = row[C_COL]  # 金額
+        type_cell = row[E_COL]  # 種別
+        purpose_cell = row[F_COL]  # 支出の目的
+        non_monetary_basis_cell = row[J_COL]  # 金銭以外の見積もりの根拠
+        note_cell = row[K_COL]  # 備考
         # Noneになったら終了
         if date_cell.value is None:
             break
 
         meeting_venue_data.append(
             {
-                "category": "building",
-                "date": date_cell.value.strftime("%Y-%m-%d"),
-                "price": extract_number(price_cell.value),
-                "type": type_cell.value,
-                "purpose": purpose_cell.value,
-                "note": note_cell.value,
+                "category": "building",  # シート名をカテゴリとして使用
+                "date": date_cell.value.strftime("%Y-%m-%d"),  # 日付
+                "price": extract_number(price_cell.value),  # 金額
+                "type": type_cell.value,  # 種別
+                "purpose": purpose_cell.value,  # 支出の目的
+                "non_monetary_basis": non_monetary_basis_cell.value,  # 金銭以外の見積もりの根拠
+                "note": note_cell.value,  # 備考
             }
         )
 

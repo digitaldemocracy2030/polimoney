@@ -2,7 +2,7 @@ import re
 
 from openpyxl.worksheet.worksheet import Worksheet
 
-from util import A_COL, B_COL, C_COL, E_COL, J_COL, extract_number
+from util import A_COL, B_COL, C_COL, E_COL, I_COL, J_COL, extract_number
 
 
 def get_individual_income(income: Worksheet):
@@ -29,21 +29,23 @@ def get_individual_income(income: Worksheet):
     min_row = 4
 
     for row in income.iter_rows(min_row=min_row, max_col=J_COL + 1):
-        date_cell = row[A_COL]
-        price_cell = row[C_COL]
-        type_cell = row[E_COL]
-        note_cell = row[J_COL]
+        date_cell = row[A_COL]  # 日付
+        price_cell = row[C_COL]  # 金額
+        type_cell = row[E_COL]  # 種別
+        non_monetary_basis_cell = row[I_COL]  # 金銭以外の見積もりの根拠
+        note_cell = row[J_COL]  # 備考
         # Noneになったら終了
         if date_cell.value is None:
             break
 
         income_data.append(
             {
-                "category": "income",
-                "date": date_cell.value.strftime("%Y-%m-%d"),
-                "price": extract_number(price_cell.value),
-                "type": type_cell.value,
-                "note": note_cell.value,
+                "category": "income",  # シート名をカテゴリとして使用
+                "date": date_cell.value.strftime("%Y-%m-%d"),  # 日付
+                "price": extract_number(price_cell.value),  # 金額
+                "type": type_cell.value,  # 種別
+                "non_monetary_basis": non_monetary_basis_cell.value,  # 金銭以外の見積もりの根拠
+                "note": note_cell.value,  # 備考
             }
         )
 

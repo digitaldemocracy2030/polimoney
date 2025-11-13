@@ -2,7 +2,7 @@ import datetime
 
 from openpyxl.worksheet.worksheet import Worksheet
 
-from util import A_COL, B_COL, C_COL, D_COL, I_COL, extract_number
+from util import A_COL, B_COL, C_COL, D_COL, H_COL, I_COL, extract_number
 
 
 def get_individual_general(general: Worksheet, name: str):
@@ -32,11 +32,12 @@ def get_individual_general(general: Worksheet, name: str):
     # 4行目以降, AからJの列を取得
     min_row = 4
     for row in general.iter_rows(min_row=min_row, max_col=I_COL + 1):
-        date_cell = row[A_COL]
-        price_cell = row[B_COL]
-        type_cell = row[C_COL]
-        purpose_cell = row[D_COL]
-        note_cell = row[I_COL]
+        date_cell = row[A_COL]  # 日付
+        price_cell = row[B_COL]  # 金額
+        type_cell = row[C_COL]  # 種別
+        purpose_cell = row[D_COL]  # 支出の目的
+        non_monetary_basis_cell = row[H_COL]  # 金銭以外の見積もりの根拠
+        note_cell = row[I_COL]  # 備考
 
         # 小計になったら終了
         if date_cell.value == "小計":
@@ -45,16 +46,17 @@ def get_individual_general(general: Worksheet, name: str):
 
         general_data.append(
             {
-                "category": name,
+                "category": name,  # シート名をカテゴリとして使用
                 "date": (
                     date_cell.value.strftime("%Y-%m-%d")
                     if isinstance(date_cell.value, (datetime.date, datetime.datetime))
                     else None  # 日付は無い場合もある
                 ),
-                "price": extract_number(price_cell.value),
-                "type": type_cell.value,
-                "purpose": purpose_cell.value,
-                "note": note_cell.value,
+                "price": extract_number(price_cell.value),  # 金額
+                "type": type_cell.value,  # 種別
+                "purpose": purpose_cell.value,  # 支出の目的
+                "non_monetary_basis": non_monetary_basis_cell.value,  # 金銭以外の見積もりの根拠
+                "note": note_cell.value,  # 備考
             }
         )
 
