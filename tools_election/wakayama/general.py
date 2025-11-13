@@ -6,7 +6,7 @@ from util import A_COL, B_COL, C_COL, E_COL, F_COL, K_COL, extract_number
 def get_individual_general(general: Worksheet):
     """共通フォーマットの個別データを取得する。
 
-    Excelシートの4行目以降から、日付、金額、カテゴリ、目的、備考を取得する。
+    Excelシートの4行目以降から、日付、金額、種別、目的、備考を取得する。
     金額セルがNoneになったら処理を終了する。
 
     Args:
@@ -16,7 +16,7 @@ def get_individual_general(general: Worksheet):
         list[dict]: 個別データのリスト。各要素は以下のキーを持つ辞書:
             - date (str or None): 日付（YYYY-MM-DD形式）。日付がない場合はNone。
             - price (int or float): 金額。
-            - category (str): カテゴリ。
+            - type (str): 種別。
             - purpose (str): 目的。
             - note (str): 備考。
     """
@@ -28,7 +28,7 @@ def get_individual_general(general: Worksheet):
     for row in general.iter_rows(min_row=min_row, max_col=K_COL + 1):
         date_cell = row[A_COL]
         price_cell = row[C_COL]
-        category_cell = row[E_COL]
+        type_cell = row[E_COL]
         purpose_cell = row[F_COL]
         note_cell = row[K_COL]
         # Noneになったら終了
@@ -41,7 +41,7 @@ def get_individual_general(general: Worksheet):
                 if date_cell.value
                 else None,  # 日付は無い場合もある
                 "price": extract_number(price_cell.value),
-                "category": category_cell.value,
+                "type": type_cell.value,
                 "purpose": purpose_cell.value,
                 "note": note_cell.value,
             }

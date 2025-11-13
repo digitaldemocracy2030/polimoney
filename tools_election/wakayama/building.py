@@ -8,7 +8,7 @@ from util import A_COL, B_COL, C_COL, E_COL, F_COL, K_COL, extract_number
 def get_individual_election_office(building: Worksheet):
     """家屋費（選挙事務所費）の個別データを取得する。
 
-    Excelシートの4行目以降から、日付、金額、カテゴリ、目的、備考を取得する。
+    Excelシートの4行目以降から、日付、金額、種別、目的、備考を取得する。
     日付セルがNoneになったら処理を終了する。
 
     Args:
@@ -18,7 +18,7 @@ def get_individual_election_office(building: Worksheet):
         list[dict]: 選挙事務所費の個別データリスト。各要素は以下のキーを持つ辞書:
             - date (str): 日付（YYYY-MM-DD形式）。
             - price (int or float): 金額。
-            - category (str): カテゴリ。
+            - type (str): 種別。
             - purpose (str): 目的。
             - note (str): 備考。
     """
@@ -29,7 +29,7 @@ def get_individual_election_office(building: Worksheet):
     for row in building.iter_rows(min_row=min_row, max_col=K_COL + 1):
         date_cell = row[A_COL]
         price_cell = row[C_COL]
-        category_cell = row[E_COL]
+        type_cell = row[E_COL]
         purpose_cell = row[F_COL]
         note_cell = row[K_COL]
         # Noneになったら終了
@@ -40,7 +40,7 @@ def get_individual_election_office(building: Worksheet):
             {
                 "date": date_cell.value.strftime("%Y-%m-%d"),
                 "price": extract_number(price_cell.value),
-                "category": category_cell.value,
+                "type": type_cell.value,
                 "purpose": purpose_cell.value,
                 "note": note_cell.value,
             }
@@ -111,7 +111,7 @@ def get_individual_meeting_venue(building: Worksheet):
         list[dict]: 集会会場費の個別データリスト。各要素は以下のキーを持つ辞書:
             - date (str): 日付（YYYY-MM-DD形式）。
             - price (int or float): 金額。
-            - category (str): カテゴリ。
+            - type (str): 種別。
             - purpose (str): 目的。
             - note (str): 備考。
             「月　　日」が見つからない場合は空のリストを返す。
@@ -141,7 +141,7 @@ def get_individual_meeting_venue(building: Worksheet):
 
         date_cell = row[A_COL]
         price_cell = row[C_COL]
-        category_cell = row[E_COL]
+        type_cell = row[E_COL]
         purpose_cell = row[F_COL]
         note_cell = row[K_COL]
         # Noneになったら終了
@@ -152,7 +152,7 @@ def get_individual_meeting_venue(building: Worksheet):
             {
                 "date": date_cell.value.strftime("%Y-%m-%d"),
                 "price": extract_number(price_cell.value),
-                "category": category_cell.value,
+                "type": type_cell.value,
                 "purpose": purpose_cell.value,
                 "note": note_cell.value,
             }

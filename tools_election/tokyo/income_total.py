@@ -9,14 +9,14 @@ def get_individual_income_total(income_total: Worksheet):
     """収入計の個別データを取得する。
 
     Excelシートの2行目から10行目までを読み込み、今回計・前回計・総計の各項目を取得する。
-    各行にはカテゴリ名（今回計/前回計/総計）と項目名、金額が含まれる。
+    各行には集計ラベル（今回計/前回計/総計）と項目名、金額が含まれる。
 
     Args:
         income_total (Worksheet): 収入計のExcelシート。
 
     Returns:
         list[dict]: 収入計のデータリスト。各要素は以下のキーを持つ辞書:
-            - name (str): カテゴリ名と項目名を結合した文字列（例: "今回計 寄附"）。
+            - name (str): 集計ラベルと項目名を結合した文字列（例: "今回計 寄附"）。
             - price: 金額。
     """
     income_total_data = []
@@ -25,16 +25,16 @@ def get_individual_income_total(income_total: Worksheet):
         income_total.iter_rows(min_row=2, max_row=10, max_col=C_COL + 1)
     ):
         if 0 <= i <= 2:
-            category = "今回計 "
+            aggregate_label = "今回計 "
         elif 3 <= i <= 5:
-            category = "前回計 "
+            aggregate_label = "前回計 "
         elif 6 <= i <= 8:
-            category = "総計 "
+            aggregate_label = "総計 "
 
         name_cell = row[B_COL]
         price_cell = row[C_COL]
         income_total_data.append(
-            {"name": category + name_cell.value, "price": price_cell.value}
+            {"name": aggregate_label + name_cell.value, "price": price_cell.value}
         )
 
     return income_total_data

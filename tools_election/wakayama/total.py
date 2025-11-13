@@ -14,7 +14,7 @@ def get_individual_total(total: Worksheet):
 
     Returns:
         list[dict]: 合計のデータリスト。各要素は以下のキーを持つ辞書:
-            - name (str): カテゴリ名と項目名を結合した文字列（例: "計 人件費"）。
+            - name (str): 集計ラベルと項目名を結合した文字列（例: "計 人件費"）。
             - price (int or float): 金額。
     """
 
@@ -23,13 +23,13 @@ def get_individual_total(total: Worksheet):
     # 4~13列目を取得
     for i, row in enumerate(total.iter_rows(min_row=5, max_row=13, max_col=C_COL + 1)):
         if 0 <= i <= 2:
-            name = "計 " + row[B_COL].value
+            aggregate_label = "計 " + row[B_COL].value
         elif 3 <= i <= 5:
-            name = "前回計 " + row[B_COL].value
+            aggregate_label = "前回計 " + row[B_COL].value
         elif 6 <= i <= 8:
-            name = "総計 " + row[B_COL].value
+            aggregate_label = "総計 " + row[B_COL].value
         price_value = extract_number(row[C_COL].value)
-        total_data.append({"name": name, "price": price_value})
+        total_data.append({"name": aggregate_label, "price": price_value})
 
     return total_data
 

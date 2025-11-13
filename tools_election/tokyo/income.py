@@ -26,7 +26,7 @@ def get_individual_income(income: Worksheet):
     for row in income.iter_rows(min_row=min_row, max_col=H_COL + 1):
         date_cell = row[A_COL]
         price_cell = row[B_COL]
-        category_cell = row[C_COL]
+        type_cell = row[C_COL]
         note_cell = row[H_COL]
 
         # 空白の場合は、小計を探すためスキップ
@@ -46,7 +46,7 @@ def get_individual_income(income: Worksheet):
                     else None
                 ),
                 "price": extract_number(price_cell.value),
-                "category": category_cell.value,
+                "type": type_cell.value,
                 "note": note_cell.value,
             }
         )
