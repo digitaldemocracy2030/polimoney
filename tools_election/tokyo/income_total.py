@@ -17,7 +17,7 @@ def get_individual_income_total(income_total: Worksheet):
     Returns:
         list[dict]: 収入計のデータリスト。各要素は以下のキーを持つ辞書:
             - name (str): 集計ラベルと項目名を結合した文字列（例: "今回計 寄附"）。
-            - price: 金額。
+            - price (int or float or None): 金額。セルの値がそのまま返される。
     """
     income_total_data = []
 

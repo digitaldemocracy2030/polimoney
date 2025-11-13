@@ -6,16 +6,24 @@ from util import A_COL, B_COL, C_COL, G_COL, H_COL, extract_number
 
 
 def get_individual_income(income: Worksheet):
-    """収入の部の個別データを取得する
+    """収入の部の個別データを取得する。
 
-    A列 = 0, B列 = 1, ...
-    結合されているセルは、左端のセルに情報が入っている
+    Excelシートの3行目以降から、日付、金額、種別、備考を取得する。
+    空白の場合はスキップし、「小計」行に到達したら処理を終了し、小計の金額をチェックサムとして返す。
+    結合されているセルは、左端のセルに情報が入っている。
 
     Args:
-        income (Worksheet): 収入の部のシート
+        income (Worksheet): 収入の部のExcelシート。
 
     Returns:
-        list: 収入の部のデータ
+        tuple[list[dict], int or float]: 個別データのリストとチェックサム（小計の金額）のタプル。
+            個別データの各要素は以下のキーを持つ辞書:
+            - category (str): データの種類を表す名前（常に"income"）。
+            - date (str or None): 日付（YYYY-MM-DD形式）。日付がない場合はNone。
+            - price (int or float): 金額。
+            - type (str or None): 種別。
+            - non_monetary_basis (str or None): 金銭以外の見積もりの根拠。
+            - note (str or None): 備考。
     """
     income_data = []
     json_checksum = 0  # jsonファイルの検証に使用

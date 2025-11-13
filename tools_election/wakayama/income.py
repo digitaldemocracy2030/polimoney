@@ -9,7 +9,7 @@ def get_individual_income(income: Worksheet):
     """収入の部の個別データを取得する。
 
     Excelシートの4行目以降から、日付、金額、種別、備考を取得する。
-    日付セルがNoneの場合はスキップし、日付セルが「小計」になったら処理を終了する。
+    日付セルがNoneになったら処理を終了する。
     結合されているセルは、左端のセルに情報が入っている。
 
     Args:
@@ -18,10 +18,11 @@ def get_individual_income(income: Worksheet):
     Returns:
         list[dict]: 収入の部のデータリスト。各要素は以下のキーを持つ辞書:
             - category (str): データの種類を表す名前（常に"income"）。
-            - date (str): 日付（YYYY-MM-DD形式）。
+            - date (str): 日付（YYYY-MM-DD形式）。date_cell.valueがdatetime型であることを前提とする。
             - price (int or float): 金額。
-            - type (str): 種別。
-            - note (str): 備考。
+            - type (str or None): 種別。
+            - non_monetary_basis (str or None): 金銭以外の見積もりの根拠。
+            - note (str or None): 備考。
     """
     income_data = []
 

@@ -16,11 +16,12 @@ def get_individual_general(general: Worksheet, name: str):
     Returns:
         list[dict]: 個別データのリスト。各要素は以下のキーを持つ辞書:
             - category (str): データの種類を表す名前（例: "personnel", "communication"）。
-            - date (str or None): 日付（YYYY-MM-DD形式）。日付がない場合はNone。
+            - date (str or None): 日付（YYYY-MM-DD形式）。日付がない場合はNone。date_cell.valueがdatetime型であることを前提とする。
             - price (int or float): 金額。
-            - type (str): 種別。
-            - purpose (str): 目的。
-            - note (str): 備考。
+            - type (str or None): 種別。
+            - purpose (str or None): 目的。
+            - non_monetary_basis (str or None): 金銭以外の見積もりの根拠。
+            - note (str or None): 備考。
     """
 
     general_data = []

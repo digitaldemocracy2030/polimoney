@@ -23,7 +23,7 @@ def analyze(income_file_path):
     人件・通信・交通・広告・文具・食料・休泊・雑費は同じフォーマットで処理される。
 
     Args:
-        input_file (str): 解析対象のExcelファイルのパス
+        income_file_path (str): 解析対象のExcelファイルのパス
     """
     wb = openpyxl.load_workbook(income_file_path, data_only=True)
 
