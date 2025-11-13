@@ -16,6 +16,7 @@ def get_individual_election_office(building: Worksheet):
 
     Returns:
         list[dict]: 選挙事務所費の個別データリスト。各要素は以下のキーを持つ辞書:
+            - category (str): データの種類を表す名前（常に"building"）。
             - date (str): 日付（YYYY-MM-DD形式）。
             - price (int or float): 金額。
             - type (str): 種別。
@@ -38,6 +39,7 @@ def get_individual_election_office(building: Worksheet):
 
         building_data.append(
             {
+                "category": "building",
                 "date": date_cell.value.strftime("%Y-%m-%d"),
                 "price": extract_number(price_cell.value),
                 "type": type_cell.value,
@@ -109,6 +111,7 @@ def get_individual_meeting_venue(building: Worksheet):
 
     Returns:
         list[dict]: 集会会場費の個別データリスト。各要素は以下のキーを持つ辞書:
+            - category (str): データの種類を表す名前（常に"building"）。
             - date (str): 日付（YYYY-MM-DD形式）。
             - price (int or float): 金額。
             - type (str): 種別。
@@ -150,6 +153,7 @@ def get_individual_meeting_venue(building: Worksheet):
 
         meeting_venue_data.append(
             {
+                "category": "building",
                 "date": date_cell.value.strftime("%Y-%m-%d"),
                 "price": extract_number(price_cell.value),
                 "type": type_cell.value,

@@ -17,6 +17,7 @@ def get_individual_income(income: Worksheet):
 
     Returns:
         list[dict]: 収入の部のデータリスト。各要素は以下のキーを持つ辞書:
+            - category (str): データの種類を表す名前（常に"income"）。
             - date (str): 日付（YYYY-MM-DD形式）。
             - price (int or float): 金額。
             - type (str): 種別。
@@ -38,6 +39,7 @@ def get_individual_income(income: Worksheet):
 
         income_data.append(
             {
+                "category": "income",
                 "date": date_cell.value.strftime("%Y-%m-%d"),
                 "price": extract_number(price_cell.value),
                 "type": type_cell.value,

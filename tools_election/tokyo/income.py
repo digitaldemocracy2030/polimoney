@@ -40,6 +40,7 @@ def get_individual_income(income: Worksheet):
 
         income_data.append(
             {
+                "category": "income",
                 "date": (
                     date_cell.value.strftime("%Y-%m-%d")
                     if isinstance(date_cell.value, (datetime.date, datetime.datetime))

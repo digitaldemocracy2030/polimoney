@@ -5,7 +5,7 @@ from openpyxl.worksheet.worksheet import Worksheet
 from util import A_COL, B_COL, C_COL, D_COL, I_COL, extract_number
 
 
-def get_individual_general(general: Worksheet):
+def get_individual_general(general: Worksheet, name: str):
     """共通フォーマットの個別データを取得する。
 
     Excelシートの4行目以降から、日付、金額、種別、目的、備考を取得する。
@@ -13,10 +13,12 @@ def get_individual_general(general: Worksheet):
 
     Args:
         general (Worksheet): 共通フォーマットのExcelシート。
+        name (str): データの種類を表す名前（例: "printing", "building"）。
 
     Returns:
         tuple[list[dict], int]: 個別データのリストとチェックサム（小計の金額）のタプル。
             個別データの各要素は以下のキーを持つ辞書:
+            - category (str): データの種類を表す名前（例: "printing", "building"）。
             - date (str or None): 日付（YYYY-MM-DD形式）。日付がない場合はNone。
             - price (int or float): 金額。
             - type (str): 種別。
@@ -43,6 +45,7 @@ def get_individual_general(general: Worksheet):
 
         general_data.append(
             {
+                "category": name,
                 "date": (
                     date_cell.value.strftime("%Y-%m-%d")
                     if isinstance(date_cell.value, (datetime.date, datetime.datetime))
@@ -70,7 +73,7 @@ def get_general(general: Worksheet, name: str):
             - individual_{name} (list[dict]): 個別データのリスト。
             - json_checksum (int or float): チェックサム（小計の金額）。
     """
-    individual_general, json_checksum = get_individual_general(general)
+    individual_general, json_checksum = get_individual_general(general, name)
 
     return {
         f"individual_{name}": individual_general,
