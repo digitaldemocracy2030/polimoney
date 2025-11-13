@@ -16,14 +16,15 @@ def get_individual_general(general: Worksheet, name: str):
         name (str): データの種類を表す名前（例: "printing", "building"）。
 
     Returns:
-        tuple[list[dict], int]: 個別データのリストとチェックサム（小計の金額）のタプル。
+        tuple[list[dict], int or float]: 個別データのリストとチェックサム（小計の金額）のタプル。
             個別データの各要素は以下のキーを持つ辞書:
             - category (str): データの種類を表す名前（例: "printing", "building"）。
             - date (str or None): 日付（YYYY-MM-DD形式）。日付がない場合はNone。
             - price (int or float): 金額。
-            - type (str): 種別。
-            - purpose (str): 目的。
-            - note (str): 備考。
+            - type (str or None): 種別。
+            - purpose (str or None): 目的。
+            - non_monetary_basis (str or None): 金銭以外の見積もりの根拠。
+            - note (str or None): 備考。
     """
 
     general_data = []

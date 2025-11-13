@@ -183,10 +183,10 @@ def create_combined_json(file_path_list: list[str], safe_input_file: str):
 
     Args:
         file_path_list (list[str]): 結合対象のJSONファイルパスのリスト。
-        input_file (str): 出力ファイル名に使用する入力ファイル名。
+        safe_input_file (str): 出力ファイル名に使用する安全なファイル名。
 
     Returns:
-        None: 戻り値は使用されない。結合されたJSONファイルが保存される。
+        tuple[list[dict], str]: 結合されたデータのリストと結合ファイルのパスのタプル。
     """
     combined_data = []
 

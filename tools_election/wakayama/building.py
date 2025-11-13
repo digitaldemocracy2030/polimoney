@@ -17,11 +17,12 @@ def get_individual_election_office(building: Worksheet):
     Returns:
         list[dict]: 選挙事務所費の個別データリスト。各要素は以下のキーを持つ辞書:
             - category (str): データの種類を表す名前（常に"building"）。
-            - date (str): 日付（YYYY-MM-DD形式）。
+            - date (str): 日付（YYYY-MM-DD形式）。date_cell.valueがdatetime型であることを前提とする。
             - price (int or float): 金額。
-            - type (str): 種別。
-            - purpose (str): 目的。
-            - note (str): 備考。
+            - type (str or None): 種別。
+            - purpose (str or None): 目的。
+            - non_monetary_basis (str or None): 金銭以外の見積もりの根拠。
+            - note (str or None): 備考。
     """
 
     building_data = []
@@ -115,11 +116,12 @@ def get_individual_meeting_venue(building: Worksheet):
     Returns:
         list[dict]: 集会会場費の個別データリスト。各要素は以下のキーを持つ辞書:
             - category (str): データの種類を表す名前（常に"building"）。
-            - date (str): 日付（YYYY-MM-DD形式）。
+            - date (str): 日付（YYYY-MM-DD形式）。date_cell.valueがdatetime型であることを前提とする。
             - price (int or float): 金額。
-            - type (str): 種別。
-            - purpose (str): 目的。
-            - note (str): 備考。
+            - type (str or None): 種別。
+            - purpose (str or None): 目的。
+            - non_monetary_basis (str or None): 金銭以外の見積もりの根拠。
+            - note (str or None): 備考。
             「月　　日」が見つからない場合は空のリストを返す。
     """
     meeting_venue_data = []
