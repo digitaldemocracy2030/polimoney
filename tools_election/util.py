@@ -85,7 +85,7 @@ def create_individual_json(data_list: list[tuple[str, dict]], safe_input_file: s
 def has_income_data(data: list[dict]):
     """データに収入データが含まれているかを検証する。
 
-    収入データにはpurposeが無いことを利用している
+    収入データにはcategoryがincomeであることを利用している
 
     Args:
         data (list[dict]): 検証対象のデータ。
@@ -93,7 +93,7 @@ def has_income_data(data: list[dict]):
     Returns:
         bool: 収入データが含まれている場合はTrue、含まれていない場合はFalse。
     """
-    return any(item.get("purpose") is None for item in data)
+    return any(item.get("category") == "income" for item in data)
 
 
 def validate_sum(data: dict, file_path: str):
