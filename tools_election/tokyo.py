@@ -53,6 +53,7 @@ def analyze(input_file):
     # フォルダを作成
     safe_input_file = util.create_output_folder(input_file)
 
+    # データとファイル名を定義 (utilで必要)
     data_list = [
         ("income_data.json", income_data),
         ("income_summary_data.json", income_summary_data),
@@ -68,10 +69,7 @@ def analyze(input_file):
 
     util.create_individual_json(data_list, safe_input_file)
 
-    file_path_list = [
-        f"output_json/{safe_input_file}/{file_name}" for file_name, _ in data_list
-    ]
-    util.create_combined_json(file_path_list, safe_input_file)
+    util.create_combined_json(data_list, safe_input_file)
 
 
 def main():

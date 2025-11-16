@@ -173,7 +173,7 @@ def add_public_expense_amount_data(data_list: list[dict]):
     return data_list
 
 
-def create_combined_json(file_path_list: list[str], safe_input_file: str):
+def create_combined_json(data_list: list[tuple[str, dict]], safe_input_file: str):
     """複数のJSONファイルを結合して新しいJSONファイルを作成する。
 
     指定されたJSONファイルリストから、`summary`を含まないファイルを読み込み、
@@ -182,7 +182,7 @@ def create_combined_json(file_path_list: list[str], safe_input_file: str):
     各ファイルの合計値は`validate_sum()`関数で検証される。
 
     Args:
-        file_path_list (list[str]): 結合対象のJSONファイルパスのリスト。
+        data_list (list[tuple[str, dict]]): 結合対象のデータのリスト。
         safe_input_file (str): 出力ファイル名に使用する安全なファイル名。
 
     Returns:
@@ -190,7 +190,12 @@ def create_combined_json(file_path_list: list[str], safe_input_file: str):
     """
     combined_data = []
 
+    file_path_list = [
+        f"output_json/{safe_input_file}/{file_name}" for file_name, _ in data_list
+    ]
+
     for file_path in file_path_list:
+        # summaryファイルは結合対象外
         if "summary" in file_path:
             continue
 

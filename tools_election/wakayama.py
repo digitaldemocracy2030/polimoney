@@ -58,6 +58,7 @@ def analyze(income_file_path):
     # フォルダを作成
     safe_input_file = util.create_output_folder(income_file_path)
 
+    # データとファイル名を定義 (utilで必要)
     data_list = [
         ("income_data.json", income_data),
         ("personnel_data.json", personnel_data),
@@ -75,12 +76,10 @@ def analyze(income_file_path):
 
     util.create_individual_json(data_list, safe_input_file)
 
-    file_path_list = [
-        f"output_json/{safe_input_file}/{file_name}" for file_name, _ in data_list
-    ]
     combined_data, combined_file_path = util.create_combined_json(
-        file_path_list, safe_input_file
+        data_list, safe_input_file
     )
+
     if not util.has_income_data(combined_data):
         logging.info(
             "入力したExcelファイルに収入データが含まれていないため、収入データを追加します"
