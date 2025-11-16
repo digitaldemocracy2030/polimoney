@@ -104,9 +104,11 @@ if __name__ == "__main__":
 
 #### 関数の命名規則
 
-- **個別データ取得**: `get_individual_[データ種別](worksheet)`
-- **合計データ取得**: `get_total_[データ種別](worksheet)`
-- **メイン処理**: `get_[データ種別](worksheet)`
+- **個別データ取得**: `get_individual_[データ種別](worksheet)` - 個別のデータ行を取得する内部関数
+- **収支計データ取得**: `get_summary(worksheet)` または `get_income_summary(worksheet)` - 支出計や収入計などの収支全体の合計を取得する内部関数
+- **メイン処理**: `get_[データ種別](worksheet)` - メインファイル（都道府県名.py）から呼び出される関数
+
+**注意**: メインファイルからは `get_[データ種別]()` 関数を呼び出してください。
 
 #### 必須の引数とDocstring
 
@@ -144,7 +146,8 @@ date = date_cell.value.strftime("%Y-%m-%d") if date_cell.value else None
 #### JSONファイル名の規則
 
 - `income_data.json`: 収入データ
-- `total_data.json`: 合計データ
+- `summary_data.json`: 支出計データ
+- `income_summary_data.json`: 収入計データ
 - `[カテゴリ名]_data.json`: その他のカテゴリデータ
 
 #### 出力データの構造例
@@ -159,7 +162,7 @@ date = date_cell.value.strftime("%Y-%m-%d") if date_cell.value else None
             "note": "備考"
         }
     ],
-    "total_income": [
+    "total_income": [  # カテゴリ内の小計（収支全体の合計ではない）
         {
             "name": "総計",
             "price": 1000000
@@ -167,6 +170,8 @@ date = date_cell.value.strftime("%Y-%m-%d") if date_cell.value else None
     ]
 }
 ```
+
+**注意**: `total_*`は各カテゴリファイル内の小計を表し、収支全体の合計（`summary_data.json`や`income_summary_data.json`）とは異なります。
 
 ## 都道府県固有の実装について
 

@@ -28,4 +28,5 @@ Excelのシート名などがこれにあたる
 | public_expense_summary | 公費負担相当額サマリー | |
 | public_expense_amount | 公費負担額 | |
 | individual_* | 個別データ | Excelの各行のデータを指す |
-| total_* | 合計データ | Excelの最後の「小計」などのデータを指す |
+| total_* | ファイル内の小計 | Excelの最後の「小計」などのデータを指す（カテゴリごとの合計） |
+| summary | 収支の合計 | 支出計や収入計など、収支全体の合計を指す |
