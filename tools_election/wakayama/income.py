@@ -107,7 +107,7 @@ def get_public_expense_summary(income: Worksheet):
 
     Returns:
         dict: 公費負担相当額のデータ。以下のキーを持つ:
-            - total (int): 公費負担相当額の総額。
+            - summary (int): 公費負担相当額の総額。
             - breakdown (dict): 内訳の辞書。項目名をキー、金額を値とする。
             「参考」が見つからない場合は空の辞書を返す。
     """
@@ -125,8 +125,8 @@ def get_public_expense_summary(income: Worksheet):
         return {}
 
     # 総額を取得する正規表現
-    total_pattern = r"公費負担相当額\s+(\d+(?:,\d+)*)円"
-    total_match = re.search(total_pattern, public_expense_summary_str)
+    summary_pattern = r"公費負担相当額\s+(\d+(?:,\d+)*)円"
+    summary_match = re.search(summary_pattern, public_expense_summary_str)
 
     # 内訳を取得する正規表現
     breakdown_pattern = r"内訳\s+(.+)"
@@ -135,9 +135,9 @@ def get_public_expense_summary(income: Worksheet):
     public_expense_summary_data = {}
 
     # 総額を追加
-    if total_match:
-        total_amount = int(total_match.group(1).replace(",", ""))
-        public_expense_summary_data["total"] = total_amount
+    if summary_match:
+        summary_amount = int(summary_match.group(1).replace(",", ""))
+        public_expense_summary_data["summary"] = summary_amount
 
     # 内訳をパース
     if breakdown_match:

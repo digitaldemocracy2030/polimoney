@@ -13,13 +13,13 @@
 ### ファイル命名規則
 
 - ファイル名は`<カテゴリ名>_data.json`の形式
-- 例: `income_data.json`, `printing_data.json`, `total_data.json`, `income_total_data.json`
+- 例: `income_data.json`, `printing_data.json`, `summary_data.json`, `income_summary_data.json`
 - 結合ファイルは`{timestamp}_combined.json`の形式（`{timestamp}`は`YYYYMMDDHHMMSS`形式）
 
 ### json_checksumについて
 
 - `json_checksum`は、**個別データを含むファイル（`individual_*`を含むファイル）に存在する場合があります**
-- 合計データファイル（`total_data.json`、`income_total_data.json`など）には含まれません
+- 合計データファイル（`summary_data.json`、`income_summary_data.json`など）には含まれません
 - 個別データファイルにおいて、`json_checksum`を最後に用意（存在する場合）
 - 個別の`price`を合計したら`json_checksum`と一致するはず（存在する場合）
 - 一致しない場合は後の処理に影響があるので、入力元の収支報告書を確認
@@ -31,7 +31,10 @@
 ### 共通用語
 
 - **`individual_*`**: 個別の取引明細をまとめた配列。`*`部分はカテゴリ名やサブカテゴリ名が入る（例: `individual_income`, `individual_advertising`）
-- **`total_*`**: 集計済みの合計情報をまとめた配列。`*`部分はカテゴリ名が入る（例: `total_income`, `total_advertising`）
+- **`total_*`**: ファイル内の小計（カテゴリごとの合計）をまとめた配列。`*`部分はカテゴリ名が入る（例: `total_income`, `total_advertising`）。**注意**: `total_*`は各カテゴリファイル内の小計を表し、収支全体の合計（支出計・収入計）とは異なる
+- **`summary`**: 収支全体の合計を表す。支出計や収入計など、すべてのカテゴリをまとめた合計を指す
+  - **`individual_summary`**: 支出計の情報をまとめた配列（`summary_data.json`で使用）
+  - **`individual_income_summary`**: 収入計の情報をまとめた配列（`income_summary_data.json`で使用）
 - **`public_expense_summary`**: 公費負担相当額の総額および内訳をまとめた辞書（オプショナル）
 - **`public_expense_amount`**: 個別明細に付与される公費負担額を表す数値（`price`と同額の場合は全額公費負担、`-1`は不明を示す）
 - **`category`**: データの大分類。シート名や処理名を英語で表したもの（例: `"personnel"`, `"communication"`, `"income"`）
@@ -123,9 +126,9 @@
 
 **用語説明**:
 - **`individual_<カテゴリ名>`**: 個別の取引明細をまとめた配列（形式Aと同様）
-- **`total_<カテゴリ名>`**: 個別データをまとめた集計配列
-- **`name`**: 合計項目名（例: "計"、"総計"など）。地域によって異なる値が設定される
-- **`price`**: 合計金額
+- **`total_<カテゴリ名>`**: 個別データをまとめた小計配列（カテゴリ内の小計）。**注意**: これは収支全体の合計（`summary`）とは異なる
+- **`name`**: 小計項目名（例: "計"、"総計"など）。地域によって異なる値が設定される
+- **`price`**: 小計金額
 - **`json_checksum`**: `individual_<カテゴリ名>`配列内のすべての`price`の合計値
 
 **使用例**: 和歌山の`general_data.json`など
@@ -177,7 +180,7 @@
 **用語説明**:
 - **`<サブカテゴリ名>`**: 地域固有の細分類名。カテゴリが複数のサブカテゴリに分割される場合に使用される（例: "選挙事務所費"と"集会会場費"）
 - **`individual_<サブカテゴリ名>`**: 各サブカテゴリの個別明細配列
-- **`total_<サブカテゴリ名>`**: 各サブカテゴリの合計配列
+- **`total_<サブカテゴリ名>`**: 各サブカテゴリの小計配列（カテゴリ内の小計）。**注意**: これは収支全体の合計（`summary`）とは異なる
 - **`json_checksum`**: すべてのサブカテゴリの`individual_*`配列内の`price`を合算した値
 
 **注意**: `json_checksum`は、複数のサブカテゴリの合計を合算した値になります。
@@ -243,7 +246,7 @@
         ...
     ],
     "public_expense_summary": {
-        "total": number,
+        "summary": number,
         "breakdown": {
             "<項目名>": number,
             ...
@@ -254,16 +257,16 @@
 
 **用語説明**:
 - **`individual_income`**: 収入の個別明細をまとめた配列（形式Aと同様）
-- **`total_income`**: 収入の合計情報。各要素は`name`と`price`を持つ
+- **`total_income`**: 収入の小計情報（カテゴリ内の小計）。各要素は`name`と`price`を持つ。**注意**: これは収入計（`income_summary_data.json`）とは異なる
   - **`name`**: 項目名（例: "寄附"、"その他の収入"、"計"、"総計"など）
-  - **`price`**: 合計金額
+  - **`price`**: 小計金額
 - **`public_expense_summary`**: 公費負担相当額の情報をまとめた辞書（optional）
-  - **`total`**: 公費負担相当額の総額（必須、存在する場合）
+  - **`summary`**: 公費負担相当額の総額（必須、存在する場合）
   - **`breakdown`**: 項目ごとの内訳。項目名をキー、金額を値とする辞書（optional: 内訳がある場合のみ存在）
 
 **使用例**: 和歌山の`income_data.json`
 
-### 3. 収入計ファイル（`income_total_data.json`）
+### 3. 収入計ファイル（`income_summary_data.json`）
 
 収入を集計したデータを格納するファイル。地域によっては別ファイルとして存在する場合がある。合計データファイルのため、`json_checksum`フィールドは含まれない。
 
@@ -271,7 +274,7 @@
 
 ```json
 {
-    "individual_income_total": [
+    "individual_income_summary": [
         {
             "name": string,
             "price": number
@@ -279,21 +282,21 @@
         ...
     ],
     "public_expense_summary": {
-        "total": number
+        "summary": number
     }
 }
 ```
 
 **用語説明**:
-- **`individual_income_total`**: 収入計の情報。各要素は`name`と`price`を持つ
+- **`individual_income_summary`**: 収入計の情報。各要素は`name`と`price`を持つ
   - **`name`**: 項目名。地域によって異なる値が設定される
   - **`price`**: 合計金額
 - **`public_expense_summary`**: 公費負担相当額の合計
-  - **`total`**: 公費負担相当額の総額
+  - **`summary`**: 公費負担相当額の総額
 
-**使用例**: 東京の`income_total_data.json`
+**使用例**: 東京の`income_summary_data.json`
 
-### 4. 支出計ファイル（`total_data.json`）
+### 4. 支出計ファイル（`summary_data.json`）
 
 支出の合計情報を扱うファイル。合計データファイルのため、`json_checksum`フィールドは含まれない。
 
@@ -301,14 +304,14 @@
 
 ```json
 {
-    "individual_total": [
+    "individual_summary": [
         {
             "name": string,
             "price": number
         },
         ...
     ],
-    "public_expense_equivalent_total": [
+    "public_expense_equivalent_summary": [
         {
             "item": string,
             "unit_price": number,
@@ -317,28 +320,31 @@
         },
         ...
         {
-            "total": number
+            "item": "計",
+            "unit_price": null,
+            "quantity": null,
+            "price": number
         }
     ]
 }
 ```
 
 **用語説明**:
-- **`individual_total`**: 支出計の情報。各要素は`name`と`price`を持つ
+- **`individual_summary`**: 支出計の情報。各要素は`name`と`price`を持つ
   - **`name`**: 項目名。地域によって異なる値が設定される
   - **`price`**: 合計金額
-- **`public_expense_equivalent_total`**: 公費負担相当額の内訳（optional: 地域によっては存在しない場合がある）
+- **`public_expense_equivalent_summary`**: 公費負担相当額の内訳（optional: 地域によっては存在しない場合がある）
   - **`item`**: 項目名
   - **`unit_price`**: 単価
   - **`quantity`**: 数量（枚数など）
   - **`price`**: 金額（単価×数量）
-  - **`{"total": number}`**: 最後の要素として合計が含まれる場合がある（optional: 地域によっては含まれない場合がある）
+  - **`{"item": "計", "unit_price": null, "quantity": null, "price": number}`**: 最後の要素として合計が含まれる場合がある（optional: 地域によっては含まれない場合がある）。「計」行は`item`が"計"で、`unit_price`と`quantity`が`null`になる
 
-**使用例**: `total_data.json`
+**使用例**: `summary_data.json`
 
-### 5. 合計ファイル（`total_<カテゴリ名>.json`）
+### 5. 小計ファイル（`total_<カテゴリ名>.json`）
 
-カテゴリごとの合計値を格納するファイル。地域によっては各カテゴリに存在する場合がある。
+カテゴリごとの小計値を格納するファイル。地域によっては各カテゴリに存在する場合がある。**注意**: このファイルは各カテゴリ内の小計を表し、収支全体の合計（`summary_data.json`や`income_summary_data.json`）とは異なる。
 
 #### 形式A: 合計情報のみ
 
@@ -355,9 +361,9 @@
 ```
 
 **用語説明**:
-- **`total_<カテゴリ名>`**: 合計情報をまとめた配列。カテゴリ名は英訳される
-- **`name`**: 合計項目の名称。地域によって異なる値が設定される
-- **`price`**: 合計金額
+- **`total_<カテゴリ名>`**: 小計情報をまとめた配列。カテゴリ名は英訳される。**注意**: これは各カテゴリ内の小計を表し、収支全体の合計（`summary_data.json`や`income_summary_data.json`）とは異なる
+- **`name`**: 小計項目の名称。地域によって異なる値が設定される
+- **`price`**: 小計金額
 
 **使用例**: 地域によっては各カテゴリごとに存在する場合がある
 
@@ -398,6 +404,6 @@
 **生成ルール**:
 - ファイル名は`{timestamp}_combined.json`の形式。`{timestamp}`は`YYYYMMDDHHMMSS`形式
 - 個別データファイル（`individual_*`を含むファイル）から`individual_*`配列を抽出して結合する
-- 合計データファイル（`total_data.json`、`income_total_data.json`など）は結合対象外
+- 合計データファイル（`summary_data.json`、`income_summary_data.json`など）は結合対象外
 - データの順序は、元の個別データファイルの順序に従う（ソートは行われない）
 - `json_checksum`フィールドは含まれない

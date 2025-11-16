@@ -111,9 +111,9 @@ def validate_sum(data: dict, file_path: str):
         None: 戻り値は使用されない。検証結果はログに出力される。
 
     Notes:
-        `total`を含むファイルパスの場合は検証をスキップする。
+        `summary`を含むファイルパスの場合は検証をスキップする。
     """
-    if "total" in file_path:
+    if "summary" in file_path:
         return
 
     total_price = 0
@@ -176,7 +176,7 @@ def add_public_expense_amount_data(data_list: list[dict]):
 def create_combined_json(file_path_list: list[str], safe_input_file: str):
     """複数のJSONファイルを結合して新しいJSONファイルを作成する。
 
-    指定されたJSONファイルリストから、`total`を含まないファイルを読み込み、
+    指定されたJSONファイルリストから、`summary`を含まないファイルを読み込み、
     各ファイルの`individual_*`キーに含まれるデータを結合して1つのリストにする。
     結合されたデータは、タイムスタンプ付きのファイル名で保存される。
     各ファイルの合計値は`validate_sum()`関数で検証される。
@@ -191,7 +191,7 @@ def create_combined_json(file_path_list: list[str], safe_input_file: str):
     combined_data = []
 
     for file_path in file_path_list:
-        if "total" in file_path:
+        if "summary" in file_path:
             continue
 
         with open(file_path, "r", encoding="utf-8") as f:

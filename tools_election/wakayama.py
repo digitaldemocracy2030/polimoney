@@ -8,7 +8,7 @@ import util
 from wakayama.building import get_building
 from wakayama.general import get_general
 from wakayama.income import get_income
-from wakayama.total import get_total
+from wakayama.summary import get_summary
 
 # ログ設定
 logging.basicConfig(
@@ -39,7 +39,7 @@ def analyze(income_file_path):
     food = wb["食料"]
     accommodation = wb["休泊"]
     miscellaneous = wb["雑費"]
-    total = wb["支出 (計)"]
+    summary = wb["支出 (計)"]
 
     # 分析
     income_data = get_income(income)  # 収入
@@ -53,7 +53,7 @@ def analyze(income_file_path):
     food_data = get_general(food, "food")  # 食料
     accommodation_data = get_general(accommodation, "accommodation")  # 休泊
     miscellaneous_data = get_general(miscellaneous, "miscellaneous")  # 雑費
-    total_data = get_total(total)  # 合計
+    summary_data = get_summary(summary)  # 支出計
 
     # フォルダを作成
     safe_input_file = util.create_output_folder(income_file_path)
@@ -70,7 +70,7 @@ def analyze(income_file_path):
         ("food_data.json", food_data),
         ("accommodation_data.json", accommodation_data),
         ("miscellaneous_data.json", miscellaneous_data),
-        ("total_data.json", total_data),
+        ("summary_data.json", summary_data),
     ]
 
     util.create_individual_json(data_list, safe_input_file)
