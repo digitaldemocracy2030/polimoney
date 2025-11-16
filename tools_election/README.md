@@ -104,10 +104,11 @@ if __name__ == "__main__":
 
 #### 関数の命名規則
 
-- **個別データ取得**: `get_individual_[データ種別](worksheet)`
-- **小計データ取得**: `get_total_[データ種別](worksheet)` - ファイル内の小計（カテゴリごとの合計）を取得
-- **収支計データ取得**: `get_summary(worksheet)` または `get_income_summary(worksheet)` - 支出計や収入計などの収支全体の合計を取得
-- **メイン処理**: `get_[データ種別](worksheet)`
+- **個別データ取得**: `get_individual_[データ種別](worksheet)` - 個別のデータ行を取得する内部関数
+- **収支計データ取得**: `get_summary(worksheet)` または `get_income_summary(worksheet)` - 支出計や収入計などの収支全体の合計を取得する内部関数
+- **メイン処理**: `get_[データ種別](worksheet)` - メインファイル（都道府県名.py）から呼び出される関数
+
+**注意**: メインファイルからは `get_[データ種別]()` 関数を呼び出してください。
 
 #### 必須の引数とDocstring
 
