@@ -376,6 +376,7 @@
 ```json
 [
     {
+        "data_id": string,
         "category": string,
         "date": "YYYY-MM-DD",
         "price": number,
@@ -399,6 +400,7 @@
 - **`non_monetary_basis`**: 金銭以外の見積もりの根拠。該当しない場合は空文字または`null`。Excel上で「－」などのプレースホルダーが入力されている場合はその値を保持する
 - **`note`**: 備考。Excel上で「－」などのプレースホルダーが入力されている場合はその値を保持する。複数行テキストは改行コード（`\n`）を含んだまま保存される
 - **`public_expense_amount`** (optional): 公費負担額。公費負担が不明な場合は-1が設定され、logging.errorを返す。
+- **`data_id`**: 結合処理で付与されるユニークなUUID。将来的にDB側でIDを付与予定だが、それまでの暫定的な識別子として使用する。
 - **`{timestamp}`**: ファイル名の`YYYYMMDDHHMMSS`部分。生成時刻を表す（例: `20251110152950`）
 
 **生成ルール**:
