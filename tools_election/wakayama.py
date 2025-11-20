@@ -125,6 +125,9 @@ def analyze_income(income_file_path: str, combined_file_path: str):
     # 収入データを追加
     combined_data.extend(income_data["individual_income"])
 
+    # データにユニークIDを付与する
+    combined_data = util.add_data_id(combined_data)
+
     # 上書き保存
     with open(combined_file_path, "w", encoding="utf-8") as f:
         json.dump(combined_data, f, indent=4, ensure_ascii=False)

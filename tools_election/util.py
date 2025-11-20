@@ -2,7 +2,7 @@ import json
 import logging
 import os
 import re
-from datetime import datetime
+import uuid
 
 from openpyxl import utils
 
@@ -173,6 +173,20 @@ def add_public_expense_amount_data(data_list: list[dict]):
     return data_list
 
 
+def add_data_id(data_list: list[dict]):
+    """データにユニークIDを付与する。
+    TODO: 将来的にDBでIDがつき、その後は不要になるので削除
+
+    Args:
+        data_list (list[dict]): データのリスト。
+    Returns:
+        list[dict]: ユニークIDが付与されたデータのリスト。
+    """
+    for data in data_list:
+        data["data_id"] = str(uuid.uuid4())
+    return data_list
+
+
 def create_combined_json(data_list: list[tuple[str, dict]], safe_input_file: str):
     """複数のJSONファイルを結合して新しいJSONファイルを作成する。
 
@@ -211,8 +225,10 @@ def create_combined_json(data_list: list[tuple[str, dict]], safe_input_file: str
     # 公費負担額の情報を追加する
     combined_data = add_public_expense_amount_data(combined_data)
 
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    combined_file_path = f"output_json/{safe_input_file}/{timestamp}_combined.json"
+    # データにユニークIDを付与する
+    combined_data = add_data_id(combined_data)
+
+    combined_file_path = f"output_json/{safe_input_file}/combined.json"
 
     with open(combined_file_path, "w", encoding="utf-8") as f:
         json.dump(combined_data, f, indent=4, ensure_ascii=False)
