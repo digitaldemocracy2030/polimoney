@@ -16,29 +16,27 @@ import { BoardContainer } from '@/components/BoardContainer';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
-import data from '@/data/election-finance/ef-nakamura.json';
-import type { ElectionFinanceData } from '@/models/election-finance';
-
-type CategorySummary = {
-  category: string;
-  total: number;
-  count: number;
-  type: 'income' | 'expense';
-};
+import jsonData from '@/data/election-finance/ef-iwanaga.json';
+import type {
+  EfData,
+  EfSummary,
+  EfTransactions,
+} from '@/models/election-finance';
+import { getCategoryJpName } from '@/utils/election-finance';
 
 function categorizeTransactionType(category: string): 'income' | 'expense' {
-  const incomeCategories = ['その他の収入', '寄附'];
-  return incomeCategories.includes(category) ? 'income' : 'expense';
+  const incomeTypes = ['その他の収入', '寄附'];
+  return incomeTypes.includes(category) ? 'income' : 'expense';
 }
 
-function calculateSummary(transactions: ElectionFinanceData) {
-  const summary: Record<string, CategorySummary> = {};
+function calculateSummary(transactions: EfTransactions) {
+  const summary: Record<string, EfSummary> = {};
 
   transactions.forEach((transaction) => {
     const category = transaction.category;
     if (!summary[category]) {
       summary[category] = {
-        category,
+        category: getCategoryJpName(category),
         total: 0,
         count: 0,
         type: categorizeTransactionType(category),
@@ -60,8 +58,10 @@ function formatCurrency(amount: number): string {
 }
 
 export default function ElectionFinancePage() {
-  const typedData = data as ElectionFinanceData;
-  const summary = calculateSummary(typedData);
+  const data = jsonData as EfData;
+  const metadata = data.metadata;
+  const transactions = data.transactions;
+  const summary = calculateSummary(transactions);
 
   const totalIncome = summary
     .filter((s) => s.type === 'income')
@@ -79,22 +79,47 @@ export default function ElectionFinancePage() {
       value: s.total,
     }));
 
-  const sortedTransactions = [...typedData].sort((a, b) => {
-    if (!a.date) return 1;
-    if (!b.date) return -1;
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
+  const sortedTransactions = [...transactions]
+    .map((transaction) => ({
+      ...transaction,
+      category: getCategoryJpName(transaction.category),
+    }))
+    .sort((a, b) => {
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
 
   return (
     <Box>
       <Header />
 
       <VStack gap={6} align="stretch">
-        {/* ヘッダーセクション */}
+        {/* サマリー＋メタデータ統合セクション */}
         <BoardContainer>
-          <Heading as="h1" size="2xl" mb={6}>
+          <Heading as="h1" size="2xl" mb={4}>
             選挙運動費用収支報告
           </Heading>
+          <Stack gap={2} mb={4}>
+            <HStack align="start" gap={2}>
+              <Text fontWeight="bold" color="gray.700" minW="80px">
+                対象
+              </Text>
+              <Text color="gray.900">{metadata.title}</Text>
+            </HStack>
+            <HStack align="start" gap={2}>
+              <Text fontWeight="bold" color="gray.700" minW="80px">
+                執行
+              </Text>
+              <Text color="gray.900">{metadata.date}</Text>
+            </HStack>
+            <HStack align="start" gap={2}>
+              <Text fontWeight="bold" color="gray.700" minW="80px">
+                候補者
+              </Text>
+              <Text color="gray.900">{metadata.name}</Text>
+            </HStack>
+          </Stack>
           <SimpleGrid columns={{ base: 1, md: 3 }} gap={4}>
             <Stack gap={1}>
               <Text fontSize="sm" color="gray.600">
@@ -256,9 +281,7 @@ export default function ElectionFinancePage() {
               </Table.Header>
               <Table.Body>
                 {sortedTransactions.map((transaction) => (
-                  <Table.Row
-                    key={`${transaction.date}-${transaction.category}-${transaction.price}`}
-                  >
+                  <Table.Row key={transaction.data_id}>
                     <Table.Cell>{transaction.date || '-'}</Table.Cell>
                     <Table.Cell>
                       <Badge size="sm">{transaction.category}</Badge>
