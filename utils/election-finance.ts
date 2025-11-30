@@ -10,3 +10,8 @@ export function getCategoryJpName(category: EfCategory): string {
   const item = efCategories.find((c) => c.key === category);
   return item ? item.label : category;
 }
+
+export function categorizeTransactionType(type: string): 'income' | 'expense' {
+  const incomeTypes = ['その他の収入', '寄附'];
+  return incomeTypes.includes(type) ? 'income' : 'expense';
+}

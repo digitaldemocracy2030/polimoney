@@ -16,30 +16,30 @@ import { BoardContainer } from '@/components/BoardContainer';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
-import jsonData from '@/data/election-finance/ef-iwanaga.json';
+import jsonData from '@/data/election-finance/ef-nakamura.json';
 import type {
   EfData,
   EfSummary,
   EfTransactions,
 } from '@/models/election-finance';
-import { getCategoryJpName } from '@/utils/election-finance';
-
-function categorizeTransactionType(category: string): 'income' | 'expense' {
-  const incomeTypes = ['その他の収入', '寄附'];
-  return incomeTypes.includes(category) ? 'income' : 'expense';
-}
+import {
+  categorizeTransactionType,
+  getCategoryJpName,
+} from '@/utils/election-finance';
 
 function calculateSummary(transactions: EfTransactions) {
   const summary: Record<string, EfSummary> = {};
 
   transactions.forEach((transaction) => {
     const category = transaction.category;
+    const type = transaction.type;
+
     if (!summary[category]) {
       summary[category] = {
-        category: getCategoryJpName(category),
+        category: getCategoryJpName(transaction.category),
         total: 0,
         count: 0,
-        type: categorizeTransactionType(category),
+        type: categorizeTransactionType(type),
       };
     }
     summary[category].total += transaction.price;
@@ -210,21 +210,15 @@ export default function ElectionFinancePage() {
             <ResponsivePie
               data={expenseByCategoryForChart}
               margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-              innerRadius={0.5}
-              padAngle={0.7}
-              cornerRadius={3}
+              sortByValue
               colors={{ scheme: 'nivo' }}
               borderColor={{
                 from: 'color',
                 modifiers: [['darker', 0.6]],
               }}
-              arcLinkLabelsSkipAngle={10}
-              arcLinkLabelsTextColor="#333333"
               arcLabelsSkipAngle={10}
-              arcLabelsTextColor={{
-                from: 'color',
-                modifiers: [['darker', 2]],
-              }}
+              arcLinkLabelsSkipAngle={10}
+              activeOuterRadiusOffset={10}
               legends={[
                 {
                   anchor: 'bottom',
