@@ -96,7 +96,19 @@ export default function ElectionFinancePage() {
     // },
   ];
 
-  const expenseByCategoryForChart = summary
+  const incomeByType = transactions
+    .filter((t) => categorizeTransactionType(t.type) === 'income')
+    .reduce(
+      (acc, t) => {
+        const key = t.type;
+        if (!acc[key]) acc[key] = 0;
+        acc[key] += t.price;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+
+  const expenseChartData = summary
     .filter((s) => s.type === 'expense')
     .map((s) => ({
       id: s.category,
@@ -205,16 +217,14 @@ export default function ElectionFinancePage() {
                 収入
               </Heading>
               <Stack gap={2}>
-                {summary
-                  .filter((s) => s.type === 'income')
-                  .map((s) => (
-                    <HStack key={s.category} justify="space-between">
-                      <Text>{s.category}</Text>
-                      <Badge variant="outline" colorPalette="green">
-                        {formatCurrency(s.total)}
-                      </Badge>
-                    </HStack>
-                  ))}
+                {Object.entries(incomeByType).map(([type, total]) => (
+                  <HStack key={type} justify="space-between">
+                    <Text>{type}</Text>
+                    <Badge variant="outline" colorPalette="green">
+                      {formatCurrency(total)}
+                    </Badge>
+                  </HStack>
+                ))}
               </Stack>
             </Box>
 
@@ -243,11 +253,11 @@ export default function ElectionFinancePage() {
         {/* グラフ */}
         <BoardContainer>
           <Heading as="h2" size="lg" mb={6}>
-            支出内訳（円グラフ）
+            支出内訳
           </Heading>
           <Box h="400px">
             <ResponsivePie
-              data={expenseByCategoryForChart}
+              data={expenseChartData}
               margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
               sortByValue
               colors={{ scheme: 'nivo' }}
