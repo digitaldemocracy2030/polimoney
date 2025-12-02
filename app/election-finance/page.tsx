@@ -11,6 +11,8 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
+import type { BarDatum } from '@nivo/bar';
+import { ResponsiveBar } from '@nivo/bar';
 import { ResponsivePie } from '@nivo/pie';
 import { BoardContainer } from '@/components/BoardContainer';
 import { Footer } from '@/components/Footer';
@@ -71,6 +73,29 @@ export default function ElectionFinancePage() {
     .filter((s) => s.type === 'expense')
     .reduce((acc, s) => acc + s.total, 0);
 
+  const carryover = Math.max(0, totalIncome - totalExpense);
+
+  const barData: BarDatum[] = [
+    {
+      category: '支出',
+      繰越額: 200000,
+      支出: 800000,
+    },
+    {
+      category: '収入',
+      収入: 1000000,
+    },
+    // {
+    //   category: '収支',
+    //   収入: totalIncome,
+    //   繰越額: carryover,
+    // },
+    // {
+    //   category: '支出',
+    //   支出: totalExpense,
+    // },
+  ];
+
   const expenseByCategoryForChart = summary
     .filter((s) => s.type === 'expense')
     .map((s) => ({
@@ -95,7 +120,7 @@ export default function ElectionFinancePage() {
       <Header />
 
       <VStack gap={6} align="stretch">
-        {/* サマリー＋メタデータ統合セクション */}
+        {/* ヘッダーセクション */}
         <BoardContainer>
           <Heading as="h1" size="2xl" mb={4}>
             選挙運動費用収支報告
@@ -120,38 +145,52 @@ export default function ElectionFinancePage() {
               <Text color="gray.900">{metadata.name}</Text>
             </HStack>
           </Stack>
-          <SimpleGrid columns={{ base: 1, md: 3 }} gap={4}>
-            <Stack gap={1}>
-              <Text fontSize="sm" color="gray.600">
-                総収入
-              </Text>
-              <Text fontSize="2xl" fontWeight="bold" color="green.600">
-                {formatCurrency(totalIncome)}
-              </Text>
-            </Stack>
-            <Stack gap={1}>
-              <Text fontSize="sm" color="gray.600">
-                総支出
-              </Text>
-              <Text fontSize="2xl" fontWeight="bold" color="red.600">
-                {formatCurrency(totalExpense)}
-              </Text>
-            </Stack>
-            <Stack gap={1}>
-              <Text fontSize="sm" color="gray.600">
-                収支
-              </Text>
-              <Text
-                fontSize="2xl"
-                fontWeight="bold"
-                color={
-                  totalIncome - totalExpense >= 0 ? 'green.600' : 'red.600'
-                }
-              >
-                {formatCurrency(totalIncome - totalExpense)}
-              </Text>
-            </Stack>
-          </SimpleGrid>
+          <HStack gap={6} align="start">
+            <Box flex={1} h="300px">
+              <ResponsiveBar
+                data={barData}
+                keys={['収入', '繰越額', '支出']}
+                indexBy="category"
+                padding={0}
+                groupMode="stacked"
+                borderColor={{
+                  from: 'color',
+                  modifiers: [['darker', 1.6]],
+                }}
+                axisBottom={null}
+                axisLeft={null}
+                labelSkipWidth={1}
+                labelSkipHeight={1}
+                label={(d) => String(d.id)}
+              />
+            </Box>
+            <VStack gap={4} minW="200px">
+              <Stack gap={1}>
+                <Text fontSize="sm" color="gray.600">
+                  収入
+                </Text>
+                <Text fontSize="2xl" fontWeight="bold" color="green.600">
+                  {formatCurrency(totalIncome)}
+                </Text>
+              </Stack>
+              <Stack gap={1}>
+                <Text fontSize="sm" color="gray.600">
+                  支出
+                </Text>
+                <Text fontSize="2xl" fontWeight="bold" color="red.600">
+                  {formatCurrency(totalExpense)}
+                </Text>
+              </Stack>
+              <Stack gap={1}>
+                <Text fontSize="sm" color="gray.600">
+                  繰越
+                </Text>
+                <Text fontSize="2xl" fontWeight="bold">
+                  {formatCurrency(carryover)}
+                </Text>
+              </Stack>
+            </VStack>
+          </HStack>
         </BoardContainer>
 
         {/* サマリーセクション */}
