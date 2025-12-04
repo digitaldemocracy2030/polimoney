@@ -177,15 +177,3 @@ async def root():
         "docs": "/docs",
         "health": "/api/v1/health",
     }
-
-
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(
-        "app.main:app",
-        host=settings.host,
-        port=settings.port,
-        reload=settings.debug,
-        log_level="info",
-    )
