@@ -1,81 +1,127 @@
+from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import BigInteger, DateTime, Integer, String, Text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
 from app.database import Base
 
 
-class ElectionFunds(Base):
-    """選挙運動費用収支報告書データを表すモデル
+class Candidate(Base):
+    """候補者情報モデル。
 
-    選挙運動の収支状況を記録するテーブル。
-    候補者情報と選挙関連の財務データを管理する。
+    候補者の識別情報（氏名、かな表記、生年月日、所属政党など）を保持します。
 
     Attributes:
-        id (int): プライマリキー
-        user_id (int): データを登録したユーザーID
-        candidate_name (str): 候補者名
-        election_type (str): 選挙種別
-        election_area (str): 選挙区
-        election_date (datetime): 選挙実施日
-        political_party (str): 所属政党
-        total_income (int): 収入合計
-        total_expenditure (int): 支出合計
-        balance (int): 収支差額
-        donations (int): 寄付金額
-        personal_funds (int): 自己資金
-        party_support (int): 政党支援金
-        income_breakdown (str): 収入内訳（JSON形式）
-        expenditure_breakdown (str): 支出内訳（JSON形式）
-        created_at (datetime): データ作成日時
-        updated_at (datetime): データ更新日時
+        id: 主キー
+        name: 候補者名（漢字/かな併用可）
+        name_kana: 候補者名（かな）
+        political_party: 所属政党/政治団体/無所属
+        election_type_code: 選挙種別コード (city_code.csv参照 衆院選: 999999, 参院選: 999998)
+        election_area_single: 小選挙区 (地方選や不出馬などの場合はNULL)
+        election_area_proportional: 比例代表選挙区 (地方選や不出馬などの場合はNULL)
+        election_date: 選挙実施日
+        created_at: レコード作成時刻
+        updated_at: レコード更新時刻
+    """
+
+    __tablename__ = "candidates"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(
+        String(255), nullable=False, comment="候補者名（漢字/かな併用可）"
+    )
+    name_kana: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="候補者名（かな）"
+    )
+    political_party: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="所属政党/政治団体/無所属"
+    )
+    election_type_code: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+        comment="選挙種別コード (city_code.csv参照 衆院選: 999999, 参院選: 999998)",
+    )
+    election_area_single: Mapped[Optional[str]] = mapped_column(
+        String(255), nullable=True, comment="小選挙区 (地方選や不出馬などの場合はNULL)"
+    )
+    election_area_proportional: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        nullable=True,
+        comment="比例代表選挙区 (地方選や不出馬などの場合はNULL)",
+    )
+    election_date: Mapped[datetime] = mapped_column(
+        datetime(timezone=True), nullable=False, comment="選挙実施日"
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        datetime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        datetime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+    election_funds: Mapped[list["ElectionFunds"]] = relationship(
+        "ElectionFunds", back_populates="candidate"
+    )
+
+
+class ElectionFunds(Base):
+    """選挙運動費用収支報告書モデル。
+
+    このモデルは日本の選挙運動費用収支報告書（Election Campaign Expense Report）に
+    特化したフィールドを保持します。政治資金の一般的な収支モデルとは別扱いとし、
+    将来的に別種の収支報告書を扱う際には別モデルで定義してください。
+
+    Attributes:
+        id: 主キー
+        candidate_id: 候補者ID（candidates.id）
+        category: カテゴリ
+        date: 日付
+        price: 金額
+        type: 種別
+        purpose: 支出の目的 (収入はNULL)
+        non_monetary_basis: 金銭以外の見積もりの根拠
+        note: 備考
+        created_at: レコード作成時刻
+        updated_at: レコード更新時刻
     """
 
     __tablename__ = "election_funds"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    user_id: Mapped[int] = mapped_column(Integer, nullable=False, comment="ユーザーID")
-    candidate_name: Mapped[str] = mapped_column(
-        String(255), nullable=False, comment="候補者名"
-    )
-    election_type: Mapped[str] = mapped_column(
-        String(100), nullable=False, comment="選挙種別"
-    )
-    election_area: Mapped[str] = mapped_column(
-        String(255), nullable=False, comment="選挙区"
-    )
-    election_date: Mapped[DateTime] = mapped_column(
-        DateTime(timezone=True), nullable=False, comment="選挙実施日"
-    )
-    political_party: Mapped[Optional[str]] = mapped_column(
-        String(255), comment="所属政党"
+    candidate_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("candidates.id"),
+        nullable=False,
+        index=True,
+        comment="候補者ID（candidates.id）",
     )
 
-    # TODO: 選挙資金収支報告書の具体的なデータ構造を定義
-    total_income: Mapped[Optional[int]] = mapped_column(BigInteger, comment="収入合計")
-    total_expenditure: Mapped[Optional[int]] = mapped_column(
-        BigInteger, comment="支出合計"
+    category: Mapped[str] = mapped_column(
+        String(100), nullable=False, comment="カテゴリ"
     )
-    balance: Mapped[Optional[int]] = mapped_column(BigInteger, comment="収支差額")
-    donations: Mapped[Optional[int]] = mapped_column(BigInteger, comment="寄付金額")
-    personal_funds: Mapped[Optional[int]] = mapped_column(
-        BigInteger, comment="自己資金"
+    date: Mapped[datetime] = mapped_column(
+        datetime(timezone=True), nullable=False, comment="日付"
     )
-    party_support: Mapped[Optional[int]] = mapped_column(
-        BigInteger, comment="政党支援金"
+    price: Mapped[int] = mapped_column(Integer, nullable=False, comment="金額")
+    type: Mapped[str] = mapped_column(String(100), nullable=False, comment="種別")
+    purpose: Mapped[Optional[str]] = mapped_column(
+        String(255), nullable=True, comment="支出の目的 (収入はNULL)"
     )
-    income_breakdown: Mapped[Optional[str]] = mapped_column(
-        Text, comment="収入内訳（JSON形式）"
+    non_monetary_basis: Mapped[Optional[str]] = mapped_column(
+        String(255), comment="金銭以外の見積もりの根拠"
     )
-    expenditure_breakdown: Mapped[Optional[str]] = mapped_column(
-        Text, comment="支出内訳（JSON形式）"
+    note: Mapped[Optional[str]] = mapped_column(String(255), comment="備考")
+
+    created_at: Mapped[datetime] = mapped_column(
+        datetime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        datetime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
-    created_at: Mapped[DateTime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
-    updated_at: Mapped[DateTime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    candidate: Mapped["Candidate"] = relationship(
+        "Candidate", back_populates="election_funds"
     )
