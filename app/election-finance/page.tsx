@@ -65,27 +65,6 @@ export default function ElectionFinancePage() {
 
   const carryover = Math.max(0, totalIncome - totalExpense);
 
-  const barData: BarDatum[] = [
-    {
-      category: '支出',
-      繰越額: 200000,
-      支出: 800000,
-    },
-    {
-      category: '収入',
-      収入: 1000000,
-    },
-    // {
-    //   category: '収支',
-    //   収入: totalIncome,
-    //   繰越額: carryover,
-    // },
-    // {
-    //   category: '支出',
-    //   支出: totalExpense,
-    // },
-  ];
-
   const incomeByType = transactions
     .filter((t) => categorizeTransactionType(t.type) === 'income')
     .reduce(
@@ -140,6 +119,29 @@ export default function ElectionFinancePage() {
     0,
   );
 
+  const incomePublic = Math.min(totalIncome, totalPublicExpense);
+  const incomePrivate = Math.max(0, totalIncome - incomePublic);
+
+  const barData: BarDatum[] = [
+    {
+      category: '支出',
+      支出: totalExpense,
+      繰越額: carryover,
+    },
+    {
+      category: '収入',
+      公費: incomePublic,
+      収入: incomePrivate,
+    },
+  ];
+
+  const barColorByKey: Record<string, string> = {
+    収入: 'var(--chakra-colors-blue-400)',
+    公費: 'var(--chakra-colors-purple-400)',
+    支出: 'var(--chakra-colors-red-400)',
+    繰越額: 'var(--chakra-colors-green-400)',
+  };
+
   const publicExpenseByType = publicExpenseTransactions.reduce(
     (acc, t) => {
       const key = t.category;
@@ -192,10 +194,13 @@ export default function ElectionFinancePage() {
             <Box flex={1} h="300px">
               <ResponsiveBar
                 data={barData}
-                keys={['収入', '繰越額', '支出']}
+                keys={['公費', '収入', '支出', '繰越額']}
                 indexBy="category"
                 padding={0}
                 groupMode="stacked"
+                colors={({ id }) =>
+                  barColorByKey[String(id)] ?? 'var(--chakra-colors-gray-400)'
+                }
                 borderColor={{
                   from: 'color',
                   modifiers: [['darker', 1.6]],
@@ -208,35 +213,35 @@ export default function ElectionFinancePage() {
               />
             </Box>
             <VStack gap={4} minW="200px">
-              <Stack gap={1}>
-                <Text fontSize="sm" color="gray.600">
+              <Stack gap={0}>
+                <Text fontSize="sm">
                   収入
                 </Text>
-                <Text fontSize="2xl" fontWeight="bold" color="green.600">
+                <Text fontSize="2xl" fontWeight="bold" color="blue.500">
                   {formatCurrency(totalIncome)}
                 </Text>
               </Stack>
-              <Stack gap={1}>
-                <Text fontSize="sm" color="gray.600">
-                  支出
-                </Text>
-                <Text fontSize="2xl" fontWeight="bold" color="red.600">
-                  {formatCurrency(totalExpense)}
-                </Text>
-              </Stack>
-              <Stack gap={1}>
-                <Text fontSize="sm" color="gray.600">
+              <Stack gap={0}>
+                <Text fontSize="sm">
                   公費
                 </Text>
-                <Text fontSize="2xl" fontWeight="bold" color="blue.600">
+                <Text fontSize="2xl" fontWeight="bold" color="purple.500">
                   {formatCurrency(totalPublicExpense)}
                 </Text>
               </Stack>
-              <Stack gap={1}>
-                <Text fontSize="sm" color="gray.600">
+              <Stack gap={0}>
+                <Text fontSize="sm">
+                  支出
+                </Text>
+                <Text fontSize="2xl" fontWeight="bold" color="red.500">
+                  {formatCurrency(totalExpense)}
+                </Text>
+              </Stack>
+              <Stack gap={0}>
+                <Text fontSize="sm">
                   繰越
                 </Text>
-                <Text fontSize="2xl" fontWeight="bold">
+                <Text fontSize="2xl" fontWeight="bold" color="green.500">
                   {formatCurrency(carryover)}
                 </Text>
               </Stack>
@@ -250,7 +255,6 @@ export default function ElectionFinancePage() {
           chartData={incomeChartData}
           summaryData={incomeByType}
           transactions={incomeTransactions}
-          colorScheme="greens"
           badgeColorPalette="green"
           showType={true}
         />
@@ -265,7 +269,6 @@ export default function ElectionFinancePage() {
               .map((s) => [s.category, s.total]),
           )}
           transactions={expenseTransactions}
-          colorScheme="nivo"
           badgeColorPalette="red"
         />
 
@@ -275,7 +278,6 @@ export default function ElectionFinancePage() {
           chartData={publicExpenseChartData}
           summaryData={publicExpenseByType}
           transactions={publicExpenseTransactions}
-          colorScheme="blues"
           badgeColorPalette="blue"
           usePublicExpenseAmount={true}
         />
