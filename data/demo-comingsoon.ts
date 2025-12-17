@@ -39,7 +39,7 @@ const data = {
   ],
 };
 
-const dataByYear: Record<number, any> = {
+const _dataByYear: Record<number, any> = {
   [new Date().getFullYear()]: {
     profile,
     data: [

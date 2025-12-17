@@ -34,6 +34,7 @@ export type EfTransaction = {
   category: EfCategory;
   date: string | null;
   price: number;
+  public_expense_amount?: number;
   type: string;
   purpose?: string;
   non_monetary_basis?: string;

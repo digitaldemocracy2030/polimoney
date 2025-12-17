@@ -1,20 +1,10 @@
 'use client';
 
-import {
-  Badge,
-  Box,
-  Heading,
-  HStack,
-  SimpleGrid,
-  Stack,
-  Table,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
+import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react';
 import type { BarDatum } from '@nivo/bar';
 import { ResponsiveBar } from '@nivo/bar';
-import { ResponsivePie } from '@nivo/pie';
 import { BoardContainer } from '@/components/BoardContainer';
+import { TransactionSection } from '@/components/election-finance/TransactionSection';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
@@ -137,7 +127,35 @@ export default function ElectionFinancePage() {
     (t) => categorizeTransactionType(t.type) === 'income',
   );
   const expenseTransactions = sortedTransactions.filter(
-    (t) => categorizeTransactionType(t.type) === 'expense',
+    (t) =>
+      categorizeTransactionType(t.type) === 'expense' &&
+      !('public_expense_amount' in t && t.public_expense_amount),
+  );
+  const publicExpenseTransactions = sortedTransactions.filter(
+    (t) => 'public_expense_amount' in t && t.public_expense_amount,
+  );
+
+  const totalPublicExpense = publicExpenseTransactions.reduce(
+    (acc, t) => acc + (t.public_expense_amount || 0),
+    0,
+  );
+
+  const publicExpenseByType = publicExpenseTransactions.reduce(
+    (acc, t) => {
+      const key = t.category;
+      if (!acc[key]) acc[key] = 0;
+      acc[key] += t.public_expense_amount || 0;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
+
+  const publicExpenseChartData = Object.entries(publicExpenseByType).map(
+    ([type, total]) => ({
+      id: type,
+      label: type,
+      value: total,
+    }),
   );
 
   return (
@@ -208,6 +226,14 @@ export default function ElectionFinancePage() {
               </Stack>
               <Stack gap={1}>
                 <Text fontSize="sm" color="gray.600">
+                  公費
+                </Text>
+                <Text fontSize="2xl" fontWeight="bold" color="blue.600">
+                  {formatCurrency(totalPublicExpense)}
+                </Text>
+              </Stack>
+              <Stack gap={1}>
+                <Text fontSize="sm" color="gray.600">
                   繰越
                 </Text>
                 <Text fontSize="2xl" fontWeight="bold">
@@ -219,225 +245,40 @@ export default function ElectionFinancePage() {
         </BoardContainer>
 
         {/* 収入セクション */}
-        <BoardContainer>
-          <Heading as="h2" size="lg" mb={6}>
-            収入
-          </Heading>
-          <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
-            <Box h="400px">
-              <ResponsivePie
-                data={incomeChartData}
-                margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-                sortByValue
-                colors={{ scheme: 'greens' }}
-                borderColor={{
-                  from: 'color',
-                  modifiers: [['darker', 0.6]],
-                }}
-                arcLabelsSkipAngle={10}
-                arcLinkLabelsSkipAngle={10}
-                activeOuterRadiusOffset={10}
-                legends={[
-                  {
-                    anchor: 'bottom',
-                    direction: 'row',
-                    justify: false,
-                    translateX: 0,
-                    translateY: 56,
-                    itemsSpacing: 0,
-                    itemWidth: 100,
-                    itemHeight: 18,
-                    itemTextColor: '#999',
-                    itemDirection: 'left-to-right',
-                    symbolSize: 18,
-                    symbolShape: 'circle',
-                    effects: [
-                      {
-                        on: 'hover',
-                        style: {
-                          itemTextColor: '#000',
-                        },
-                      },
-                    ],
-                  },
-                ]}
-                tooltip={({ datum: { id, value } }) => (
-                  <Box bg="white" p={2} borderRadius="md" boxShadow="md">
-                    <Text fontSize="sm" fontWeight="bold">
-                      {id}
-                    </Text>
-                    <Text fontSize="sm">{formatCurrency(value)}</Text>
-                  </Box>
-                )}
-              />
-            </Box>
-            <Box>
-              <Heading as="h3" size="md" mb={4}>
-                収入（タイプ別）
-              </Heading>
-              <Stack gap={2}>
-                {Object.entries(incomeByType).map(([type, total]) => (
-                  <HStack key={type} justify="space-between">
-                    <Text>{type}</Text>
-                    <Badge variant="outline" colorPalette="green">
-                      {formatCurrency(total)}
-                    </Badge>
-                  </HStack>
-                ))}
-              </Stack>
-            </Box>
-          </SimpleGrid>
-          <Box mt={6}>
-            <Heading as="h3" size="md" mb={4}>
-              収入詳細一覧
-            </Heading>
-            <Box overflowX="auto">
-              <Table.Root>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeader>日付</Table.ColumnHeader>
-                    <Table.ColumnHeader>タイプ</Table.ColumnHeader>
-                    <Table.ColumnHeader>目的</Table.ColumnHeader>
-                    <Table.ColumnHeader textAlign="right">
-                      金額
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader>備考</Table.ColumnHeader>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {incomeTransactions.map((transaction) => (
-                    <Table.Row key={transaction.data_id}>
-                      <Table.Cell>{transaction.date || '-'}</Table.Cell>
-                      <Table.Cell>
-                        <Badge size="sm">{transaction.type}</Badge>
-                      </Table.Cell>
-                      <Table.Cell>{transaction.purpose || '-'}</Table.Cell>
-                      <Table.Cell textAlign="right" fontWeight="bold">
-                        {formatCurrency(transaction.price)}
-                      </Table.Cell>
-                      <Table.Cell fontSize="xs">
-                        {transaction.note || '-'}
-                      </Table.Cell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table.Root>
-            </Box>
-          </Box>
-        </BoardContainer>
+        <TransactionSection
+          title="収入"
+          chartData={incomeChartData}
+          summaryData={incomeByType}
+          transactions={incomeTransactions}
+          colorScheme="greens"
+          badgeColorPalette="green"
+          showType={true}
+        />
 
         {/* 支出セクション */}
-        <BoardContainer>
-          <Heading as="h2" size="lg" mb={6}>
-            支出
-          </Heading>
-          <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
-            <Box h="400px">
-              <ResponsivePie
-                data={expenseChartData}
-                margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-                sortByValue
-                colors={{ scheme: 'nivo' }}
-                borderColor={{
-                  from: 'color',
-                  modifiers: [['darker', 0.6]],
-                }}
-                arcLabelsSkipAngle={10}
-                arcLinkLabelsSkipAngle={10}
-                activeOuterRadiusOffset={10}
-                legends={[
-                  {
-                    anchor: 'bottom',
-                    direction: 'row',
-                    justify: false,
-                    translateX: 0,
-                    translateY: 56,
-                    itemsSpacing: 0,
-                    itemWidth: 100,
-                    itemHeight: 18,
-                    itemTextColor: '#999',
-                    itemDirection: 'left-to-right',
-                    symbolSize: 18,
-                    symbolShape: 'circle',
-                    effects: [
-                      {
-                        on: 'hover',
-                        style: {
-                          itemTextColor: '#000',
-                        },
-                      },
-                    ],
-                  },
-                ]}
-                tooltip={({ datum: { id, value } }) => (
-                  <Box bg="white" p={2} borderRadius="md" boxShadow="md">
-                    <Text fontSize="sm" fontWeight="bold">
-                      {id}
-                    </Text>
-                    <Text fontSize="sm">{formatCurrency(value)}</Text>
-                  </Box>
-                )}
-              />
-            </Box>
-            <Box>
-              <Heading as="h3" size="md" mb={4}>
-                支出（カテゴリー別）
-              </Heading>
-              <Stack gap={2}>
-                {summary
-                  .filter((s) => s.type === 'expense')
-                  .sort((a, b) => b.total - a.total)
-                  .map((s) => (
-                    <HStack key={s.category} justify="space-between">
-                      <Text>{s.category}</Text>
-                      <Badge variant="outline" colorPalette="red">
-                        {formatCurrency(s.total)}
-                      </Badge>
-                    </HStack>
-                  ))}
-              </Stack>
-            </Box>
-          </SimpleGrid>
-          <Box mt={6}>
-            <Heading as="h3" size="md" mb={4}>
-              支出詳細一覧
-            </Heading>
-            <Box overflowX="auto">
-              <Table.Root>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeader>日付</Table.ColumnHeader>
-                    <Table.ColumnHeader>カテゴリー</Table.ColumnHeader>
-                    <Table.ColumnHeader>目的</Table.ColumnHeader>
-                    <Table.ColumnHeader textAlign="right">
-                      金額
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader>備考</Table.ColumnHeader>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {expenseTransactions.map((transaction) => (
-                    <Table.Row key={transaction.data_id}>
-                      <Table.Cell>{transaction.date || '-'}</Table.Cell>
-                      <Table.Cell>
-                        <Badge size="sm">{transaction.category}</Badge>
-                      </Table.Cell>
-                      <Table.Cell>{transaction.purpose || '-'}</Table.Cell>
-                      <Table.Cell textAlign="right" fontWeight="bold">
-                        {formatCurrency(transaction.price)}
-                      </Table.Cell>
-                      <Table.Cell fontSize="xs">
-                        {transaction.note || '-'}
-                      </Table.Cell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table.Root>
-            </Box>
-          </Box>
-        </BoardContainer>
+        <TransactionSection
+          title="支出"
+          chartData={expenseChartData}
+          summaryData={Object.fromEntries(
+            summary
+              .filter((s) => s.type === 'expense')
+              .map((s) => [s.category, s.total]),
+          )}
+          transactions={expenseTransactions}
+          colorScheme="nivo"
+          badgeColorPalette="red"
+        />
 
-
+        {/* 公費セクション */}
+        <TransactionSection
+          title="公費"
+          chartData={publicExpenseChartData}
+          summaryData={publicExpenseByType}
+          transactions={publicExpenseTransactions}
+          colorScheme="blues"
+          badgeColorPalette="blue"
+          usePublicExpenseAmount={true}
+        />
       </VStack>
 
       <Notice />

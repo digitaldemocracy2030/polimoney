@@ -2,7 +2,6 @@
 
 import { useAuth0 } from '@auth0/auth0-react';
 import { Box } from '@chakra-ui/react';
-import { notFound } from 'next/navigation';
 import { BoardMetadata } from '@/components/BoardMetadata';
 import { BoardTransactions } from '@/components/BoardTransactions';
 import { Footer } from '@/components/Footer';
