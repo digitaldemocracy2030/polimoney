@@ -13,7 +13,7 @@ import { BoardContainer } from '@/components/BoardContainer';
 
 type Transaction = {
   data_id: string;
-  date?: string;
+  date?: string | null;
   category: string;
   purpose?: string;
   price: number;
@@ -33,7 +33,6 @@ interface TransactionSectionProps {
   chartData: ChartData[];
   summaryData: Record<string, number>;
   transactions: Transaction[];
-  colorScheme: string;
   badgeColorPalette: 'green' | 'red' | 'blue';
   showType?: boolean;
   usePublicExpenseAmount?: boolean;
@@ -61,11 +60,16 @@ export function TransactionSection({
   chartData,
   summaryData,
   transactions,
-  colorScheme,
   badgeColorPalette,
   showType = false,
   usePublicExpenseAmount = false,
 }: TransactionSectionProps) {
+  const totalAmount = chartData.reduce((sum, item) => sum + item.value, 0);
+  const sortedChartData = [...chartData].sort((a, b) => {
+    const diff = b.value - a.value;
+    return diff !== 0 ? diff : a.id.localeCompare(b.id, 'ja-JP');
+  });
+
   const summaryLabel =
     title === '収入'
       ? '収入（タイプ別）'
@@ -95,15 +99,19 @@ export function TransactionSection({
       <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
         <Box h="400px">
           <ResponsivePie
-            data={chartData}
+            data={sortedChartData}
             margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
             sortByValue
-            colors={{ scheme: colorScheme }}
+            colors={{ scheme: 'set2' }}
             borderColor={{
               from: 'color',
               modifiers: [['darker', 0.6]],
             }}
+            innerRadius={0.5}
             arcLabelsSkipAngle={10}
+            arcLabel={(datum) =>
+              `¥${datum.value.toLocaleString('ja-JP')}`
+            }
             arcLinkLabelsSkipAngle={10}
             activeOuterRadiusOffset={10}
             legends={[
@@ -112,12 +120,11 @@ export function TransactionSection({
                 direction: 'row',
                 justify: false,
                 translateX: 0,
-                translateY: 56,
-                itemsSpacing: 0,
-                itemWidth: 100,
+                translateY: 50,
+                itemWidth: 60,
                 itemHeight: 18,
                 itemTextColor: '#999',
-                itemDirection: 'left-to-right',
+                itemDirection: 'top-to-bottom',
                 symbolSize: 18,
                 symbolShape: 'circle',
                 effects: [
@@ -129,6 +136,24 @@ export function TransactionSection({
                   },
                 ],
               },
+            ]}
+            layers={[
+              'arcs',
+              'arcLabels',
+              'arcLinkLabels',
+              ({ centerX, centerY }: { centerX: number; centerY: number }) => (
+                <text
+                  x={centerX}
+                  y={centerY}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  fill="#333"
+                  style={{ fontSize: '18px', fontWeight: 'bold' }}
+                >
+                  ¥{totalAmount.toLocaleString('ja-JP')}
+                </text>
+              ),
+              'legends',
             ]}
             tooltip={({ datum: { id, value } }) => (
               <Box bg="white" p={2} borderRadius="md" boxShadow="md">
