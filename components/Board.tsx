@@ -13,7 +13,7 @@ interface BoardProps {
 
 // ✅ 2. 引数でpoliticianIdを受け取る
 export function Board({ data, politicianId }: BoardProps) {
-  if (!data) return <></>;
+  if (!data) return null;
 
   const reportData = data.data.find((d) => d.report.id === data.latestReportId);
   if (!reportData) return null;

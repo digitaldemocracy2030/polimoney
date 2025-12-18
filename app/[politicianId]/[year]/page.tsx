@@ -8,7 +8,7 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
 import { politicianDataMap } from '@/data/politician-data';
-import type { Report } from '@/models/type';
+import type { AccountingReports, Report, Transaction } from '@/models/type';
 
 type Props = {
   params: Promise<{
@@ -32,7 +32,15 @@ export async function generateStaticParams() {
 }
 
 function getPoliticianData(politicianId: string, year: string) {
-  const dataModule = (politicianDataMap as any)[politicianId];
+  const dataModule = (
+    politicianDataMap as Record<
+      string,
+      {
+        default: AccountingReports;
+        getDataByYear: (year: number) => AccountingReports | null;
+      }
+    >
+  )[politicianId];
 
   if (!dataModule?.getDataByYear) {
     return null;
@@ -44,7 +52,7 @@ function getPoliticianData(politicianId: string, year: string) {
   }
 
   const allReports: Report[] = dataModule.default.data.map(
-    (d: any) => d.report,
+    (d: { report: Report }) => d.report,
   );
   return {
     yearData,
@@ -93,7 +101,7 @@ export default async function Page({ params }: Props) {
         direction={'income'}
         total={reportData.report.totalIncome}
         transactions={reportData.transactions.filter(
-          (t: any) => t.direction === 'income',
+          (t: Transaction) => t.direction === 'income',
         )}
         showPurpose={false}
         showDate={false}
@@ -102,7 +110,7 @@ export default async function Page({ params }: Props) {
         direction={'expense'}
         total={reportData.report.totalExpense}
         transactions={reportData.transactions.filter(
-          (t: any) => t.direction === 'expense',
+          (t: Transaction) => t.direction === 'expense',
         )}
         showPurpose={false}
         showDate={false}

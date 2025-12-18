@@ -8,13 +8,24 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
 import { BoardSummary } from '@/components/uniformed/BoardSummary';
-import type { Report, Transaction } from '@/models/uniformed/type';
+import type {
+  AccountingReports,
+  Report,
+  Transaction,
+} from '@/models/uniformed/type';
 
 interface Props {
   politicianId: string;
-  yearData: any;
+  yearData: AccountingReports;
   allReports: Report[];
-  reportData: any;
+  reportData: {
+    report: Report;
+    transactions: Transaction[];
+    categories?: {
+      income: import('@/data/uniformed/common').Category[];
+      expense: import('@/data/uniformed/common').Category[];
+    };
+  };
 }
 
 export function Main({

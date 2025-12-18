@@ -4,6 +4,7 @@ import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react';
 import type { BarDatum } from '@nivo/bar';
 import { ResponsiveBar } from '@nivo/bar';
 import { BoardContainer } from '@/components/BoardContainer';
+import type { ChartData } from '@/components/election-finance/TransactionSection';
 import { TransactionSection } from '@/components/election-finance/TransactionSection';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
@@ -49,6 +50,54 @@ function formatCurrency(amount: number): string {
   });
 }
 
+function calculateIncomeByType(transactions: EfTransactions) {
+  return transactions
+    .filter((t) => categorizeTransactionType(t.type) === 'income')
+    .reduce(
+      (acc, t) => {
+        const key = t.type;
+        if (!acc[key]) acc[key] = 0;
+        acc[key] += t.price;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+}
+
+function calculateExpenseChartData(summary: EfSummary[]) {
+  return summary
+    .filter((s) => s.type === 'expense')
+    .map((s) => ({
+      id: s.category,
+      label: s.category,
+      value: s.total,
+    }));
+}
+
+function calculateExpenseSummaryData(summary: EfSummary[]) {
+  return Object.fromEntries(
+    summary
+      .filter((s) => s.type === 'expense')
+      .map((s) => [s.category, s.total]),
+  );
+}
+
+function calculatePublicExpenseByType(
+  transactions: Array<{ category: string; public_expense_amount?: number }>,
+) {
+  return transactions
+    .filter((t) => 'public_expense_amount' in t && t.public_expense_amount)
+    .reduce(
+      (acc, t) => {
+        const key = t.category;
+        if (!acc[key]) acc[key] = 0;
+        acc[key] += t.public_expense_amount || 0;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+}
+
 export default function ElectionFinancePage() {
   const data = jsonData as EfData;
   const metadata = data.metadata;
@@ -65,54 +114,27 @@ export default function ElectionFinancePage() {
 
   const carryover = Math.max(0, totalIncome - totalExpense);
 
-  const incomeByType = transactions
+  const sortedTransactions = [...transactions].sort((a, b) => {
+    if (!a.date) return 1;
+    if (!b.date) return -1;
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
+
+  const incomeTransactions = sortedTransactions
     .filter((t) => categorizeTransactionType(t.type) === 'income')
-    .reduce(
-      (acc, t) => {
-        const key = t.type;
-        if (!acc[key]) acc[key] = 0;
-        acc[key] += t.price;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
+    .map((t) => ({ ...t, category: getCategoryJpName(t.category) }));
 
-  const incomeChartData = Object.entries(incomeByType).map(([type, total]) => ({
-    id: type,
-    label: type,
-    value: total,
-  }));
+  const expenseTransactions = sortedTransactions
+    .filter(
+      (t) =>
+        categorizeTransactionType(t.type) === 'expense' &&
+        !('public_expense_amount' in t && t.public_expense_amount),
+    )
+    .map((t) => ({ ...t, category: getCategoryJpName(t.category) }));
 
-  const expenseChartData = summary
-    .filter((s) => s.type === 'expense')
-    .map((s) => ({
-      id: s.category,
-      label: s.category,
-      value: s.total,
-    }));
-
-  const sortedTransactions = [...transactions]
-    .map((transaction) => ({
-      ...transaction,
-      category: getCategoryJpName(transaction.category),
-    }))
-    .sort((a, b) => {
-      if (!a.date) return 1;
-      if (!b.date) return -1;
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
-    });
-
-  const incomeTransactions = sortedTransactions.filter(
-    (t) => categorizeTransactionType(t.type) === 'income',
-  );
-  const expenseTransactions = sortedTransactions.filter(
-    (t) =>
-      categorizeTransactionType(t.type) === 'expense' &&
-      !('public_expense_amount' in t && t.public_expense_amount),
-  );
-  const publicExpenseTransactions = sortedTransactions.filter(
-    (t) => 'public_expense_amount' in t && t.public_expense_amount,
-  );
+  const publicExpenseTransactions = sortedTransactions
+    .filter((t) => 'public_expense_amount' in t && t.public_expense_amount)
+    .map((t) => ({ ...t, category: getCategoryJpName(t.category) }));
 
   const totalPublicExpense = publicExpenseTransactions.reduce(
     (acc, t) => acc + (t.public_expense_amount || 0),
@@ -142,23 +164,29 @@ export default function ElectionFinancePage() {
     繰越額: 'var(--chakra-colors-green-400)',
   };
 
-  const publicExpenseByType = publicExpenseTransactions.reduce(
-    (acc, t) => {
-      const key = t.category;
-      if (!acc[key]) acc[key] = 0;
-      acc[key] += t.public_expense_amount || 0;
-      return acc;
-    },
-    {} as Record<string, number>,
+  const incomeByType = calculateIncomeByType(transactions);
+
+  const incomeChartData = Object.entries(incomeByType).map(([type, total]) => ({
+    id: type,
+    label: type,
+    value: total,
+  }));
+
+  const expenseSummaryData = calculateExpenseSummaryData(summary);
+
+  const expenseChartData = calculateExpenseChartData(summary);
+
+  const publicExpenseByType = calculatePublicExpenseByType(
+    publicExpenseTransactions,
   );
 
-  const publicExpenseChartData = Object.entries(publicExpenseByType).map(
-    ([type, total]) => ({
-      id: type,
-      label: type,
-      value: total,
-    }),
-  );
+  const publicExpenseChartData: ChartData[] = Object.entries(
+    publicExpenseByType,
+  ).map(([type, total]) => ({
+    id: type,
+    label: type,
+    value: total as number,
+  }));
 
   return (
     <Box>
@@ -214,33 +242,25 @@ export default function ElectionFinancePage() {
             </Box>
             <VStack gap={4} minW="200px">
               <Stack gap={0}>
-                <Text fontSize="sm">
-                  収入
-                </Text>
+                <Text fontSize="sm">収入</Text>
                 <Text fontSize="2xl" fontWeight="bold" color="blue.500">
                   {formatCurrency(totalIncome)}
                 </Text>
               </Stack>
               <Stack gap={0}>
-                <Text fontSize="sm">
-                  公費
-                </Text>
+                <Text fontSize="sm">公費</Text>
                 <Text fontSize="2xl" fontWeight="bold" color="purple.500">
                   {formatCurrency(totalPublicExpense)}
                 </Text>
               </Stack>
               <Stack gap={0}>
-                <Text fontSize="sm">
-                  支出
-                </Text>
+                <Text fontSize="sm">支出</Text>
                 <Text fontSize="2xl" fontWeight="bold" color="red.500">
                   {formatCurrency(totalExpense)}
                 </Text>
               </Stack>
               <Stack gap={0}>
-                <Text fontSize="sm">
-                  繰越
-                </Text>
+                <Text fontSize="sm">繰越</Text>
                 <Text fontSize="2xl" fontWeight="bold" color="green.500">
                   {formatCurrency(carryover)}
                 </Text>
@@ -263,11 +283,7 @@ export default function ElectionFinancePage() {
         <TransactionSection
           title="支出"
           chartData={expenseChartData}
-          summaryData={Object.fromEntries(
-            summary
-              .filter((s) => s.type === 'expense')
-              .map((s) => [s.category, s.total]),
-          )}
+          summaryData={expenseSummaryData}
           transactions={expenseTransactions}
           badgeColorPalette="red"
         />

@@ -9,6 +9,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { ResponsivePie } from '@nivo/pie';
+import { useMemo } from 'react';
 import { BoardContainer } from '@/components/BoardContainer';
 
 type Transaction = {
@@ -22,7 +23,7 @@ type Transaction = {
   public_expense_amount?: number;
 };
 
-type ChartData = {
+export type ChartData = {
   id: string;
   label: string;
   value: number;
@@ -38,6 +39,12 @@ interface TransactionSectionProps {
   usePublicExpenseAmount?: boolean;
 }
 
+const CATEGORY_MAP: Record<string, string> = {
+  income: '収入',
+  expense: '支出',
+  public_expense: '公費',
+};
+
 function formatCurrency(amount: number): string {
   return amount.toLocaleString('ja-JP', {
     style: 'currency',
@@ -47,12 +54,7 @@ function formatCurrency(amount: number): string {
 }
 
 function getCategoryJpName(category: string): string {
-  const map: Record<string, string> = {
-    income: '収入',
-    expense: '支出',
-    public_expense: '公費',
-  };
-  return map[category] || category;
+  return CATEGORY_MAP[category] || category;
 }
 
 export function TransactionSection({
@@ -64,32 +66,79 @@ export function TransactionSection({
   showType = false,
   usePublicExpenseAmount = false,
 }: TransactionSectionProps) {
-  const totalAmount = chartData.reduce((sum, item) => sum + item.value, 0);
-  const sortedChartData = [...chartData].sort((a, b) => {
-    const diff = b.value - a.value;
-    return diff !== 0 ? diff : a.id.localeCompare(b.id, 'ja-JP');
-  });
+  const totalAmount = useMemo(
+    () => chartData.reduce((sum, item) => sum + item.value, 0),
+    [chartData],
+  );
 
-  const summaryLabel =
-    title === '収入'
-      ? '収入（タイプ別）'
-      : title === '支出'
-        ? '支出（カテゴリー別）'
-        : '公費（カテゴリー別）';
+  const sortedSummaryData = useMemo(
+    () => Object.entries(summaryData).sort(([, a], [, b]) => b - a),
+    [summaryData],
+  );
 
-  const tableLabel =
-    title === '収入'
-      ? 'タイプ'
-      : title === '支出'
-        ? 'カテゴリー'
-        : 'カテゴリー';
-
-  const detailsLabel =
-    title === '収入'
-      ? '収入詳細一覧'
-      : title === '支出'
-        ? '支出詳細一覧'
-        : '公費詳細一覧';
+  const pieChartProps: Record<string, unknown> = {
+    margin: { top: 40, right: 80, bottom: 80, left: 80 },
+    sortByValue: true,
+    colors: { scheme: 'set2' },
+    borderColor: {
+      from: 'color',
+      modifiers: [['darker', 0.6]],
+    },
+    innerRadius: 0.5,
+    arcLabelsSkipAngle: 10,
+    arcLabel: (datum: ChartData) => `¥${datum.value.toLocaleString('ja-JP')}`,
+    arcLinkLabelsSkipAngle: 10,
+    activeOuterRadiusOffset: 10,
+    legends: [
+      {
+        anchor: 'bottom',
+        direction: 'row',
+        justify: false,
+        translateX: 0,
+        translateY: 50,
+        itemWidth: 60,
+        itemHeight: 18,
+        itemTextColor: '#999',
+        itemDirection: 'top-to-bottom',
+        symbolSize: 18,
+        symbolShape: 'circle',
+        effects: [
+          {
+            on: 'hover',
+            style: {
+              itemTextColor: '#000',
+            },
+          },
+        ],
+      },
+    ],
+    layers: [
+      'arcs',
+      'arcLabels',
+      'arcLinkLabels',
+      ({ centerX, centerY }: { centerX: number; centerY: number }) => (
+        <text
+          x={centerX}
+          y={centerY}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fill="#333"
+          style={{ fontSize: '18px', fontWeight: 'bold' }}
+        >
+          ¥{totalAmount.toLocaleString('ja-JP')}
+        </text>
+      ),
+      'legends',
+    ],
+    tooltip: ({ datum: { id, value } }: { datum: ChartData }) => (
+      <Box bg="white" p={2} borderRadius="md" boxShadow="md">
+        <Text fontSize="sm" fontWeight="bold">
+          {id}
+        </Text>
+        <Text fontSize="sm">{formatCurrency(value)}</Text>
+      </Box>
+    ),
+  };
 
   return (
     <BoardContainer>
@@ -98,101 +147,31 @@ export function TransactionSection({
       </Heading>
       <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
         <Box h="400px">
-          <ResponsivePie
-            data={sortedChartData}
-            margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-            sortByValue
-            colors={{ scheme: 'set2' }}
-            borderColor={{
-              from: 'color',
-              modifiers: [['darker', 0.6]],
-            }}
-            innerRadius={0.5}
-            arcLabelsSkipAngle={10}
-            arcLabel={(datum) =>
-              `¥${datum.value.toLocaleString('ja-JP')}`
-            }
-            arcLinkLabelsSkipAngle={10}
-            activeOuterRadiusOffset={10}
-            legends={[
-              {
-                anchor: 'bottom',
-                direction: 'row',
-                justify: false,
-                translateX: 0,
-                translateY: 50,
-                itemWidth: 60,
-                itemHeight: 18,
-                itemTextColor: '#999',
-                itemDirection: 'top-to-bottom',
-                symbolSize: 18,
-                symbolShape: 'circle',
-                effects: [
-                  {
-                    on: 'hover',
-                    style: {
-                      itemTextColor: '#000',
-                    },
-                  },
-                ],
-              },
-            ]}
-            layers={[
-              'arcs',
-              'arcLabels',
-              'arcLinkLabels',
-              ({ centerX, centerY }: { centerX: number; centerY: number }) => (
-                <text
-                  x={centerX}
-                  y={centerY}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fill="#333"
-                  style={{ fontSize: '18px', fontWeight: 'bold' }}
-                >
-                  ¥{totalAmount.toLocaleString('ja-JP')}
-                </text>
-              ),
-              'legends',
-            ]}
-            tooltip={({ datum: { id, value } }) => (
-              <Box bg="white" p={2} borderRadius="md" boxShadow="md">
-                <Text fontSize="sm" fontWeight="bold">
-                  {id}
-                </Text>
-                <Text fontSize="sm">{formatCurrency(value)}</Text>
-              </Box>
-            )}
-          />
+          <ResponsivePie data={chartData} {...pieChartProps} />
         </Box>
         <Box>
-          <Heading as="h3" size="md" mb={4}>
-            {summaryLabel}
-          </Heading>
           <Stack gap={2}>
-            {Object.entries(summaryData)
-              .sort(([, a], [, b]) => b - a)
-              .map(([key, total]) => (
-                <HStack key={key} justify="space-between">
-                  <Text>{getCategoryJpName(key)}</Text>
-                  <Badge variant="outline" colorPalette={badgeColorPalette}>
-                    {formatCurrency(total)}
-                  </Badge>
-                </HStack>
-              ))}
+            {sortedSummaryData.map(([key, total]) => (
+              <HStack key={key} justify="space-between">
+                <Text>{getCategoryJpName(key)}</Text>
+                <Badge variant="outline" colorPalette={badgeColorPalette}>
+                  {formatCurrency(total)}
+                </Badge>
+              </HStack>
+            ))}
           </Stack>
         </Box>
       </SimpleGrid>
       <Box mt={6}>
         <Heading as="h3" size="md" mb={4}>
-          {detailsLabel}
+          {title}詳細一覧
         </Heading>
         <Box overflowX="auto">
           <Table.Root>
             <Table.Header>
               <Table.Row>
                 <Table.ColumnHeader>日付</Table.ColumnHeader>
-                <Table.ColumnHeader>{tableLabel}</Table.ColumnHeader>
+                <Table.ColumnHeader>カテゴリー</Table.ColumnHeader>
                 <Table.ColumnHeader>目的</Table.ColumnHeader>
                 <Table.ColumnHeader textAlign="right">金額</Table.ColumnHeader>
                 <Table.ColumnHeader>備考</Table.ColumnHeader>
