@@ -1,4 +1,5 @@
 import {
+  Accordion,
   Badge,
   Box,
   Heading,
@@ -162,47 +163,65 @@ export function TransactionSection({
           </Stack>
         </Box>
       </SimpleGrid>
-      <Box mt={6}>
-        <Heading as="h3" size="md" mb={4}>
-          {title}詳細一覧
-        </Heading>
-        <Box overflowX="auto">
-          <Table.Root>
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeader>日付</Table.ColumnHeader>
-                <Table.ColumnHeader>カテゴリー</Table.ColumnHeader>
-                <Table.ColumnHeader>目的</Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="right">金額</Table.ColumnHeader>
-                <Table.ColumnHeader>備考</Table.ColumnHeader>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {transactions.map((transaction) => (
-                <Table.Row key={transaction.data_id}>
-                  <Table.Cell>{transaction.date || '-'}</Table.Cell>
-                  <Table.Cell>
-                    <Badge size="sm">
-                      {showType ? transaction.type : transaction.category}
-                    </Badge>
-                  </Table.Cell>
-                  <Table.Cell>{transaction.purpose || '-'}</Table.Cell>
-                  <Table.Cell textAlign="right" fontWeight="bold">
-                    {formatCurrency(
-                      usePublicExpenseAmount
-                        ? transaction.public_expense_amount || 0
-                        : transaction.price,
-                    )}
-                  </Table.Cell>
-                  <Table.Cell fontSize="xs">
-                    {transaction.note || '-'}
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table.Root>
-        </Box>
-      </Box>
+      <Accordion.Root collapsible defaultValue={[]} mt={6}>
+        <Accordion.Item value="details">
+          <Accordion.ItemTrigger
+            bg="#7C3AED"
+            color="white"
+            px={4}
+            py={3}
+            borderRadius="md"
+            _hover={{ bg: '#6D28D9' }}
+          >
+            <HStack justify="space-between" width="full">
+              <Heading as="h3" size="md">
+                {title}詳細一覧
+              </Heading>
+              <Accordion.ItemIndicator />
+            </HStack>
+          </Accordion.ItemTrigger>
+          <Accordion.ItemContent>
+            <Box overflowX="auto" pt={4}>
+              <Table.Root>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeader>日付</Table.ColumnHeader>
+                    <Table.ColumnHeader>カテゴリー</Table.ColumnHeader>
+                    <Table.ColumnHeader>目的</Table.ColumnHeader>
+                    <Table.ColumnHeader textAlign="right">
+                      金額
+                    </Table.ColumnHeader>
+                    <Table.ColumnHeader>備考</Table.ColumnHeader>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {transactions.map((transaction) => (
+                    <Table.Row key={transaction.data_id}>
+                      <Table.Cell>{transaction.date || '-'}</Table.Cell>
+                      <Table.Cell>
+                        <Badge size="sm">
+                          {showType ? transaction.type : transaction.category}
+                        </Badge>
+                      </Table.Cell>
+                      <Table.Cell>{transaction.purpose || '-'}</Table.Cell>
+                      <Table.Cell textAlign="right" fontWeight="bold">
+                        {formatCurrency(
+                          usePublicExpenseAmount
+                            ? transaction.public_expense_amount || 0
+                            : transaction.price,
+                        )}
+                      </Table.Cell>
+                      <Table.Cell fontSize="xs">
+                        {transaction.note || '-'}
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table.Root>
+            </Box>
+          </Accordion.ItemContent>
+        </Accordion.Item>
+      </Accordion.Root>
     </BoardContainer>
   );
 }
