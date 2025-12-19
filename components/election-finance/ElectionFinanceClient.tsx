@@ -73,14 +73,6 @@ function calculateExpenseChartData(summary: EfSummary[]) {
     }));
 }
 
-function calculateExpenseSummaryData(summary: EfSummary[]) {
-  return Object.fromEntries(
-    summary
-      .filter((s) => s.type === 'expense')
-      .map((s) => [s.category, s.total]),
-  );
-}
-
 function calculatePublicExpenseByType(
   transactions: Array<{ category: string; public_expense_amount?: number }>,
 ) {
@@ -167,14 +159,11 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
   };
 
   const incomeByType = calculateIncomeByType(transactions);
-
   const incomeChartData = Object.entries(incomeByType).map(([type, total]) => ({
     id: type,
     label: type,
     value: total,
   }));
-
-  const expenseSummaryData = calculateExpenseSummaryData(summary);
 
   const expenseChartData = calculateExpenseChartData(summary);
 
@@ -220,8 +209,13 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
               <Text color="gray.900">{metadata.name}</Text>
             </HStack>
           </Stack>
-          <HStack gap={6} align="start">
-            <Box flex={1} h="300px">
+          <Stack
+            gap={6}
+            align={{ base: 'stretch', md: 'start' }}
+            direction={{ base: 'column', md: 'row' }}
+            w="full"
+          >
+            <Box h={{ base: '200px', md: '200px' }} w="full">
               <ResponsiveBar
                 data={barData}
                 keys={['公費', '収入', '支出', '繰越額']}
@@ -235,6 +229,7 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
                   from: 'color',
                   modifiers: [['darker', 1.6]],
                 }}
+                enableGridY={false}
                 axisBottom={null}
                 axisLeft={null}
                 labelSkipWidth={1}
@@ -242,40 +237,50 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
                 label={(d) => String(d.id)}
               />
             </Box>
-            <VStack gap={4} minW="200px">
-              <Stack gap={0}>
-                <Text fontSize="sm">収入</Text>
-                <Text fontSize="2xl" fontWeight="bold" color="blue.500">
-                  {formatCurrency(totalIncome)}
-                </Text>
-              </Stack>
-              <Stack gap={0}>
-                <Text fontSize="sm">公費</Text>
-                <Text fontSize="2xl" fontWeight="bold" color="purple.500">
-                  {formatCurrency(totalPublicExpense)}
-                </Text>
-              </Stack>
-              <Stack gap={0}>
-                <Text fontSize="sm">支出</Text>
-                <Text fontSize="2xl" fontWeight="bold" color="red.500">
-                  {formatCurrency(totalExpense)}
-                </Text>
-              </Stack>
-              <Stack gap={0}>
-                <Text fontSize="sm">繰越</Text>
-                <Text fontSize="2xl" fontWeight="bold" color="green.500">
-                  {formatCurrency(carryover)}
-                </Text>
-              </Stack>
-            </VStack>
-          </HStack>
+            <Box
+              minW={{ base: 'full', md: '200px' }}
+              w={{ base: 'full', md: 'auto' }}
+            >
+              <Box
+                display={{ base: 'grid', md: 'flex' }}
+                gridTemplateColumns={{ base: '1fr 1fr', md: undefined }}
+                gap={4}
+                flexDirection={{ md: 'column' }}
+                alignItems={{ md: 'flex-start' }}
+              >
+                <Stack gap={0}>
+                  <Text fontSize="sm">収入</Text>
+                  <Text fontSize="xl" fontWeight="bold" color="blue.500">
+                    {formatCurrency(totalIncome)}
+                  </Text>
+                </Stack>
+                <Stack gap={0}>
+                  <Text fontSize="sm">公費</Text>
+                  <Text fontSize="xl" fontWeight="bold" color="purple.500">
+                    {formatCurrency(totalPublicExpense)}
+                  </Text>
+                </Stack>
+                <Stack gap={0}>
+                  <Text fontSize="sm">支出</Text>
+                  <Text fontSize="xl" fontWeight="bold" color="red.500">
+                    {formatCurrency(totalExpense)}
+                  </Text>
+                </Stack>
+                <Stack gap={0}>
+                  <Text fontSize="sm">繰越</Text>
+                  <Text fontSize="2xl" fontWeight="bold" color="green.500">
+                    {formatCurrency(carryover)}
+                  </Text>
+                </Stack>
+              </Box>
+            </Box>
+          </Stack>
         </BoardContainer>
 
         {/* 収入セクション */}
         <TransactionSection
           title="収入"
           chartData={incomeChartData}
-          summaryData={incomeByType}
           transactions={incomeTransactions}
           badgeColorPalette="green"
           showType={true}
@@ -285,7 +290,6 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
         <TransactionSection
           title="支出"
           chartData={expenseChartData}
-          summaryData={expenseSummaryData}
           transactions={expenseTransactions}
           badgeColorPalette="red"
         />
@@ -294,7 +298,6 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
         <TransactionSection
           title="公費"
           chartData={publicExpenseChartData}
-          summaryData={publicExpenseByType}
           transactions={publicExpenseTransactions}
           badgeColorPalette="blue"
           usePublicExpenseAmount={true}

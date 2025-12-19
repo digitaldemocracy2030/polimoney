@@ -8,10 +8,12 @@ import {
   Stack,
   Table,
   Text,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import { ResponsivePie } from '@nivo/pie';
 import { useMemo } from 'react';
 import { BoardContainer } from '@/components/BoardContainer';
+import { colorSchemeDefault } from '@/utils/nivoColorScheme';
 
 type Transaction = {
   data_id: string;
@@ -33,18 +35,11 @@ export type ChartData = {
 interface TransactionSectionProps {
   title: string;
   chartData: ChartData[];
-  summaryData: Record<string, number>;
   transactions: Transaction[];
   badgeColorPalette: 'green' | 'red' | 'blue';
   showType?: boolean;
   usePublicExpenseAmount?: boolean;
 }
-
-const CATEGORY_MAP: Record<string, string> = {
-  income: '収入',
-  expense: '支出',
-  public_expense: '公費',
-};
 
 function formatCurrency(amount: number): string {
   return amount.toLocaleString('ja-JP', {
@@ -54,14 +49,9 @@ function formatCurrency(amount: number): string {
   });
 }
 
-function getCategoryJpName(category: string): string {
-  return CATEGORY_MAP[category] || category;
-}
-
 export function TransactionSection({
   title,
   chartData,
-  summaryData,
   transactions,
   badgeColorPalette,
   showType = false,
@@ -72,47 +62,23 @@ export function TransactionSection({
     [chartData],
   );
 
-  const sortedSummaryData = useMemo(
-    () => Object.entries(summaryData).sort(([, a], [, b]) => b - a),
-    [summaryData],
-  );
-
   const pieChartProps: Record<string, unknown> = {
-    margin: { top: 40, right: 80, bottom: 80, left: 80 },
-    sortByValue: true,
-    colors: { scheme: 'set2' },
+    margin: useBreakpointValue({
+      base: { top: 10, right: 10, bottom: 10, left: 10 },
+      md: { top: 40, right: 80, bottom: 80, left: 80 },
+    }),
+    colors: colorSchemeDefault,
     borderColor: {
       from: 'color',
       modifiers: [['darker', 0.6]],
     },
     innerRadius: 0.5,
-    arcLabelsSkipAngle: 10,
     arcLabel: (datum: ChartData) => `¥${datum.value.toLocaleString('ja-JP')}`,
+    arcLabelsTextColor: '#ffffff',
+    arcLabelsSkipAngle: 15,
+    enableArcLinkLabels: useBreakpointValue({ base: false, md: true }),
     arcLinkLabelsSkipAngle: 10,
     activeOuterRadiusOffset: 10,
-    legends: [
-      {
-        anchor: 'bottom',
-        direction: 'row',
-        justify: false,
-        translateX: 0,
-        translateY: 50,
-        itemWidth: 60,
-        itemHeight: 18,
-        itemTextColor: '#999',
-        itemDirection: 'top-to-bottom',
-        symbolSize: 18,
-        symbolShape: 'circle',
-        effects: [
-          {
-            on: 'hover',
-            style: {
-              itemTextColor: '#000',
-            },
-          },
-        ],
-      },
-    ],
     layers: [
       'arcs',
       'arcLabels',
@@ -141,22 +107,40 @@ export function TransactionSection({
     ),
   };
 
+  // chartDataを値の大きい順でソート
+  const sortedChartData = useMemo(
+    () => [...chartData].sort((a, b) => b.value - a.value),
+    [chartData],
+  );
+
+  // データidと色のマッピングを作成
+  const colorMap = sortedChartData.reduce<Record<string, string>>(
+    (acc, item, idx) => {
+      acc[item.id] = colorSchemeDefault[idx % colorSchemeDefault.length];
+      return acc;
+    },
+    {},
+  );
+
   return (
     <BoardContainer>
       <Heading as="h2" size="lg" mb={6}>
         {title}
       </Heading>
       <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
-        <Box h="400px">
-          <ResponsivePie data={chartData} {...pieChartProps} />
+        <Box w="100%" aspectRatio={1} overflow="visible">
+          <ResponsivePie data={sortedChartData} {...pieChartProps} />
         </Box>
         <Box>
           <Stack gap={2}>
-            {sortedSummaryData.map(([key, total]) => (
-              <HStack key={key} justify="space-between">
-                <Text>{getCategoryJpName(key)}</Text>
+            {sortedChartData.map((item) => (
+              <HStack key={item.id} justify="space-between">
+                <HStack>
+                  <Box w={3} h={3} borderRadius="full" bg={colorMap[item.id]} />
+                  <Text>{item.label}</Text>
+                </HStack>
                 <Badge variant="outline" colorPalette={badgeColorPalette}>
-                  {formatCurrency(total)}
+                  {formatCurrency(item.value)}
                 </Badge>
               </HStack>
             ))}
