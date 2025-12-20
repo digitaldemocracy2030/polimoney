@@ -3,6 +3,7 @@ import logging
 import os
 import re
 import uuid
+from decimal import ROUND_HALF_UP, Decimal
 
 from openpyxl import utils
 
@@ -20,14 +21,14 @@ def extract_number(value):
     if value is None:
         return 0
 
-    # 既に数値の場合はfloatでかつ整数値ならintで返す
+    # 既に数値の場合は整数はそのまま
     if isinstance(value, int):
         return value
+
+    # floatは四捨五入してintで返す
     if isinstance(value, float):
-        if value.is_integer():
-            return int(value)
-        else:
-            return value
+        rounded = int(Decimal(str(value)).quantize(0, ROUND_HALF_UP))
+        return rounded
 
     # 文字列から数字（小数点含む）を抽出
     if isinstance(value, str):
