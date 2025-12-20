@@ -4,7 +4,6 @@ import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react';
 import type { BarDatum } from '@nivo/bar';
 import { ResponsiveBar } from '@nivo/bar';
 import { BoardContainer } from '@/components/BoardContainer';
-import type { ChartData } from '@/components/election-finance/TransactionSection';
 import { TransactionSection } from '@/components/election-finance/TransactionSection';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
@@ -73,22 +72,6 @@ function calculateExpenseChartData(summary: EfSummary[]) {
     }));
 }
 
-function calculatePublicExpenseByType(
-  transactions: Array<{ category: string; public_expense_amount?: number }>,
-) {
-  return transactions
-    .filter((t) => 'public_expense_amount' in t && t.public_expense_amount)
-    .reduce(
-      (acc, t) => {
-        const key = t.category;
-        if (!acc[key]) acc[key] = 0;
-        acc[key] += t.public_expense_amount || 0;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
-}
-
 interface ElectionFinanceClientProps {
   data: EfData;
 }
@@ -135,6 +118,10 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
     0,
   );
 
+  const nonPublicExpenseTransactions = sortedTransactions
+    .filter((t) => !('public_expense_amount' in t && t.public_expense_amount))
+    .map((t) => ({ ...t, category: getCategoryJpName(t.category) }));
+
   const incomePublic = Math.min(totalIncome, totalPublicExpense);
   const incomePrivate = Math.max(0, totalIncome - incomePublic);
 
@@ -167,17 +154,18 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
 
   const expenseChartData = calculateExpenseChartData(summary);
 
-  const publicExpenseByType = calculatePublicExpenseByType(
-    publicExpenseTransactions,
-  );
-
-  const publicExpenseChartData: ChartData[] = Object.entries(
-    publicExpenseByType,
-  ).map(([type, total]) => ({
-    id: type,
-    label: type,
-    value: total as number,
-  }));
+  const publicVsNonPublicChartData = [
+    {
+      id: '公費',
+      label: '公費',
+      value: totalPublicExpense,
+    },
+    {
+      id: 'その他',
+      label: 'その他',
+      value: totalExpense - totalPublicExpense,
+    },
+  ];
 
   return (
     <Box>
@@ -277,28 +265,30 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
           </Stack>
         </BoardContainer>
 
+        {/* 支出セクション */}
+        <TransactionSection
+          title="支出目的で見る"
+          chartData={expenseChartData}
+          transactions={expenseTransactions}
+          badgeColorPalette="red"
+        />
+
         {/* 収入セクション */}
         <TransactionSection
-          title="収入"
+          title="収入で見る"
           chartData={incomeChartData}
           transactions={incomeTransactions}
           badgeColorPalette="green"
           showType={true}
         />
 
-        {/* 支出セクション */}
-        <TransactionSection
-          title="支出"
-          chartData={expenseChartData}
-          transactions={expenseTransactions}
-          badgeColorPalette="red"
-        />
-
         {/* 公費セクション */}
         <TransactionSection
-          title="公費"
-          chartData={publicExpenseChartData}
-          transactions={publicExpenseTransactions}
+          title="公費で見る"
+          chartData={publicVsNonPublicChartData}
+          transactions={publicExpenseTransactions.concat(
+            nonPublicExpenseTransactions,
+          )}
           badgeColorPalette="blue"
           usePublicExpenseAmount={true}
         />

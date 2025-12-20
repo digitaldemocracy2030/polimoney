@@ -7,7 +7,7 @@ type Props = {
 
 export function BoardContainer({ id, children }: Props) {
   return (
-    <Box id={id} bgColor={'#ffffff'} borderRadius={'xl'} px={10} py={8} mb={6}>
+    <Box id={id} bgColor={'#ffffff'} borderRadius={'xl'} p={6} mb={4}>
       {children}
     </Box>
   );
