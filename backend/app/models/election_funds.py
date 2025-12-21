@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy import DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -52,14 +52,14 @@ class Candidate(Base):
         comment="比例代表選挙区 (地方選や不出馬などの場合はNULL)",
     )
     election_date: Mapped[datetime] = mapped_column(
-        datetime(timezone=True), nullable=False, comment="選挙実施日"
+        DateTime(timezone=True), nullable=False, comment="選挙実施日"
     )
 
     created_at: Mapped[datetime] = mapped_column(
-        datetime(timezone=True), server_default=func.now()
+        DateTime(timezone=True), server_default=func.now()
     )
     updated_at: Mapped[datetime] = mapped_column(
-        datetime(timezone=True), server_default=func.now(), onupdate=func.now()
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
     election_funds: Mapped[list["ElectionFunds"]] = relationship(
@@ -103,7 +103,7 @@ class ElectionFunds(Base):
         String(100), nullable=False, comment="カテゴリ"
     )
     date: Mapped[datetime] = mapped_column(
-        datetime(timezone=True), nullable=False, comment="日付"
+        DateTime(timezone=True), nullable=False, comment="日付"
     )
     price: Mapped[int] = mapped_column(Integer, nullable=False, comment="金額")
     type: Mapped[str] = mapped_column(String(100), nullable=False, comment="種別")
@@ -116,10 +116,10 @@ class ElectionFunds(Base):
     note: Mapped[Optional[str]] = mapped_column(String(255), comment="備考")
 
     created_at: Mapped[datetime] = mapped_column(
-        datetime(timezone=True), server_default=func.now()
+        DateTime(timezone=True), server_default=func.now()
     )
     updated_at: Mapped[datetime] = mapped_column(
-        datetime(timezone=True), server_default=func.now(), onupdate=func.now()
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
     candidate: Mapped["Candidate"] = relationship(
