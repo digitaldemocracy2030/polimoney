@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 from app.config import settings
 from app.database import create_tables, init_db
 from app.dependencies.auth import get_current_admin_user
-from app.routers import auth, election_funds, health, political_funds, profile, users
+from app.routers import election_funds, health, profile
 
 # Configure logging
 logging.basicConfig(
@@ -128,25 +128,27 @@ async def global_exception_handler(request: Request, exc: Exception):
 # Include routers
 app.include_router(health.router, prefix="/api/v1", tags=["health"])
 
-app.include_router(auth.router, prefix="/api/v1", tags=["authentication"])
+# app.include_router(auth.router, prefix="/api/v1", tags=["authentication"])
 
-app.include_router(
-    users.router,
-    prefix="/api/v1/admin",
-    tags=["users"],
-    dependencies=[Depends(get_current_admin_user)],
-)
+# app.include_router(
+#     users.router,
+#     prefix="/api/v1/admin",
+#     tags=["users"],
+#     dependencies=[Depends(get_current_admin_user)],
+# )
 
+# 本来はユーザーのマイページのためのエンドポイント
+# auth0のテストをするためだけのコード
 app.include_router(profile.router, prefix="/api/v1", tags=["profile"])
 
-app.include_router(
-    political_funds.router,
-    prefix="/api/v1/admin",
-    tags=["political-funds"],
-    dependencies=[
-        Depends(get_current_admin_user)
-    ],  # Will be protected by individual endpoints
-)
+# app.include_router(
+#     political_funds.router,
+#     prefix="/api/v1/admin",
+#     tags=["political-funds"],
+#     dependencies=[
+#         Depends(get_current_admin_user)
+#     ],  # Will be protected by individual endpoints
+# )
 
 app.include_router(
     election_funds.router,

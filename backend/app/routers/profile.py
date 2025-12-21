@@ -1,24 +1,22 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Security
 
-from app import models, schemas
-from app.dependencies.auth import get_current_user_with_role
+from app.utils.verify import VerifyToken
 
 router = APIRouter()
+auth = VerifyToken()
 
 
-@router.get("/profile", response_model=schemas.User)
-async def get_my_profile(
-    current_user: models.User = Depends(get_current_user_with_role),
-):
-    """現在認証されているユーザーのプロフィールを取得する
+@router.get("/profile")
+async def get_my_profile(auth_result: dict = Security(auth.verify)):
+    """認証が成功していることを確認するエンドポイント
 
-    JWTトークンから認証されたユーザーのプロフィール情報を返却する。
-    ロール情報も含めて返却される。
+    JWTトークンの検証が成功した場合、デコードされたトークンペイロードを返却する。
+    データベース接続は行わず、認証の確認のみを行う。
 
     Args:
-        current_user (models.User): ロール情報付きの現在認証されているユーザー
+        auth_result (dict): 検証済みのJWTトークンペイロード
 
     Returns:
-        schemas.User: ユーザーのプロフィール情報（ロール情報付き）
+        dict: JWTトークンのペイロード（iss, sub, aud, iat, expなど）
     """
-    return current_user
+    return auth_result

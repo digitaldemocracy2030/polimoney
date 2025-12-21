@@ -25,8 +25,7 @@ class Settings(BaseSettings):
     # Auth0 settings
     auth0_domain: str = Field(..., env="AUTH0_DOMAIN")
     auth0_api_audience: str = Field(..., env="AUTH0_API_AUDIENCE")
-    auth0_client_id: str = Field(..., env="AUTH0_CLIENT_ID")
-    auth0_algorithms: List[str] = Field(["RS256"], env="AUTH0_ALGORITHMS")
+    auth0_algorithms: str = Field(..., env="AUTH0_ALGORITHMS")
     auth0_issuer: str = Field(..., env="AUTH0_ISSUER")
 
     # Application settings
