@@ -36,11 +36,11 @@ export function Header({ profileName }: { profileName?: string }) {
     <Box>
       <Box w="full" position="relative">
         <Flex
-          justify={{ base: 'center', lg: 'space-between' }}
-          align="center"
+          justify="space-between"
+          alignItems="center"
           w="full"
           h="60px"
-          px={{ base: 6, md: 10 }}
+          px={8}
           py={5}
           background={'linear-gradient(90deg, #FDD2F8 0%, #A6D1FF 100%)'}
           borderRadius={'full'}
@@ -50,7 +50,9 @@ export function Header({ profileName }: { profileName?: string }) {
           {/* タイトル */}
           <Box>
             <Link href={'/'}>
-              <Heading fontSize={'2xl'}>Polimoney</Heading>
+              <Heading as="h1" size="2xl">
+                Polimoney
+              </Heading>
             </Link>
           </Box>
 
@@ -123,6 +125,7 @@ const AccountControl = () => {
           variant="ghost"
           color="white"
           onClick={() => loginWithRedirect()}
+          px={0}
         >
           ログイン
         </Button>
