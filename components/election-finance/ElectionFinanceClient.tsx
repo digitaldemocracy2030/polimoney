@@ -1,5 +1,6 @@
 'use client';
 
+import { useAuth0 } from '@auth0/auth0-react';
 import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react';
 import type { BarDatum } from '@nivo/bar';
 import { ResponsiveBar } from '@nivo/bar';
@@ -77,6 +78,10 @@ interface ElectionFinanceClientProps {
 }
 
 export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
+  const { isAuthenticated } = useAuth0();
+
+  if (!isAuthenticated) return null;
+
   const metadata = data.metadata;
   const transactions = data.transactions;
   const summary = calculateSummary(transactions);
