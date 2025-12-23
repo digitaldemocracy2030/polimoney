@@ -1,5 +1,6 @@
 'use client';
 
+import { useAuth0 } from '@auth0/auth0-react';
 import { Box } from '@chakra-ui/react';
 import { BoardMetadata } from '@/components/BoardMetadata';
 import { BoardTransactions } from '@/components/BoardTransactions';
@@ -7,15 +8,24 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
 import { BoardSummary } from '@/components/uniformed/BoardSummary';
-import type { Report, Transaction } from '@/models/uniformed/type';
-import { useAuth0 } from '@auth0/auth0-react';
-import { notFound } from 'next/navigation';
+import type {
+  AccountingReports,
+  Report,
+  Transaction,
+} from '@/models/uniformed/type';
 
 interface Props {
   politicianId: string;
-  yearData: any;
+  yearData: AccountingReports;
   allReports: Report[];
-  reportData: any;
+  reportData: {
+    report: Report;
+    transactions: Transaction[];
+    categories?: {
+      income: import('@/data/uniformed/common').Category[];
+      expense: import('@/data/uniformed/common').Category[];
+    };
+  };
 }
 
 export function Main({

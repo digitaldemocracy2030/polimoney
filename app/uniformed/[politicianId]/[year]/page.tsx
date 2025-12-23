@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Main } from '@/components/uniformed/Main';
 import { politicianDataMap } from '@/data/uniformed/politician-data';
-import type { Report } from '@/models/uniformed/type';
+import type { AccountingReports, Report } from '@/models/uniformed/type';
 
 type Props = {
   params: Promise<{
@@ -26,7 +26,15 @@ export async function generateStaticParams() {
 }
 
 function getPoliticianData(politicianId: string, year: string) {
-  const dataModule = (politicianDataMap as Record<string, any>)[politicianId];
+  const dataModule = (
+    politicianDataMap as Record<
+      string,
+      {
+        default: AccountingReports;
+        getDataByYear: (year: number) => AccountingReports | null;
+      }
+    >
+  )[politicianId];
 
   console.log(`politicianId: ${politicianId}`);
   console.log(`year: ${year}`);

@@ -1,9 +1,17 @@
-import type { Flow, ProfileList, Report, Transaction } from '@/models/type';
+import type {
+  AccountingReports,
+  Flow,
+  Profile,
+  Report,
+  Transaction,
+} from '@/models/type';
 export const comingSoonNum = 1;
 export const comingSoonId = 'demo-comingsoon';
 
-const profile: ProfileList = {
+const profile: Profile = {
   name: 'Coming Soon...',
+  title: '',
+  party: '',
   image: '/demo-example.png',
 };
 
@@ -39,8 +47,10 @@ const data = {
   ],
 };
 
-const dataByYear: Record<number, any> = {
+const _dataByYear: Record<number, AccountingReports> = {
   [new Date().getFullYear()]: {
+    id: comingSoonId,
+    latestReportId: 'coming-soon',
     profile,
     data: [
       {
