@@ -166,8 +166,8 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
       value: totalPublicExpense,
     },
     {
-      id: 'その他',
-      label: 'その他',
+      id: '自費',
+      label: '自費',
       value: totalExpense - totalPublicExpense,
     },
   ];

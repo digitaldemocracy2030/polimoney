@@ -225,10 +225,10 @@ export function TransactionSection({
           <Accordion.ItemContent bg="purple.50" mt={2} p={2} borderRadius="lg">
             <Box p={2} spaceY={4}>
               {(() => {
-                // グループ化: 公費セクションなら「公費」「その他」で分割、それ以外はカテゴリで分ける
+                // グループ化: 公費セクションなら「公費」「自費」で分割、それ以外はカテゴリで分ける
                 const grouped: Record<string, Transaction[]> = {};
                 if (usePublicExpenseAmount) {
-                  // 公費セクション: トランザクションを「公費」「その他」に分割
+                  // 公費セクション: トランザクションを「公費」「自費」に分割
                   // 各トランザクションは複数セクションに含まれる可能性がある
                   transactions.forEach((t) => {
                     if (
@@ -243,8 +243,8 @@ export function TransactionSection({
                       !t.public_expense_amount ||
                       t.public_expense_amount < t.price
                     ) {
-                      if (!grouped.その他) grouped.その他 = [];
-                      grouped.その他.push(t);
+                      if (!grouped.自費) grouped.自費 = [];
+                      grouped.自費.push(t);
                     }
                   });
                 } else {
