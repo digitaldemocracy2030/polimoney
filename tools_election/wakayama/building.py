@@ -1,8 +1,16 @@
-import datetime
-
 from openpyxl.worksheet.worksheet import Worksheet
 
-from util import A_COL, B_COL, C_COL, E_COL, F_COL, J_COL, K_COL, extract_number
+from util import (
+    A_COL,
+    B_COL,
+    C_COL,
+    E_COL,
+    F_COL,
+    J_COL,
+    K_COL,
+    convert_date,
+    extract_number,
+)
 
 
 def get_individual_election_office(building: Worksheet):
@@ -42,7 +50,7 @@ def get_individual_election_office(building: Worksheet):
         building_data.append(
             {
                 "category": "building",  # シート名をカテゴリとして使用
-                "date": date_cell.value.strftime("%Y-%m-%d"),  # 日付
+                "date": convert_date(date_cell.value),
                 "price": extract_number(price_cell.value),  # 金額
                 "type": type_cell.value,  # 種別
                 "purpose": purpose_cell.value,  # 支出の目的
@@ -138,21 +146,17 @@ def get_individual_meeting_venue(building: Worksheet):
             start_row = i + 2
             break
     else:
-        return []
+        exit("家屋シートの集合会場費の開始位置が見つかりません。")
 
     # 特定した行以降からスタートする
     for row in building.iter_rows(min_row=start_row, max_col=K_COL + 1):
-        # 型をチェック
-        date_cell = row[A_COL]
-        if not isinstance(date_cell.value, datetime.datetime):
-            continue
-
         date_cell = row[A_COL]  # 日付
         price_cell = row[C_COL]  # 金額
         type_cell = row[E_COL]  # 種別
         purpose_cell = row[F_COL]  # 支出の目的
         non_monetary_basis_cell = row[J_COL]  # 金銭以外の見積もりの根拠
         note_cell = row[K_COL]  # 備考
+
         # Noneになったら終了
         if date_cell.value is None:
             break
@@ -160,7 +164,7 @@ def get_individual_meeting_venue(building: Worksheet):
         meeting_venue_data.append(
             {
                 "category": "building",  # シート名をカテゴリとして使用
-                "date": date_cell.value.strftime("%Y-%m-%d"),  # 日付
+                "date": convert_date(date_cell.value),
                 "price": extract_number(price_cell.value),  # 金額
                 "type": type_cell.value,  # 種別
                 "purpose": purpose_cell.value,  # 支出の目的

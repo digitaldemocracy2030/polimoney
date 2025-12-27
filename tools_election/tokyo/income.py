@@ -1,8 +1,6 @@
-import datetime
-
 from openpyxl.worksheet.worksheet import Worksheet
 
-from util import A_COL, B_COL, C_COL, G_COL, H_COL, extract_number
+from util import A_COL, B_COL, C_COL, G_COL, H_COL, convert_date, extract_number
 
 
 def get_individual_income(income: Worksheet):
@@ -51,11 +49,7 @@ def get_individual_income(income: Worksheet):
         income_data.append(
             {
                 "category": "income",  # 収入にはカテゴリがない
-                "date": (  # 日付は無い場合もある
-                    date_cell.value.strftime("%Y-%m-%d")
-                    if isinstance(date_cell.value, (datetime.date, datetime.datetime))
-                    else None
-                ),
+                "date": convert_date(date_cell.value),
                 "price": extract_number(price_cell.value),  # 金額
                 "type": type_cell.value,  # 種別
                 # 金銭以外の見積もりの根拠

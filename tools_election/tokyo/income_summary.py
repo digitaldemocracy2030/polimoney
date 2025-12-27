@@ -24,6 +24,7 @@ def get_individual_income_summary(income_summary: Worksheet):
     for i, row in enumerate(
         income_summary.iter_rows(min_row=2, max_row=10, max_col=C_COL + 1)
     ):
+        aggregate_label = ""
         if 0 <= i <= 2:
             aggregate_label = "今回計 "
         elif 3 <= i <= 5:
@@ -34,7 +35,7 @@ def get_individual_income_summary(income_summary: Worksheet):
         name_cell = row[B_COL]
         price_cell = row[C_COL]
         income_summary_data.append(
-            {"name": aggregate_label + name_cell.value, "price": price_cell.value}
+            {"name": aggregate_label + str(name_cell.value), "price": price_cell.value}
         )
 
     return income_summary_data
@@ -61,10 +62,12 @@ def get_public_expense_summary(income_summary: Worksheet):
     summary_pattern = r"公費負担相当額[：:]\s*(\d+(?:,\d+)*)円"
     summary_match = re.search(summary_pattern, str(public_expense_summary_str))
 
+    public_expense_summary_data: dict[str, int | dict] = {}
+
     if summary_match:
-        public_expense_summary_data = {
-            "summary": int(summary_match.group(1).replace(",", ""))
-        }
+        public_expense_summary_data["summary"] = int(
+            summary_match.group(1).replace(",", "")
+        )
 
     # 公費負担相当額について内訳を書く人がいたら、ここに追加する
     # 中村さんは書いていないので、空の辞書を返す

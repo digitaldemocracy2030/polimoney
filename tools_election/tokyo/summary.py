@@ -24,12 +24,13 @@ def get_individual_summary(summary: Worksheet):
     for i, row in enumerate(
         summary.iter_rows(min_row=2, max_row=10, max_col=C_COL + 1)
     ):
+        aggregate_label = ""
         if 0 <= i <= 2:
-            aggregate_label = "今回計 " + row[B_COL].value
+            aggregate_label = "今回計 " + str(row[B_COL].value)
         elif 3 <= i <= 5:
-            aggregate_label = "前回計 " + row[B_COL].value
+            aggregate_label = "前回計 " + str(row[B_COL].value)
         elif 6 <= i <= 8:
-            aggregate_label = "総計 " + row[B_COL].value
+            aggregate_label = "総計 " + str(row[B_COL].value)
         price_value = extract_number(row[C_COL].value)
         # extract_number関数内で四捨五入処理済み
         summary_data.append({"name": aggregate_label, "price": price_value})

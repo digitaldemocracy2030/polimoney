@@ -2,7 +2,7 @@ import re
 
 from openpyxl.worksheet.worksheet import Worksheet
 
-from util import A_COL, B_COL, C_COL, E_COL, I_COL, J_COL, extract_number
+from util import A_COL, B_COL, C_COL, E_COL, I_COL, J_COL, convert_date, extract_number
 
 
 def get_individual_income(income: Worksheet):
@@ -42,7 +42,7 @@ def get_individual_income(income: Worksheet):
         income_data.append(
             {
                 "category": "income",  # シート名をカテゴリとして使用
-                "date": date_cell.value.strftime("%Y-%m-%d"),  # 日付
+                "date": convert_date(date_cell.value),
                 "price": extract_number(price_cell.value),  # 金額
                 "type": type_cell.value,  # 種別
                 # 金銭以外の見積もりの根拠
@@ -126,11 +126,11 @@ def get_public_expense_summary(income: Worksheet):
 
     # 総額を取得する正規表現
     summary_pattern = r"公費負担相当額\s+(\d+(?:,\d+)*)円"
-    summary_match = re.search(summary_pattern, public_expense_summary_str)
+    summary_match = re.search(summary_pattern, str(public_expense_summary_str))
 
     # 内訳を取得する正規表現
     breakdown_pattern = r"内訳\s+(.+)"
-    breakdown_match = re.search(breakdown_pattern, public_expense_summary_str)
+    breakdown_match = re.search(breakdown_pattern, str(public_expense_summary_str))
 
     public_expense_summary_data = {}
 
