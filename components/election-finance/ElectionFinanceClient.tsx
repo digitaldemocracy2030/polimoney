@@ -9,15 +9,8 @@ import { TransactionSection } from '@/components/election-finance/TransactionSec
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
-import type {
-  EfData,
-  EfSummary,
-  EfTransactions,
-} from '@/models/election-finance';
-import {
-  categorizeTransactionType,
-  getCategoryJpName,
-} from '@/utils/election-finance';
+import type { EfData } from '@/models/election-finance';
+import { getCategoryJpName } from '@/utils/election-finance';
 
 function formatCurrency(amount: number): string {
   return amount.toLocaleString('ja-JP', {
@@ -25,29 +18,6 @@ function formatCurrency(amount: number): string {
     currency: 'JPY',
     minimumFractionDigits: 0,
   });
-}
-
-function calculateSummary(transactions: EfTransactions) {
-  const summary: Record<string, EfSummary> = {};
-
-  transactions.forEach((transaction) => {
-    const category = transaction.category;
-    const type = transaction.type;
-
-    if (!summary[category]) {
-      summary[category] = {
-        category: getCategoryJpName(transaction.category),
-        total: 0,
-        count: 0,
-        type: categorizeTransactionType(type),
-      };
-    }
-
-    summary[category].total += transaction.price;
-    summary[category].count += 1;
-  });
-
-  return Object.values(summary);
 }
 
 export function ElectionFinanceClient({ data }: { data: EfData }) {
@@ -61,9 +31,6 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
     if (!b.date) return -1;
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
-
-  // サマリデータ
-  const summary = calculateSummary(transactions);
 
   // 収入データ
   const incomeTransactions = transactions
@@ -128,55 +95,6 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
       // グラフ表現は、支出に対して収入・公費がそれぞれどの程度充てられたかを表す
       収入: totalExpenseNonPublic, // 寄付などの収入で賄った額
       公費: totalExpensePublic, // 公費で賄った額
-    },
-  ];
-
-  // 円グラフ用データ（支出視点）
-  const expenseChartData = summary
-    .filter((s) => s.type === 'expense')
-    .map((s) => ({
-      id: s.category,
-      label: s.category,
-      value: s.total,
-    }));
-
-  // カテゴリごとの合計
-  const categoryTotals = transactions.reduce((acc, t) => {
-    if (!acc[t.category]) acc[t.category] = 0;
-    acc[t.category] += t.price;
-    return acc;
-  }, {} as Record<string, number>);
-
-  // 円グラフ用データ（収入視点）
-  const PieChartDataIncome = Object.entries(
-    transactions
-      .filter((t) => categorizeTransactionType(t.type) === 'income')
-      .reduce(
-        (acc, t) => {
-          const key = t.type;
-          if (!acc[key]) acc[key] = 0;
-          acc[key] += t.price;
-          return acc;
-        },
-        {} as Record<string, number>,
-      ),
-  ).map(([type, total]) => ({
-    id: type,
-    label: type,
-    value: total,
-  }));
-
-  // 円グラフ用データ（公費視点）
-  const PiDataPublic = [
-    {
-      id: '公費',
-      label: '公費',
-      value: totalExpensePublic,
-    },
-    {
-      id: '自費',
-      label: '自費',
-      value: totalExpense - totalExpensePublic,
     },
   ];
 
@@ -281,7 +199,6 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
         {/* 支出セクション */}
         <TransactionSection
           title="支出目的で見る"
-          chartData={expenseChartData}
           transactions={expenseTransactions}
           badgeColorPalette="red"
         />
@@ -289,7 +206,6 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
         {/* 収入セクション */}
         <TransactionSection
           title="収入で見る"
-          chartData={PieChartDataIncome}
           transactions={incomeTransactions}
           badgeColorPalette="green"
           showType={true}
@@ -298,8 +214,7 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
         {/* 公費セクション */}
         <TransactionSection
           title="公費で見る"
-          chartData={PiDataPublic}
-          transactions={incomeTransactions}
+          transactions={expenseTransactions}
           badgeColorPalette="blue"
           usePublicExpenseAmount={true}
         />

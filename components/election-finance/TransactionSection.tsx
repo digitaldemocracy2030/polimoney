@@ -89,7 +89,6 @@ export type ChartData = {
 
 interface TransactionSectionProps {
   title: string;
-  chartData: ChartData[];
   transactions: Transaction[];
   badgeColorPalette: 'green' | 'red' | 'blue';
   showType?: boolean;
@@ -106,12 +105,59 @@ function formatCurrency(amount: number): string {
 
 export function TransactionSection({
   title,
-  chartData,
   transactions,
   badgeColorPalette,
   showType = false,
   usePublicExpenseAmount = false,
 }: TransactionSectionProps) {
+  // chartDataをtransactionsから生成
+  const chartData = useMemo(() => {
+    if (usePublicExpenseAmount) {
+      // 公費と自費の計算
+      const publicTotal = transactions.reduce(
+        (sum, t) => sum + (t.public_expense_amount || 0),
+        0,
+      );
+      const privateTotal = transactions.reduce(
+        (sum, t) => sum + Math.max(0, t.price - (t.public_expense_amount || 0)),
+        0,
+      );
+      return [
+        { id: '公費', label: '公費', value: publicTotal },
+        { id: '自費', label: '自費', value: privateTotal },
+      ];
+    }
+    if (showType) {
+      // typeごとに集計（収入の場合）
+      const grouped = transactions.reduce(
+        (acc, t) => {
+          const key = t.type || t.category;
+          acc[key] = (acc[key] || 0) + t.price;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
+      return Object.entries(grouped).map(([id, value]) => ({
+        id,
+        label: id,
+        value,
+      }));
+    }
+    // categoryごとに集計（支出の場合）
+    const grouped = transactions.reduce(
+      (acc, t) => {
+        acc[t.category] = (acc[t.category] || 0) + t.price;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+    return Object.entries(grouped).map(([id, value]) => ({
+      id,
+      label: id,
+      value,
+    }));
+  }, [transactions, usePublicExpenseAmount, showType]);
+
   // chartDataを値の大きい順でソート
   const sortedChartData = useMemo(
     () => [...chartData].sort((a, b) => b.value - a.value),
@@ -129,8 +175,8 @@ export function TransactionSection({
   );
 
   const totalAmount = useMemo(
-    () => chartData.reduce((sum, item) => sum + item.value, 0),
-    [chartData],
+    () => sortedChartData.reduce((sum, item) => sum + item.value, 0),
+    [sortedChartData],
   );
 
   const pieChartProps: Record<string, unknown> = {
