@@ -1,6 +1,16 @@
 from openpyxl.worksheet.worksheet import Worksheet
 
-from util import A_COL, B_COL, C_COL, E_COL, F_COL, J_COL, K_COL, extract_number
+from util import (
+    A_COL,
+    B_COL,
+    C_COL,
+    E_COL,
+    F_COL,
+    J_COL,
+    K_COL,
+    convert_date,
+    extract_number,
+)
 
 
 def get_individual_general(general: Worksheet, name: str):
@@ -42,9 +52,7 @@ def get_individual_general(general: Worksheet, name: str):
         general_data.append(
             {
                 "category": name,  # シート名をカテゴリとして使用
-                "date": date_cell.value.strftime("%Y-%m-%d")
-                if date_cell.value
-                else None,  # 日付は無い場合もある
+                "date": convert_date(date_cell.value),
                 "price": extract_number(price_cell.value),  # 金額
                 "type": type_cell.value,  # 種別
                 "purpose": purpose_cell.value,  # 支出の目的
