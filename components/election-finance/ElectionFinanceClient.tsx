@@ -19,6 +19,14 @@ import {
   getCategoryJpName,
 } from '@/utils/election-finance';
 
+function formatCurrency(amount: number): string {
+  return amount.toLocaleString('ja-JP', {
+    style: 'currency',
+    currency: 'JPY',
+    minimumFractionDigits: 0,
+  });
+}
+
 function calculateSummary(transactions: EfTransactions) {
   const summary: Record<string, EfSummary> = {};
 
@@ -34,6 +42,7 @@ function calculateSummary(transactions: EfTransactions) {
         type: categorizeTransactionType(type),
       };
     }
+
     summary[category].total += transaction.price;
     summary[category].count += 1;
   });
@@ -41,108 +50,65 @@ function calculateSummary(transactions: EfTransactions) {
   return Object.values(summary);
 }
 
-function formatCurrency(amount: number): string {
-  return amount.toLocaleString('ja-JP', {
-    style: 'currency',
-    currency: 'JPY',
-    minimumFractionDigits: 0,
-  });
-}
-
-function calculateIncomeByType(transactions: EfTransactions) {
-  return transactions
-    .filter((t) => categorizeTransactionType(t.type) === 'income')
-    .reduce(
-      (acc, t) => {
-        const key = t.type;
-        if (!acc[key]) acc[key] = 0;
-        acc[key] += t.price;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
-}
-
-function calculateExpenseChartData(summary: EfSummary[]) {
-  return summary
-    .filter((s) => s.type === 'expense')
-    .map((s) => ({
-      id: s.category,
-      label: s.category,
-      value: s.total,
-    }));
-}
-
-interface ElectionFinanceClientProps {
-  data: EfData;
-}
-
-export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
+export function ElectionFinanceClient({ data }: { data: EfData }) {
   const { isAuthenticated } = useAuth0();
-
   if (!isAuthenticated) return null;
 
+  // メタデータ、ソート済みトランザクションの取得
   const metadata = data.metadata;
-  const transactions = data.transactions;
-  const summary = calculateSummary(transactions);
-
-  const totalIncome = summary
-    .filter((s) => s.type === 'income')
-    .reduce((acc, s) => acc + s.total, 0);
-
-  const totalExpense = summary
-    .filter((s) => s.type === 'expense')
-    .reduce((acc, s) => acc + s.total, 0);
-
-  const carryover = Math.max(0, totalIncome - totalExpense);
-
-  const sortedTransactions = [...transactions].sort((a, b) => {
+  const transactions = [...data.transactions].sort((a, b) => {
     if (!a.date) return 1;
     if (!b.date) return -1;
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
-  const incomeTransactions = sortedTransactions
-    .filter((t) => categorizeTransactionType(t.type) === 'income')
+  // サマリデータ
+  const summary = calculateSummary(transactions);
+
+  // 収入データ
+  const incomeTransactions = transactions
+    .filter((t) => t.category === 'income')
     .map((t) => ({ ...t, category: getCategoryJpName(t.category) }));
 
-  const expenseTransactions = sortedTransactions
-    .filter(
-      (t) =>
-        categorizeTransactionType(t.type) === 'expense' &&
-        !('public_expense_amount' in t && t.public_expense_amount),
-    )
+  // 支出データ
+  const expenseTransactions = transactions
+    .filter((t) => t.category !== 'income')
     .map((t) => ({ ...t, category: getCategoryJpName(t.category) }));
 
-  const publicExpenseTransactions = sortedTransactions
-    .filter((t) => 'public_expense_amount' in t && t.public_expense_amount)
+  // 支出データ（公費のみ）
+  const expensePublicTransactions = transactions
+    .filter((t) => t.category !== 'income')
+    .filter((t) => t.public_expense_amount)
     .map((t) => ({ ...t, category: getCategoryJpName(t.category) }));
 
-  const totalPublicExpense = publicExpenseTransactions.reduce(
-    (acc, t) => acc + (t.public_expense_amount || 0),
+  // 支出データ（公費以外のみ）
+  const expenseNonPublicTransactions = transactions
+    .filter((t) => t.category !== 'income')
+    .filter((t) => !t.public_expense_amount)
+    .map((t) => ({ ...t, category: getCategoryJpName(t.category) }));
+
+  // 収入総計
+  const totalIncome = incomeTransactions.reduce((acc, t) => acc + t.price, 0);
+
+  // 支出総計
+  const totalExpense = expenseTransactions.reduce((acc, t) => acc + t.price, 0);
+
+  // 支出合計（公費のみ）
+  const totalExpensePublic = expensePublicTransactions.reduce(
+    (acc, t) => acc + t.price,
     0,
   );
 
-  const nonPublicExpenseTransactions = sortedTransactions
-    .filter((t) => !('public_expense_amount' in t && t.public_expense_amount))
-    .map((t) => ({ ...t, category: getCategoryJpName(t.category) }));
+  // 支出合計（公費以外のみ）
+  const totalExpenseNonPublic = expenseNonPublicTransactions.reduce(
+    (acc, t) => acc + t.price,
+    0,
+  );
 
-  const incomePublic = Math.min(totalIncome, totalPublicExpense);
-  const incomePrivate = Math.max(0, totalIncome - incomePublic);
+  // 繰越
+  const carryover = totalIncome - totalExpense;
 
-  const barData: BarDatum[] = [
-    {
-      category: '支出',
-      支出: totalExpense,
-      繰越額: carryover,
-    },
-    {
-      category: '収入',
-      公費: incomePublic,
-      収入: incomePrivate,
-    },
-  ];
-
+  // 積み上げグラフ色設定
   const barColorByKey: Record<string, string> = {
     収入: 'var(--chakra-colors-blue-400)',
     公費: 'var(--chakra-colors-purple-400)',
@@ -150,25 +116,67 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
     繰越額: 'var(--chakra-colors-green-400)',
   };
 
-  const incomeByType = calculateIncomeByType(transactions);
-  const incomeChartData = Object.entries(incomeByType).map(([type, total]) => ({
+  // 積み上げグラフデータ
+  const barData: BarDatum[] = [
+    {
+      category: '支出',
+      支出: totalExpense,
+      繰越: carryover,
+    },
+    {
+      category: '収入',
+      // グラフ表現は、支出に対して収入・公費がそれぞれどの程度充てられたかを表す
+      収入: totalExpenseNonPublic, // 寄付などの収入で賄った額
+      公費: totalExpensePublic, // 公費で賄った額
+    },
+  ];
+
+  // 円グラフ用データ（支出視点）
+  const expenseChartData = summary
+    .filter((s) => s.type === 'expense')
+    .map((s) => ({
+      id: s.category,
+      label: s.category,
+      value: s.total,
+    }));
+
+  // カテゴリごとの合計
+  const categoryTotals = transactions.reduce((acc, t) => {
+    if (!acc[t.category]) acc[t.category] = 0;
+    acc[t.category] += t.price;
+    return acc;
+  }, {} as Record<string, number>);
+
+  // 円グラフ用データ（収入視点）
+  const PieChartDataIncome = Object.entries(
+    transactions
+      .filter((t) => categorizeTransactionType(t.type) === 'income')
+      .reduce(
+        (acc, t) => {
+          const key = t.type;
+          if (!acc[key]) acc[key] = 0;
+          acc[key] += t.price;
+          return acc;
+        },
+        {} as Record<string, number>,
+      ),
+  ).map(([type, total]) => ({
     id: type,
     label: type,
     value: total,
   }));
 
-  const expenseChartData = calculateExpenseChartData(summary);
-
-  const publicVsNonPublicChartData = [
+  // 円グラフ用データ（公費視点）
+  const PiDataPublic = [
     {
       id: '公費',
       label: '公費',
-      value: totalPublicExpense,
+      value: totalExpensePublic,
     },
     {
       id: '自費',
       label: '自費',
-      value: totalExpense - totalPublicExpense,
+      value: totalExpense - totalExpensePublic,
     },
   ];
 
@@ -211,7 +219,7 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
             <Box h={{ base: '200px', md: '200px' }} w="full">
               <ResponsiveBar
                 data={barData}
-                keys={['公費', '収入', '支出', '繰越額']}
+                keys={['公費', '収入', '支出', '繰越']}
                 indexBy="category"
                 padding={0}
                 groupMode="stacked"
@@ -244,13 +252,13 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
                 <Stack gap={0}>
                   <Text fontSize="sm">収入</Text>
                   <Text fontSize="xl" fontWeight="bold" color="blue.500">
-                    {formatCurrency(totalIncome)}
+                    {formatCurrency(totalExpenseNonPublic)}
                   </Text>
                 </Stack>
                 <Stack gap={0}>
                   <Text fontSize="sm">公費</Text>
                   <Text fontSize="xl" fontWeight="bold" color="purple.500">
-                    {formatCurrency(totalPublicExpense)}
+                    {formatCurrency(totalExpensePublic)}
                   </Text>
                 </Stack>
                 <Stack gap={0}>
@@ -261,7 +269,7 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
                 </Stack>
                 <Stack gap={0}>
                   <Text fontSize="sm">繰越</Text>
-                  <Text fontSize="2xl" fontWeight="bold" color="green.500">
+                  <Text fontSize="xl" fontWeight="bold" color="green.500">
                     {formatCurrency(carryover)}
                   </Text>
                 </Stack>
@@ -281,7 +289,7 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
         {/* 収入セクション */}
         <TransactionSection
           title="収入で見る"
-          chartData={incomeChartData}
+          chartData={PieChartDataIncome}
           transactions={incomeTransactions}
           badgeColorPalette="green"
           showType={true}
@@ -290,10 +298,8 @@ export function ElectionFinanceClient({ data }: ElectionFinanceClientProps) {
         {/* 公費セクション */}
         <TransactionSection
           title="公費で見る"
-          chartData={publicVsNonPublicChartData}
-          transactions={publicExpenseTransactions.concat(
-            nonPublicExpenseTransactions,
-          )}
+          chartData={PiDataPublic}
+          transactions={incomeTransactions}
           badgeColorPalette="blue"
           usePublicExpenseAmount={true}
         />
