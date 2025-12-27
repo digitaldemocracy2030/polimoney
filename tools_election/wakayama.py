@@ -154,6 +154,9 @@ def main():
     Raises:
         SystemExit: コマンドライン引数が不正な場合、エラーメッセージを表示して終了する。
     """
+    if len(INPUT_FILES) == 0:
+        logging.error("入力ファイルが指定されていません。")
+        sys.exit(1)
     logging.info(f"分析を開始します: {INPUT_FILES.values()}")
 
     # 出力フォルダを統一
