@@ -29,7 +29,7 @@ INPUT_FILES = {
 }
 
 
-def analyze(file_path):
+def analyze(file_path, folder_name):
     """
     指定されたExcelファイルを解析し、各シートのデータをJSONファイルとして出力する。
 
@@ -69,7 +69,7 @@ def analyze(file_path):
     summary_data = get_summary(summary)  # 支出計
 
     # フォルダを作成
-    safe_input_file = util.create_output_folder(file_path)
+    safe_input_file = util.create_output_folder(folder_name)
 
     # データとファイル名を定義 (utilで必要)
     data_list = [
@@ -92,7 +92,7 @@ def analyze(file_path):
     return data_list
 
 
-def analyze_income(income_file_path: str, key: int):
+def analyze_income(income_file_path: str, key: int, folder_name: str):
     """
     収入データは、一番最初に提出されたファイルから解析を行う。
     収支報告書Excelファイルが複数あり、かつ収入と支出のデータが分かれている場合に使用する。
@@ -108,7 +108,7 @@ def analyze_income(income_file_path: str, key: int):
     income_data = get_income(income)
 
     # フォルダを作成
-    safe_input_file = util.create_output_folder(income_file_path)
+    safe_input_file = util.create_output_folder(folder_name)
 
     # 収入データのみを個別データとして出力
     data_list = [
@@ -119,7 +119,7 @@ def analyze_income(income_file_path: str, key: int):
     return data_list
 
 
-def analyze_communication(file_path: str, key: int):
+def analyze_communication(file_path: str, key: int, folder_name: str):
     """
     通信費データはすべてのファイルにそれぞれユニークなデータがあるため、
     個別に解析してJSONファイルとして出力する。
@@ -134,7 +134,7 @@ def analyze_communication(file_path: str, key: int):
     communication_data = get_general(communication, "communication")
 
     # フォルダを作成
-    safe_input_file = util.create_output_folder(file_path)
+    safe_input_file = util.create_output_folder(folder_name)
 
     # 通信データのみを個別データとして出力
     data_list = [
@@ -156,11 +156,15 @@ def main():
     """
     logging.info(f"分析を開始します: {INPUT_FILES.values()}")
 
+    # 出力フォルダを統一
+    hash_value = hash(frozenset(INPUT_FILES.values()))
+    folder_name = f"wakayama_{hash_value}"
+
     data_list = []
 
     # 最初に提出されたファイルを解析
     first_file_path = INPUT_FILES[min(INPUT_FILES.keys())]
-    data = analyze_income(first_file_path, 1)
+    data = analyze_income(first_file_path, 1, folder_name)
     data_list.extend(data)
 
     # 最後以外のすべてのファイルを解析
@@ -168,15 +172,15 @@ def main():
         if key == max(INPUT_FILES.keys()):
             continue
         file_path = INPUT_FILES[key]
-        data = analyze_communication(file_path, key)
+        data = analyze_communication(file_path, key, folder_name)
         data_list.extend(data)
 
     # 最後に提出されたファイルを解析
     last_file_path = INPUT_FILES[max(INPUT_FILES.keys())]
-    data = analyze(last_file_path)
+    data = analyze(last_file_path, folder_name)
     data_list.extend(data)
 
-    output_folder = util.create_output_folder(last_file_path)
+    output_folder = util.create_output_folder(folder_name)
 
     util.create_combined_json(data_list, output_folder)
 
