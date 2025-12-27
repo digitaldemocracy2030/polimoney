@@ -1,5 +1,172 @@
 [
     {
+        "category": "income",
+        "date": "2025-05-13",
+        "price": 500000,
+        "type": "その他の収入",
+        "non_monetary_basis": null,
+        "note": "自己資金",
+        "data_id": "f6c15bed-3331-43bc-b13c-b0091c8b37ec"
+    },
+    {
+        "category": "income",
+        "date": "2025-05-23",
+        "price": 400000,
+        "type": "寄附",
+        "non_monetary_basis": null,
+        "note": "寄附金",
+        "data_id": "a8a6bb5f-edbc-4304-b980-769cf1875a62"
+    },
+    {
+        "category": "income",
+        "date": "2025-05-23",
+        "price": 100000,
+        "type": "寄附",
+        "non_monetary_basis": "選挙活動用事務所の看板\n制作・取付",
+        "note": "金銭以外の寄附",
+        "data_id": "f68ff19d-fbe7-48fa-b425-89b2802e26d6"
+    },
+    {
+        "category": "income",
+        "date": "2025-05-23",
+        "price": 30000,
+        "type": "寄附",
+        "non_monetary_basis": null,
+        "note": "寄附金",
+        "data_id": "df1d63dc-79c5-48b1-8b57-4745550af37b"
+    },
+    {
+        "category": "income",
+        "date": "2025-05-23",
+        "price": 10000,
+        "type": "寄附",
+        "non_monetary_basis": null,
+        "note": "寄附金",
+        "data_id": "d6373a33-5018-469f-a5af-733b3d36cdfb"
+    },
+    {
+        "category": "income",
+        "date": "2025-05-23",
+        "price": 10000,
+        "type": "寄附",
+        "non_monetary_basis": null,
+        "note": "寄附金",
+        "data_id": "d7b06a88-5da5-4336-a253-f4e69a44ebd2"
+    },
+    {
+        "category": "income",
+        "date": "2025-05-23",
+        "price": 5000,
+        "type": "寄附",
+        "non_monetary_basis": null,
+        "note": "寄附金",
+        "data_id": "fe8c60a3-78cb-413d-b38c-fbc78d2d29d9"
+    },
+    {
+        "category": "income",
+        "date": "2025-05-24",
+        "price": 10000,
+        "type": "寄附",
+        "non_monetary_basis": null,
+        "note": "寄附金",
+        "data_id": "3555b2ed-d6eb-4955-a3d7-fb5d4f881f80"
+    },
+    {
+        "category": "income",
+        "date": "2025-05-25",
+        "price": 10000,
+        "type": "寄附",
+        "non_monetary_basis": null,
+        "note": "寄附金",
+        "data_id": "b221ac75-cc97-4939-a1a2-232aad682c52"
+    },
+    {
+        "category": "income",
+        "date": "2025-05-25",
+        "price": 50000,
+        "type": "寄附",
+        "non_monetary_basis": null,
+        "note": "寄附金",
+        "data_id": "5822fe74-74d2-4e38-b8b9-5f109b0ef354"
+    },
+    {
+        "category": "income",
+        "date": "2025-05-27",
+        "price": 20000,
+        "type": "寄附",
+        "non_monetary_basis": null,
+        "note": "寄附金",
+        "data_id": "a9f34635-d09a-4ab1-b823-dcbe78ea0813"
+    },
+    {
+        "category": "income",
+        "date": "2025-05-27",
+        "price": 100000,
+        "type": "寄附",
+        "non_monetary_basis": null,
+        "note": "寄附金",
+        "data_id": "304be8a4-45d7-4040-9081-aee152623e14"
+    },
+    {
+        "category": "income",
+        "date": "2025-05-30",
+        "price": 10000,
+        "type": "寄附",
+        "non_monetary_basis": null,
+        "note": "寄附金",
+        "data_id": "4684cae4-3ea4-4578-a895-5068081cb6b6"
+    },
+    {
+        "category": "communication",
+        "date": "2025-05-13",
+        "price": 31179,
+        "type": "選挙運動",
+        "purpose": "レンタルスマホ借上料",
+        "non_monetary_basis": null,
+        "note": "5月13日〜6月10日",
+        "data_id": "2ac078cd-9ece-4f57-8b0b-68301ad8dd7b"
+    },
+    {
+        "category": "communication",
+        "date": "2025-06-11",
+        "price": 13200,
+        "type": "選挙運動",
+        "purpose": "レンタルスマホ通信料",
+        "non_monetary_basis": null,
+        "note": "5月13日〜6月10日",
+        "data_id": "4aadd44f-4db3-4f10-857c-2fccc6c84573"
+    },
+    {
+        "category": "communication",
+        "date": "2025-06-23",
+        "price": 55323,
+        "type": "選挙運動",
+        "purpose": "電話工事料、電話回線使用料",
+        "non_monetary_basis": null,
+        "note": "5月16日〜5月25日使用",
+        "data_id": "fc1133c1-c840-4fbb-80e3-07653740866d"
+    },
+    {
+        "category": "communication",
+        "date": "2025-06-23",
+        "price": 1874,
+        "type": "選挙運動",
+        "purpose": "電話回線使用料",
+        "non_monetary_basis": null,
+        "note": "5月16日〜5月25日使用",
+        "data_id": "1d5108c0-3880-40d4-ae88-f1b7de702ebb"
+    },
+    {
+        "category": "communication",
+        "date": "2025-06-23",
+        "price": 1874,
+        "type": "選挙運動",
+        "purpose": "電話回線使用料",
+        "non_monetary_basis": null,
+        "note": "5月16日〜5月25日使用",
+        "data_id": "db8c924f-b315-43c8-a69d-cd20f8370b90"
+    },
+    {
         "category": "personnel",
         "date": "2025-06-10",
         "price": 30605,
@@ -7,17 +174,17 @@
         "purpose": "車上運動員報酬",
         "non_monetary_basis": null,
         "note": "5/23~25\n(11,100円/日 - その日の昼食・夕食代)*3",
-        "data_id": "e7098ad7-f6a2-4dfd-a60c-fa814d0bb47c"
+        "data_id": "7349dba6-e807-47af-94af-faa16c1d2abc"
     },
     {
         "category": "personnel",
         "date": "2025-06-10",
-        "price": 20496.6,
+        "price": 20497,
         "type": "選挙運動",
         "purpose": "車上運動員報酬",
         "non_monetary_basis": null,
         "note": "5/26~27\n(11,100円/日 - その日の昼食・夕食代)*2",
-        "data_id": "daac12d2-d36a-4401-bb85-d6503bfc035f"
+        "data_id": "58e6eb08-ee10-4fe5-87c6-0901b1b1b6c7"
     },
     {
         "category": "personnel",
@@ -27,7 +194,7 @@
         "purpose": "車上運動員報酬",
         "non_monetary_basis": null,
         "note": "5/28~29\n(11,100円/日 - その日の昼食・夕食代)*2",
-        "data_id": "4e9d089f-fb19-4c8b-913f-daf8fa833388"
+        "data_id": "5bda5a60-3995-4472-ba24-a47a3dcdd569"
     },
     {
         "category": "personnel",
@@ -37,7 +204,7 @@
         "purpose": "車上運動員報酬",
         "non_monetary_basis": null,
         "note": "5/30~31\n(11,100円/日 - その日の昼食・夕食代)*2",
-        "data_id": "0db9ab7d-1b32-48f1-95d4-b6365701693c"
+        "data_id": "dd0a8b98-ca29-4950-8970-1f209d255b25"
     },
     {
         "category": "building",
@@ -47,7 +214,7 @@
         "purpose": "選挙事務所借り上げ",
         "non_monetary_basis": null,
         "note": "5月7日〜6月7日",
-        "data_id": "6afb0eed-d9c3-4833-a24c-6fbc71ae28df"
+        "data_id": "0166076f-01fd-4714-9263-c028df39601d"
     },
     {
         "category": "building",
@@ -57,7 +224,7 @@
         "purpose": "演説会場使用料",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "26d60410-bf75-4530-aec0-17befe37c47d"
+        "data_id": "45040b52-d8bc-48ba-9b75-41c702cea7a3"
     },
     {
         "category": "communication",
@@ -67,7 +234,7 @@
         "purpose": "電話回線使用料",
         "non_monetary_basis": null,
         "note": "5月26日〜5月31日使用\n6月10日分までの請求額から日数で按分",
-        "data_id": "f5174eef-d52e-4120-b614-87d492c268c8"
+        "data_id": "b46e2e01-2961-4837-8b0e-09a8837fbb93"
     },
     {
         "category": "communication",
@@ -77,7 +244,7 @@
         "purpose": "電話回線使用料",
         "non_monetary_basis": null,
         "note": "5月26日〜5月31日使用\n6月10日分までの請求額から日数で按分",
-        "data_id": "faa62c6e-2588-4453-b30c-152320f387a9"
+        "data_id": "7dc9efeb-c09b-40da-8904-98ca3ec013db"
     },
     {
         "category": "communication",
@@ -87,7 +254,7 @@
         "purpose": "電話回線使用料",
         "non_monetary_basis": null,
         "note": "5月26日〜5月31日使用\n6月10日分までの請求額から日数で按分",
-        "data_id": "eec13aeb-1e20-44dd-ab0a-66c01b8f4117"
+        "data_id": "19aa578d-cb4d-45a5-a743-64d9645926d7"
     },
     {
         "category": "printing",
@@ -98,7 +265,7 @@
         "non_monetary_basis": null,
         "note": "公費負担",
         "public_expense_amount": 123680,
-        "data_id": "e5ed5c06-76c8-4f81-9798-fd17287820ca"
+        "data_id": "fc48ba1b-e4fa-4b69-a5bb-a3659ab26974"
     },
     {
         "category": "printing",
@@ -109,7 +276,7 @@
         "non_monetary_basis": null,
         "note": "公費負担",
         "public_expense_amount": 1012176,
-        "data_id": "b40d0be2-4b28-474c-a458-a253fc340e86"
+        "data_id": "abda04c1-4b67-43c4-910f-11f6b6c59b5b"
     },
     {
         "category": "printing",
@@ -119,7 +286,7 @@
         "purpose": "ビラ印刷",
         "non_monetary_basis": null,
         "note": "自費負担",
-        "data_id": "a2b23a66-01a2-4f0f-bf94-9fa2f7b0af7c"
+        "data_id": "fdfe6ac9-65c1-4ac0-832d-be535d5ab587"
     },
     {
         "category": "advertising",
@@ -129,7 +296,7 @@
         "purpose": "選挙カー音響・看板・取付",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "8e4c5c17-b3f7-44c0-ab40-bb117ae6660c"
+        "data_id": "7f2523a3-6af3-4128-b746-08e281b043f5"
     },
     {
         "category": "advertising",
@@ -139,7 +306,7 @@
         "purpose": "タスキ",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "9b70da0c-4aa6-4cf4-9f26-752b929de6a5"
+        "data_id": "8d2cdf31-1598-459a-b94c-6c9379576e51"
     },
     {
         "category": "advertising",
@@ -149,7 +316,7 @@
         "purpose": "選挙活動用事務所の看板制作・取付",
         "non_monetary_basis": "看板1枚",
         "note": "金銭以外\nの寄附",
-        "data_id": "191f18d8-7796-4320-9fc5-1990645ee315"
+        "data_id": "605de54a-9585-4c57-937e-008c47d8aa99"
     },
     {
         "category": "advertising",
@@ -159,7 +326,7 @@
         "purpose": "ビラの新聞折込",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "72e8550c-6b41-4aad-b232-e3d2cd4d1088"
+        "data_id": "d56c478b-7555-401a-8413-f41dbd25e4b6"
     },
     {
         "category": "advertising",
@@ -169,7 +336,7 @@
         "purpose": "選挙運動用広告",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "588927b4-65d4-4c1c-8958-99f569b8091a"
+        "data_id": "28f56cb2-cf09-4ffe-abce-469462d9df2b"
     },
     {
         "category": "advertising",
@@ -179,7 +346,7 @@
         "purpose": "選挙広告費",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "f3fce6ea-e0c7-43d4-be14-48fd1f096197"
+        "data_id": "3dfb49ee-7daa-402a-b237-abbae34f066a"
     },
     {
         "category": "advertising",
@@ -189,7 +356,7 @@
         "purpose": "ビラの新聞折込",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "fba552fc-209e-4d49-b919-ae11b327812d"
+        "data_id": "57641c1a-3561-44e6-8e58-15ae6a212a52"
     },
     {
         "category": "advertising",
@@ -199,7 +366,7 @@
         "purpose": "ビラの新聞折込",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "96cd650a-a855-4a8b-a2f6-f8fe79a9a582"
+        "data_id": "3a7bf940-4881-4a91-a2a3-d9f9232d5510"
     },
     {
         "category": "advertising",
@@ -209,7 +376,7 @@
         "purpose": "選挙活動用事務所に掲示する立札、\nのぼりのデザイン、制作\n選挙活動用事務所の看板デザイン\n推薦ハガキ：デザイン・印刷\n新聞広告デザイン\n選挙カー看板デザイン",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "072a2b26-7d8e-49df-99cb-089b400c3bc3"
+        "data_id": "034985ed-3608-4ac5-8b95-83af25be14aa"
     },
     {
         "category": "stationery",
@@ -219,7 +386,7 @@
         "purpose": "テープ等",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "43eba6ba-f45e-4392-8d38-7243bac6b518"
+        "data_id": "b6445743-0aac-47aa-bad4-b708f18f80aa"
     },
     {
         "category": "stationery",
@@ -229,7 +396,7 @@
         "purpose": "コピー用紙",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "9318d0b6-c627-46c1-b332-22fbd3805f7f"
+        "data_id": "de64ec0f-339d-4f46-9a12-50e89821f23c"
     },
     {
         "category": "stationery",
@@ -239,7 +406,7 @@
         "purpose": "紙袋",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "e2161dee-2da1-4660-8e52-78d0c1d81ed1"
+        "data_id": "f5571396-bd3d-4f48-b7f8-2782d7d40bbc"
     },
     {
         "category": "food",
@@ -249,7 +416,7 @@
         "purpose": "弁当代（20個）",
         "non_monetary_basis": null,
         "note": "23日昼食",
-        "data_id": "605541ca-888a-4489-a271-b1613fe1cf92"
+        "data_id": "650f0c0d-3f21-46c6-9f12-fa5bb59bfbbe"
     },
     {
         "category": "food",
@@ -259,7 +426,7 @@
         "purpose": "弁当代（16個）",
         "non_monetary_basis": null,
         "note": "24日昼食",
-        "data_id": "8a593817-eee6-4292-9825-d8013f66ba87"
+        "data_id": "862fa9ea-5464-43ab-b122-dfb77e657f3a"
     },
     {
         "category": "food",
@@ -269,7 +436,7 @@
         "purpose": "お菓子",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "c84476fd-630d-4d98-a574-c9313ab68427"
+        "data_id": "6e8fb55f-2846-4e82-a670-30f5ef234316"
     },
     {
         "category": "food",
@@ -279,7 +446,7 @@
         "purpose": "お菓子",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "87f9b91e-32e8-42dd-891e-ec23d21ae9de"
+        "data_id": "f581219b-c68d-46b8-807d-f5b600f01327"
     },
     {
         "category": "food",
@@ -289,7 +456,7 @@
         "purpose": "弁当代（20個）",
         "non_monetary_basis": null,
         "note": "25日昼食",
-        "data_id": "8f564dcd-02d1-4561-9606-b7a2729d544e"
+        "data_id": "ae3e0c66-7704-4158-ae2f-5ccba0a24d93"
     },
     {
         "category": "food",
@@ -299,7 +466,7 @@
         "purpose": "弁当代（20個）",
         "non_monetary_basis": null,
         "note": "26日昼食",
-        "data_id": "2e3cd1fb-2079-4449-8eff-c45a5fe15c14"
+        "data_id": "508d5eb3-3bff-4bdc-a0d3-f685d6a90b0d"
     },
     {
         "category": "food",
@@ -309,7 +476,7 @@
         "purpose": "お菓子・おにぎり代（5個）",
         "non_monetary_basis": null,
         "note": "26日夕食",
-        "data_id": "3e201a33-ec89-4538-93a5-618bf1724973"
+        "data_id": "4f0dd289-8687-42c4-800b-b4a492ede5b2"
     },
     {
         "category": "food",
@@ -319,7 +486,7 @@
         "purpose": "弁当代（20個）",
         "non_monetary_basis": null,
         "note": "27日昼食",
-        "data_id": "89e77119-8a58-4d41-93cb-5789b72fe243"
+        "data_id": "e66835f0-57f2-4fe3-9ee5-d956b00d1594"
     },
     {
         "category": "food",
@@ -329,7 +496,7 @@
         "purpose": "弁当代（25個）",
         "non_monetary_basis": null,
         "note": "28日昼食",
-        "data_id": "a50a19ad-952e-4379-9108-28d59527ca8f"
+        "data_id": "89e4783c-b043-4e19-8413-f2202ceae32c"
     },
     {
         "category": "food",
@@ -339,7 +506,7 @@
         "purpose": "おにぎり代（5個）・お菓子",
         "non_monetary_basis": null,
         "note": "28日夕食",
-        "data_id": "b9f31318-3def-4df2-94bd-fd2fa1ea32ac"
+        "data_id": "9379aadc-237f-4975-b2df-82c72ff6f772"
     },
     {
         "category": "food",
@@ -349,7 +516,7 @@
         "purpose": "弁当代（6個）",
         "non_monetary_basis": null,
         "note": "29日昼食",
-        "data_id": "afdfd7ec-edc0-4f87-a602-1e214ae4bb7c"
+        "data_id": "8837825f-d74a-44cf-bbb7-f3f4350a2747"
     },
     {
         "category": "food",
@@ -359,7 +526,7 @@
         "purpose": "弁当代（20個）",
         "non_monetary_basis": null,
         "note": "29日昼食",
-        "data_id": "ac933d7b-170c-439d-8cff-84748d8d721b"
+        "data_id": "8064001f-e8f8-4a0e-ac85-d610d8e098dc"
     },
     {
         "category": "food",
@@ -369,7 +536,7 @@
         "purpose": "おにぎり代（5個）・茶菓子",
         "non_monetary_basis": null,
         "note": "29日夕食",
-        "data_id": "fb281cbd-75b9-4ebe-aa99-e61b80f0ae81"
+        "data_id": "7c929bcd-41ba-47b1-bb7d-f82479fe2167"
     },
     {
         "category": "food",
@@ -379,7 +546,7 @@
         "purpose": "弁当代（20個）",
         "non_monetary_basis": null,
         "note": "30日昼食",
-        "data_id": "420cf7e5-8c25-4779-8ca8-b7d1f04d1b51"
+        "data_id": "7e1a1df0-abe5-47df-963e-84ab02f7675f"
     },
     {
         "category": "food",
@@ -389,7 +556,7 @@
         "purpose": "弁当代（5個）・おにぎり代（5個）",
         "non_monetary_basis": null,
         "note": "30日夕食",
-        "data_id": "057af9cf-0298-4a7f-b512-8a247a3c878a"
+        "data_id": "941964f2-e79f-4be6-b7f5-37264e7c4c34"
     },
     {
         "category": "food",
@@ -399,7 +566,7 @@
         "purpose": "弁当代（25個）",
         "non_monetary_basis": null,
         "note": "31日昼食",
-        "data_id": "4805ac17-8e4e-4fd4-86d9-970d4165a536"
+        "data_id": "10f7f4fb-2f3d-4f6c-bb48-3156361d1bed"
     },
     {
         "category": "food",
@@ -409,7 +576,7 @@
         "purpose": "おにぎり代（5個）",
         "non_monetary_basis": null,
         "note": "31日夕食",
-        "data_id": "1063333d-b744-462c-a2ae-6dc8a3345ca5"
+        "data_id": "43a0a879-7deb-4606-83af-679d0629763b"
     },
     {
         "category": "miscellaneous",
@@ -419,7 +586,7 @@
         "purpose": "電池等",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "250016c9-621a-433a-9ff5-9a52cbdaff5f"
+        "data_id": "759b616c-db6a-4286-b948-4fc60774a2f1"
     },
     {
         "category": "miscellaneous",
@@ -429,7 +596,7 @@
         "purpose": "ワッポン",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "35e4764d-99a9-4ac8-a1a4-0ea1d29a61c1"
+        "data_id": "4e11a747-ae66-4b19-af3f-6a6ed7d8783a"
     },
     {
         "category": "miscellaneous",
@@ -439,7 +606,7 @@
         "purpose": "傘",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "09ae408f-3672-4b0e-92cb-a0dd21d02a49"
+        "data_id": "8f6604fc-911b-4f8f-b6ef-3ba92b47194d"
     },
     {
         "category": "miscellaneous",
@@ -449,7 +616,7 @@
         "purpose": "電池",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "1f5c3f5a-2e34-48c8-9e11-951bde15caa7"
+        "data_id": "fda85ffa-c5fd-4d91-93e2-adf21fa3da5a"
     },
     {
         "category": "miscellaneous",
@@ -459,7 +626,7 @@
         "purpose": "Tシャツ",
         "non_monetary_basis": null,
         "note": null,
-        "data_id": "addb8d8c-06b4-4919-b565-84f7b617654a"
+        "data_id": "e0009f4a-1ba1-4f82-80ef-3f0201619167"
     },
     {
         "category": "miscellaneous",
@@ -469,123 +636,6 @@
         "purpose": "選挙事務所\n電気水道代",
         "non_monetary_basis": null,
         "note": "5月7日〜6月7日",
-        "data_id": "8ddb01e3-5b81-4ad0-9c82-47864ae1d021"
-    },
-    {
-        "category": "income",
-        "date": "2025-05-13",
-        "price": 500000,
-        "type": "その他の収入",
-        "non_monetary_basis": null,
-        "note": "自己資金",
-        "data_id": "5f6ae268-baec-46b0-87e0-8860a222f658"
-    },
-    {
-        "category": "income",
-        "date": "2025-05-23",
-        "price": 400000,
-        "type": "寄附",
-        "non_monetary_basis": null,
-        "note": "寄附金",
-        "data_id": "b13b1d46-9ad8-450c-aed8-bcb0ecbceebc"
-    },
-    {
-        "category": "income",
-        "date": "2025-05-23",
-        "price": 100000,
-        "type": "寄附",
-        "non_monetary_basis": "選挙活動用事務所の看板\n制作・取付",
-        "note": "金銭以外の寄附",
-        "data_id": "8acef356-e9f8-4439-b49e-a9cc96ffc858"
-    },
-    {
-        "category": "income",
-        "date": "2025-05-23",
-        "price": 30000,
-        "type": "寄附",
-        "non_monetary_basis": null,
-        "note": "寄附金",
-        "data_id": "7c14d3a0-0f57-4a5d-b770-aba3e9c19cf5"
-    },
-    {
-        "category": "income",
-        "date": "2025-05-23",
-        "price": 10000,
-        "type": "寄附",
-        "non_monetary_basis": null,
-        "note": "寄附金",
-        "data_id": "4384a83b-6662-4228-8fcc-d3c87fc10670"
-    },
-    {
-        "category": "income",
-        "date": "2025-05-23",
-        "price": 10000,
-        "type": "寄附",
-        "non_monetary_basis": null,
-        "note": "寄附金",
-        "data_id": "6e095d15-00cb-4728-ae28-68a520038bf1"
-    },
-    {
-        "category": "income",
-        "date": "2025-05-23",
-        "price": 5000,
-        "type": "寄附",
-        "non_monetary_basis": null,
-        "note": "寄附金",
-        "data_id": "268b5066-8ce6-4381-9c5d-0e8aa700ee4c"
-    },
-    {
-        "category": "income",
-        "date": "2025-05-24",
-        "price": 10000,
-        "type": "寄附",
-        "non_monetary_basis": null,
-        "note": "寄附金",
-        "data_id": "b8d7d762-81e9-48c0-8329-92a587dd4b90"
-    },
-    {
-        "category": "income",
-        "date": "2025-05-25",
-        "price": 10000,
-        "type": "寄附",
-        "non_monetary_basis": null,
-        "note": "寄附金",
-        "data_id": "1cf692b4-51ff-4a4d-9929-feb0d30b49e7"
-    },
-    {
-        "category": "income",
-        "date": "2025-05-25",
-        "price": 50000,
-        "type": "寄附",
-        "non_monetary_basis": null,
-        "note": "寄附金",
-        "data_id": "19e9d30e-5a38-42d5-9251-e88d82e15594"
-    },
-    {
-        "category": "income",
-        "date": "2025-05-27",
-        "price": 20000,
-        "type": "寄附",
-        "non_monetary_basis": null,
-        "note": "寄附金",
-        "data_id": "745d21ab-7319-4cc4-8a62-09eb14bb6c18"
-    },
-    {
-        "category": "income",
-        "date": "2025-05-27",
-        "price": 100000,
-        "type": "寄附",
-        "non_monetary_basis": null,
-        "note": "寄附金",
-        "data_id": "75960998-c8f5-455c-b95a-921ba03c44d4"
-    },
-    {
-        "category": "income",
-        "date": "2025-05-30",
-        "price": 10000,
-        "type": "寄附",
-        "non_monetary_basis": null,
-        "note": "寄附金",
-        "data_id": "6da15982-1edc-4d8b-a2b3-2a83bbe70bea"
+        "data_id": "745c3574-98d9-4768-8fb1-ef38aff587a9"
     }
 ]

@@ -1,4 +1,3 @@
-import json
 import logging
 import sys
 
@@ -16,16 +15,30 @@ logging.basicConfig(
 )
 
 
-def analyze(income_file_path):
+"""
+
+和歌山県は、入力ファイルが複数の場合、すべてのファイルが必要なため、
+最初に定数としてファイル名を定義。
+
+"""
+
+INPUT_FILES = {
+    1: r"",  # 第1回
+    2: r"",  # 第2回
+    3: r"",  # 第3回
+}
+
+
+def analyze(file_path, folder_name):
     """
     指定されたExcelファイルを解析し、各シートのデータをJSONファイルとして出力する。
 
     人件・通信・交通・広告・文具・食料・休泊・雑費は同じフォーマットで処理される。
 
     Args:
-        income_file_path (str): 解析対象のExcelファイルのパス
+        file_path (str): 解析対象のExcelファイルのパス
     """
-    wb = openpyxl.load_workbook(income_file_path, data_only=True)
+    wb = openpyxl.load_workbook(file_path, data_only=True)
 
     # 各シートを取得
     income = wb["収入"]
@@ -56,7 +69,7 @@ def analyze(income_file_path):
     summary_data = get_summary(summary)  # 支出計
 
     # フォルダを作成
-    safe_input_file = util.create_output_folder(income_file_path)
+    safe_input_file = util.create_output_folder(folder_name)
 
     # データとファイル名を定義 (utilで必要)
     data_list = [
@@ -76,27 +89,12 @@ def analyze(income_file_path):
 
     util.create_individual_json(data_list, safe_input_file)
 
-    combined_data, combined_file_path = util.create_combined_json(
-        data_list, safe_input_file
-    )
-
-    if not util.has_income_data(combined_data):
-        logging.info(
-            "入力したExcelファイルに収入データが含まれていないため、収入データを追加します"
-        )
-        income_file_path = (
-            input("収入データが含まれているExcelファイルのパスを入力してください: ")
-            .strip()
-            .strip('"')
-            .strip("'")
-        )
-        analyze_income(income_file_path, combined_file_path)
+    return data_list
 
 
-def analyze_income(income_file_path: str, combined_file_path: str):
+def analyze_income(income_file_path: str, key: int, folder_name: str):
     """
-    最初に入力したExcelファイルに収入データが含まれていない場合、収入データを追加して結合データを更新する。
-
+    収入データは、一番最初に提出されたファイルから解析を行う。
     収支報告書Excelファイルが複数あり、かつ収入と支出のデータが分かれている場合に使用する。
 
     Args:
@@ -110,27 +108,41 @@ def analyze_income(income_file_path: str, combined_file_path: str):
     income_data = get_income(income)
 
     # フォルダを作成
-    safe_input_file = util.create_output_folder(income_file_path)
+    safe_input_file = util.create_output_folder(folder_name)
 
     # 収入データのみを個別データとして出力
     data_list = [
-        ("income_data.json", income_data),
+        (f"income_data_{key}.json", income_data),
     ]
     util.create_individual_json(data_list, safe_input_file)
 
-    # 支出データを取り出す
-    with open(combined_file_path, "r", encoding="utf-8") as f:
-        combined_data = json.load(f)
+    return data_list
 
-    # 収入データを追加
-    combined_data.extend(income_data["individual_income"])
 
-    # データにユニークIDを付与する
-    combined_data = util.add_data_id(combined_data)
+def analyze_communication(file_path: str, key: int, folder_name: str):
+    """
+    通信費データはすべてのファイルにそれぞれユニークなデータがあるため、
+    個別に解析してJSONファイルとして出力する。
 
-    # 上書き保存
-    with open(combined_file_path, "w", encoding="utf-8") as f:
-        json.dump(combined_data, f, indent=4, ensure_ascii=False)
+    Args:
+        file_path (str): 解析対象のExcelファイルのパス
+    """
+    wb = openpyxl.load_workbook(file_path, data_only=True)
+
+    # 通信シートを取得
+    communication = wb["通信"]
+    communication_data = get_general(communication, "communication")
+
+    # フォルダを作成
+    safe_input_file = util.create_output_folder(folder_name)
+
+    # 通信データのみを個別データとして出力
+    data_list = [
+        (f"communication_data_{key}.json", communication_data),
+    ]
+    util.create_individual_json(data_list, safe_input_file)
+
+    return data_list
 
 
 def main():
@@ -142,14 +154,37 @@ def main():
     Raises:
         SystemExit: コマンドライン引数が不正な場合、エラーメッセージを表示して終了する。
     """
-    if len(sys.argv) != 2:
-        logging.error("python wakayama.py <input_file> と入力してください")
-        sys.exit(1)
+    logging.info(f"分析を開始します: {INPUT_FILES.values()}")
 
-    logging.info(f"分析を開始します: {sys.argv[1]}")
-    input_file = sys.argv[1]
-    analyze(input_file)
-    logging.info(f"分析を完了しました: {sys.argv[1]}")
+    # 出力フォルダを統一
+    hash_value = hash(frozenset(INPUT_FILES.values()))
+    folder_name = f"wakayama_{hash_value}"
+
+    data_list = []
+
+    # 最初に提出されたファイルを解析
+    first_file_path = INPUT_FILES[min(INPUT_FILES.keys())]
+    data = analyze_income(first_file_path, 1, folder_name)
+    data_list.extend(data)
+
+    # 最後以外のすべてのファイルを解析
+    for key in sorted(INPUT_FILES.keys()):
+        if key == max(INPUT_FILES.keys()):
+            continue
+        file_path = INPUT_FILES[key]
+        data = analyze_communication(file_path, key, folder_name)
+        data_list.extend(data)
+
+    # 最後に提出されたファイルを解析
+    last_file_path = INPUT_FILES[max(INPUT_FILES.keys())]
+    data = analyze(last_file_path, folder_name)
+    data_list.extend(data)
+
+    output_folder = util.create_output_folder(folder_name)
+
+    util.create_combined_json(data_list, output_folder)
+
+    logging.info(f"分析を完了しました: {INPUT_FILES.values()}")
 
     return 0
 
