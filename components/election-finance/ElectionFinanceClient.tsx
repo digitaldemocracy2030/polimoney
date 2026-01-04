@@ -48,12 +48,6 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
     .filter((t) => t.public_expense_amount)
     .map((t) => ({ ...t, category: getCategoryJpName(t.category) }));
 
-  // 支出データ（公費以外のみ）
-  const expenseNonPublicTransactions = transactions
-    .filter((t) => t.category !== 'income')
-    .filter((t) => !t.public_expense_amount)
-    .map((t) => ({ ...t, category: getCategoryJpName(t.category) }));
-
   // 収入総計
   const totalIncome = incomeTransactions.reduce((acc, t) => acc + t.price, 0);
 
@@ -62,18 +56,12 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
 
   // 支出合計（公費のみ）
   const totalExpensePublic = expensePublicTransactions.reduce(
-    (acc, t) => acc + t.price,
-    0,
-  );
-
-  // 支出合計（公費以外のみ）
-  const totalExpenseNonPublic = expenseNonPublicTransactions.reduce(
-    (acc, t) => acc + t.price,
+    (acc, t) => acc + (t.public_expense_amount || 0),
     0,
   );
 
   // 繰越
-  const carryover = totalIncome - totalExpense;
+  const carryover = totalIncome + totalExpensePublic - totalExpense;
 
   // 積み上げグラフ色設定
   const barColorByKey: Record<string, string> = {
@@ -93,7 +81,7 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
     {
       category: '収入',
       // グラフ表現は、支出に対して収入・公費がそれぞれどの程度充てられたかを表す
-      収入: totalExpenseNonPublic, // 寄付などの収入で賄った額
+      収入: totalIncome, // 寄付などの収入で賄った額
       公費: totalExpensePublic, // 公費で賄った額
     },
   ];
@@ -170,7 +158,7 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
                 <Stack gap={0}>
                   <Text fontSize="sm">収入</Text>
                   <Text fontSize="xl" fontWeight="bold" color="blue.500">
-                    {formatCurrency(totalExpenseNonPublic)}
+                    {formatCurrency(totalIncome)}
                   </Text>
                 </Stack>
                 <Stack gap={0}>

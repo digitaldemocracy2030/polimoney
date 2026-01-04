@@ -316,7 +316,7 @@ export function TransactionSection({
                       watch={records.length}
                       bg="white"
                       borderRadius="lg"
-                      maxH="calc(100vh - 100px)"
+                      maxH={{ base: 'calc(100vh - 100px)', md: 'none' }}
                       overflowY="scroll"
                       scrollbar="hidden"
                       p={2}

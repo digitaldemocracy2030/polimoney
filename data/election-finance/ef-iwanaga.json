@@ -1,648 +1,648 @@
 {
-	"metadata": {
-		"date": "令和７年６月１日",
-		"title": "和歌山県議会議員日高郡選挙区補欠選挙",
-		"name": "岩永淳志"
-	},
-	"transactions": [
-		{
-			"category": "income",
-			"date": "2025-05-13",
-			"price": 500000,
-			"type": "その他の収入",
-			"non_monetary_basis": null,
-			"note": "自己資金",
-			"data_id": "f6c15bed-3331-43bc-b13c-b0091c8b37ec"
-		},
-		{
-			"category": "income",
-			"date": "2025-05-23",
-			"price": 400000,
-			"type": "寄附",
-			"non_monetary_basis": null,
-			"note": "寄附金",
-			"data_id": "a8a6bb5f-edbc-4304-b980-769cf1875a62"
-		},
-		{
-			"category": "income",
-			"date": "2025-05-23",
-			"price": 100000,
-			"type": "寄附",
-			"non_monetary_basis": "選挙活動用事務所の看板\n制作・取付",
-			"note": "金銭以外の寄附",
-			"data_id": "f68ff19d-fbe7-48fa-b425-89b2802e26d6"
-		},
-		{
-			"category": "income",
-			"date": "2025-05-23",
-			"price": 30000,
-			"type": "寄附",
-			"non_monetary_basis": null,
-			"note": "寄附金",
-			"data_id": "df1d63dc-79c5-48b1-8b57-4745550af37b"
-		},
-		{
-			"category": "income",
-			"date": "2025-05-23",
-			"price": 10000,
-			"type": "寄附",
-			"non_monetary_basis": null,
-			"note": "寄附金",
-			"data_id": "d6373a33-5018-469f-a5af-733b3d36cdfb"
-		},
-		{
-			"category": "income",
-			"date": "2025-05-23",
-			"price": 10000,
-			"type": "寄附",
-			"non_monetary_basis": null,
-			"note": "寄附金",
-			"data_id": "d7b06a88-5da5-4336-a253-f4e69a44ebd2"
-		},
-		{
-			"category": "income",
-			"date": "2025-05-23",
-			"price": 5000,
-			"type": "寄附",
-			"non_monetary_basis": null,
-			"note": "寄附金",
-			"data_id": "fe8c60a3-78cb-413d-b38c-fbc78d2d29d9"
-		},
-		{
-			"category": "income",
-			"date": "2025-05-24",
-			"price": 10000,
-			"type": "寄附",
-			"non_monetary_basis": null,
-			"note": "寄附金",
-			"data_id": "3555b2ed-d6eb-4955-a3d7-fb5d4f881f80"
-		},
-		{
-			"category": "income",
-			"date": "2025-05-25",
-			"price": 10000,
-			"type": "寄附",
-			"non_monetary_basis": null,
-			"note": "寄附金",
-			"data_id": "b221ac75-cc97-4939-a1a2-232aad682c52"
-		},
-		{
-			"category": "income",
-			"date": "2025-05-25",
-			"price": 50000,
-			"type": "寄附",
-			"non_monetary_basis": null,
-			"note": "寄附金",
-			"data_id": "5822fe74-74d2-4e38-b8b9-5f109b0ef354"
-		},
-		{
-			"category": "income",
-			"date": "2025-05-27",
-			"price": 20000,
-			"type": "寄附",
-			"non_monetary_basis": null,
-			"note": "寄附金",
-			"data_id": "a9f34635-d09a-4ab1-b823-dcbe78ea0813"
-		},
-		{
-			"category": "income",
-			"date": "2025-05-27",
-			"price": 100000,
-			"type": "寄附",
-			"non_monetary_basis": null,
-			"note": "寄附金",
-			"data_id": "304be8a4-45d7-4040-9081-aee152623e14"
-		},
-		{
-			"category": "income",
-			"date": "2025-05-30",
-			"price": 10000,
-			"type": "寄附",
-			"non_monetary_basis": null,
-			"note": "寄附金",
-			"data_id": "4684cae4-3ea4-4578-a895-5068081cb6b6"
-		},
-		{
-			"category": "communication",
-			"date": "2025-05-13",
-			"price": 31179,
-			"type": "選挙運動",
-			"purpose": "レンタルスマホ借上料",
-			"non_monetary_basis": null,
-			"note": "5月13日〜6月10日",
-			"data_id": "2ac078cd-9ece-4f57-8b0b-68301ad8dd7b"
-		},
-		{
-			"category": "communication",
-			"date": "2025-06-11",
-			"price": 13200,
-			"type": "選挙運動",
-			"purpose": "レンタルスマホ通信料",
-			"non_monetary_basis": null,
-			"note": "5月13日〜6月10日",
-			"data_id": "4aadd44f-4db3-4f10-857c-2fccc6c84573"
-		},
-		{
-			"category": "communication",
-			"date": "2025-06-23",
-			"price": 55323,
-			"type": "選挙運動",
-			"purpose": "電話工事料、電話回線使用料",
-			"non_monetary_basis": null,
-			"note": "5月16日〜5月25日使用",
-			"data_id": "fc1133c1-c840-4fbb-80e3-07653740866d"
-		},
-		{
-			"category": "communication",
-			"date": "2025-06-23",
-			"price": 1874,
-			"type": "選挙運動",
-			"purpose": "電話回線使用料",
-			"non_monetary_basis": null,
-			"note": "5月16日〜5月25日使用",
-			"data_id": "1d5108c0-3880-40d4-ae88-f1b7de702ebb"
-		},
-		{
-			"category": "communication",
-			"date": "2025-06-23",
-			"price": 1874,
-			"type": "選挙運動",
-			"purpose": "電話回線使用料",
-			"non_monetary_basis": null,
-			"note": "5月16日〜5月25日使用",
-			"data_id": "db8c924f-b315-43c8-a69d-cd20f8370b90"
-		},
-		{
-			"category": "personnel",
-			"date": "2025-06-10",
-			"price": 30605,
-			"type": "選挙運動",
-			"purpose": "車上運動員報酬",
-			"non_monetary_basis": null,
-			"note": "5/23~25\n(11,100円/日 - その日の昼食・夕食代)*3",
-			"data_id": "7349dba6-e807-47af-94af-faa16c1d2abc"
-		},
-		{
-			"category": "personnel",
-			"date": "2025-06-10",
-			"price": 20497,
-			"type": "選挙運動",
-			"purpose": "車上運動員報酬",
-			"non_monetary_basis": null,
-			"note": "5/26~27\n(11,100円/日 - その日の昼食・夕食代)*2",
-			"data_id": "58e6eb08-ee10-4fe5-87c6-0901b1b1b6c7"
-		},
-		{
-			"category": "personnel",
-			"date": "2025-06-10",
-			"price": 20226,
-			"type": "選挙運動",
-			"purpose": "車上運動員報酬",
-			"non_monetary_basis": null,
-			"note": "5/28~29\n(11,100円/日 - その日の昼食・夕食代)*2",
-			"data_id": "5bda5a60-3995-4472-ba24-a47a3dcdd569"
-		},
-		{
-			"category": "personnel",
-			"date": "2025-06-10",
-			"price": 20060,
-			"type": "選挙運動",
-			"purpose": "車上運動員報酬",
-			"non_monetary_basis": null,
-			"note": "5/30~31\n(11,100円/日 - その日の昼食・夕食代)*2",
-			"data_id": "dd0a8b98-ca29-4950-8970-1f209d255b25"
-		},
-		{
-			"category": "building",
-			"date": "2025-06-13",
-			"price": 50000,
-			"type": "選挙運動",
-			"purpose": "選挙事務所借り上げ",
-			"non_monetary_basis": null,
-			"note": "5月7日〜6月7日",
-			"data_id": "0166076f-01fd-4714-9263-c028df39601d"
-		},
-		{
-			"category": "building",
-			"date": "2025-05-27",
-			"price": 5500,
-			"type": "選挙運動",
-			"purpose": "演説会場使用料",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "45040b52-d8bc-48ba-9b75-41c702cea7a3"
-		},
-		{
-			"category": "communication",
-			"date": "2025-07-29",
-			"price": 1190,
-			"type": "選挙運動",
-			"purpose": "電話回線使用料",
-			"non_monetary_basis": null,
-			"note": "5月26日〜5月31日使用\n6月10日分までの請求額から日数で按分",
-			"data_id": "b46e2e01-2961-4837-8b0e-09a8837fbb93"
-		},
-		{
-			"category": "communication",
-			"date": "2025-07-29",
-			"price": 1093,
-			"type": "選挙運動",
-			"purpose": "電話回線使用料",
-			"non_monetary_basis": null,
-			"note": "5月26日〜5月31日使用\n6月10日分までの請求額から日数で按分",
-			"data_id": "7dc9efeb-c09b-40da-8904-98ca3ec013db"
-		},
-		{
-			"category": "communication",
-			"date": "2025-07-29",
-			"price": 854,
-			"type": "選挙運動",
-			"purpose": "電話回線使用料",
-			"non_monetary_basis": null,
-			"note": "5月26日〜5月31日使用\n6月10日分までの請求額から日数で按分",
-			"data_id": "19aa578d-cb4d-45a5-a743-64d9645926d7"
-		},
-		{
-			"category": "printing",
-			"date": null,
-			"price": 123680,
-			"type": "立候補準備のための支出",
-			"purpose": "ビラ印刷",
-			"non_monetary_basis": null,
-			"note": "公費負担",
-			"public_expense_amount": 123680,
-			"data_id": "fc48ba1b-e4fa-4b69-a5bb-a3659ab26974"
-		},
-		{
-			"category": "printing",
-			"date": null,
-			"price": 1012176,
-			"type": "立候補準備のための支出",
-			"purpose": "ポスター印刷",
-			"non_monetary_basis": null,
-			"note": "公費負担",
-			"public_expense_amount": 1012176,
-			"data_id": "abda04c1-4b67-43c4-910f-11f6b6c59b5b"
-		},
-		{
-			"category": "printing",
-			"date": "2025-06-14",
-			"price": 8320,
-			"type": "立候補準備のための支出",
-			"purpose": "ビラ印刷",
-			"non_monetary_basis": null,
-			"note": "自費負担",
-			"data_id": "fdfe6ac9-65c1-4ac0-832d-be535d5ab587"
-		},
-		{
-			"category": "advertising",
-			"date": "2025-05-15",
-			"price": 208800,
-			"type": "立候補準備",
-			"purpose": "選挙カー音響・看板・取付",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "7f2523a3-6af3-4128-b746-08e281b043f5"
-		},
-		{
-			"category": "advertising",
-			"date": "2025-05-16",
-			"price": 7480,
-			"type": "選挙運動",
-			"purpose": "タスキ",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "8d2cdf31-1598-459a-b94c-6c9379576e51"
-		},
-		{
-			"category": "advertising",
-			"date": "2025-05-23",
-			"price": 100000,
-			"type": "選挙運動",
-			"purpose": "選挙活動用事務所の看板制作・取付",
-			"non_monetary_basis": "看板1枚",
-			"note": "金銭以外\nの寄附",
-			"data_id": "605de54a-9585-4c57-937e-008c47d8aa99"
-		},
-		{
-			"category": "advertising",
-			"date": "2025-05-23",
-			"price": 32868,
-			"type": "選挙運動",
-			"purpose": "ビラの新聞折込",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "d56c478b-7555-401a-8413-f41dbd25e4b6"
-		},
-		{
-			"category": "advertising",
-			"date": "2025-06-03",
-			"price": 44000,
-			"type": "選挙運動",
-			"purpose": "選挙運動用広告",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "28f56cb2-cf09-4ffe-abce-469462d9df2b"
-		},
-		{
-			"category": "advertising",
-			"date": "2025-06-03",
-			"price": 44000,
-			"type": "選挙運動",
-			"purpose": "選挙広告費",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "3dfb49ee-7daa-402a-b237-abbae34f066a"
-		},
-		{
-			"category": "advertising",
-			"date": "2025-06-03",
-			"price": 18502,
-			"type": "選挙運動",
-			"purpose": "ビラの新聞折込",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "57641c1a-3561-44e6-8e58-15ae6a212a52"
-		},
-		{
-			"category": "advertising",
-			"date": "2025-06-03",
-			"price": 16429,
-			"type": "選挙運動",
-			"purpose": "ビラの新聞折込",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "3a7bf940-4881-4a91-a2a3-d9f9232d5510"
-		},
-		{
-			"category": "advertising",
-			"date": "2025-06-09",
-			"price": 192368,
-			"type": "立候補準備",
-			"purpose": "選挙活動用事務所に掲示する立札、\nのぼりのデザイン、制作\n選挙活動用事務所の看板デザイン\n推薦ハガキ：デザイン・印刷\n新聞広告デザイン\n選挙カー看板デザイン",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "034985ed-3608-4ac5-8b95-83af25be14aa"
-		},
-		{
-			"category": "stationery",
-			"date": "2025-05-22",
-			"price": 1052,
-			"type": "選挙運動",
-			"purpose": "テープ等",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "b6445743-0aac-47aa-bad4-b708f18f80aa"
-		},
-		{
-			"category": "stationery",
-			"date": "2025-05-24",
-			"price": 748,
-			"type": "選挙運動",
-			"purpose": "コピー用紙",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "de64ec0f-339d-4f46-9a12-50e89821f23c"
-		},
-		{
-			"category": "stationery",
-			"date": "2025-05-24",
-			"price": 1372,
-			"type": "選挙運動",
-			"purpose": "紙袋",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "f5571396-bd3d-4f48-b7f8-2782d7d40bbc"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-23",
-			"price": 18400,
-			"type": "選挙運動",
-			"purpose": "弁当代（20個）",
-			"non_monetary_basis": null,
-			"note": "23日昼食",
-			"data_id": "650f0c0d-3f21-46c6-9f12-fa5bb59bfbbe"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-24",
-			"price": 12400,
-			"type": "選挙運動",
-			"purpose": "弁当代（16個）",
-			"non_monetary_basis": null,
-			"note": "24日昼食",
-			"data_id": "862fa9ea-5464-43ab-b122-dfb77e657f3a"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-24",
-			"price": 2819,
-			"type": "選挙運動",
-			"purpose": "お菓子",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "6e8fb55f-2846-4e82-a670-30f5ef234316"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-24",
-			"price": 643,
-			"type": "選挙運動",
-			"purpose": "お菓子",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "f581219b-c68d-46b8-807d-f5b600f01327"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-25",
-			"price": 20000,
-			"type": "選挙運動",
-			"purpose": "弁当代（20個）",
-			"non_monetary_basis": null,
-			"note": "25日昼食",
-			"data_id": "ae3e0c66-7704-4158-ae2f-5ccba0a24d93"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-26",
-			"price": 18000,
-			"type": "選挙運動",
-			"purpose": "弁当代（20個）",
-			"non_monetary_basis": null,
-			"note": "26日昼食",
-			"data_id": "508d5eb3-3bff-4bdc-a0d3-f685d6a90b0d"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-26",
-			"price": 5687,
-			"type": "選挙運動",
-			"purpose": "お菓子・おにぎり代（5個）",
-			"non_monetary_basis": null,
-			"note": "26日夕食",
-			"data_id": "4f0dd289-8687-42c4-800b-b4a492ede5b2"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-27",
-			"price": 13000,
-			"type": "選挙運動",
-			"purpose": "弁当代（20個）",
-			"non_monetary_basis": null,
-			"note": "27日昼食",
-			"data_id": "e66835f0-57f2-4fe3-9ee5-d956b00d1594"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-28",
-			"price": 22500,
-			"type": "選挙運動",
-			"purpose": "弁当代（25個）",
-			"non_monetary_basis": null,
-			"note": "28日昼食",
-			"data_id": "89e4783c-b043-4e19-8413-f2202ceae32c"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-28",
-			"price": 2000,
-			"type": "選挙運動",
-			"purpose": "おにぎり代（5個）・お菓子",
-			"non_monetary_basis": null,
-			"note": "28日夕食",
-			"data_id": "9379aadc-237f-4975-b2df-82c72ff6f772"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-29",
-			"price": 4500,
-			"type": "選挙運動",
-			"purpose": "弁当代（6個）",
-			"non_monetary_basis": null,
-			"note": "29日昼食",
-			"data_id": "8837825f-d74a-44cf-bbb7-f3f4350a2747"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-29",
-			"price": 18000,
-			"type": "選挙運動",
-			"purpose": "弁当代（20個）",
-			"non_monetary_basis": null,
-			"note": "29日昼食",
-			"data_id": "8064001f-e8f8-4a0e-ac85-d610d8e098dc"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-29",
-			"price": 1566,
-			"type": "選挙運動",
-			"purpose": "おにぎり代（5個）・茶菓子",
-			"non_monetary_basis": null,
-			"note": "29日夕食",
-			"data_id": "7c929bcd-41ba-47b1-bb7d-f82479fe2167"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-30",
-			"price": 19000,
-			"type": "選挙運動",
-			"purpose": "弁当代（20個）",
-			"non_monetary_basis": null,
-			"note": "30日昼食",
-			"data_id": "7e1a1df0-abe5-47df-963e-84ab02f7675f"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-30",
-			"price": 4800,
-			"type": "選挙運動",
-			"purpose": "弁当代（5個）・おにぎり代（5個）",
-			"non_monetary_basis": null,
-			"note": "30日夕食",
-			"data_id": "941964f2-e79f-4be6-b7f5-37264e7c4c34"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-31",
-			"price": 22750,
-			"type": "選挙運動",
-			"purpose": "弁当代（25個）",
-			"non_monetary_basis": null,
-			"note": "31日昼食",
-			"data_id": "10f7f4fb-2f3d-4f6c-bb48-3156361d1bed"
-		},
-		{
-			"category": "food",
-			"date": "2025-05-31",
-			"price": 810,
-			"type": "選挙運動",
-			"purpose": "おにぎり代（5個）",
-			"non_monetary_basis": null,
-			"note": "31日夕食",
-			"data_id": "43a0a879-7deb-4606-83af-679d0629763b"
-		},
-		{
-			"category": "miscellaneous",
-			"date": "2025-05-23",
-			"price": 1760,
-			"type": "選挙運動",
-			"purpose": "電池等",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "759b616c-db6a-4286-b948-4fc60774a2f1"
-		},
-		{
-			"category": "miscellaneous",
-			"date": "2025-05-23",
-			"price": 1386,
-			"type": "選挙運動",
-			"purpose": "ワッポン",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "4e11a747-ae66-4b19-af3f-6a6ed7d8783a"
-		},
-		{
-			"category": "miscellaneous",
-			"date": "2025-05-24",
-			"price": 850,
-			"type": "選挙運動",
-			"purpose": "傘",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "8f6604fc-911b-4f8f-b6ef-3ba92b47194d"
-		},
-		{
-			"category": "miscellaneous",
-			"date": "2025-05-24",
-			"price": 569,
-			"type": "選挙運動",
-			"purpose": "電池",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "fda85ffa-c5fd-4d91-93e2-adf21fa3da5a"
-		},
-		{
-			"category": "miscellaneous",
-			"date": "2025-06-03",
-			"price": 52140,
-			"type": "選挙運動",
-			"purpose": "Tシャツ",
-			"non_monetary_basis": null,
-			"note": null,
-			"data_id": "e0009f4a-1ba1-4f82-80ef-3f0201619167"
-		},
-		{
-			"category": "miscellaneous",
-			"date": "2025-06-13",
-			"price": 14000,
-			"type": "選挙運動",
-			"purpose": "選挙事務所\n電気水道代",
-			"non_monetary_basis": null,
-			"note": "5月7日〜6月7日",
-			"data_id": "745c3574-98d9-4768-8fb1-ef38aff587a9"
-		}
-	]
+  "metadata": {
+    "date": "令和７年６月１日",
+    "title": "和歌山県議会議員日高郡選挙区補欠選挙",
+    "name": "岩永淳志"
+  },
+  "transactions": [
+    {
+      "category": "income",
+      "date": "2025-05-13",
+      "price": 500000,
+      "type": "その他の収入",
+      "non_monetary_basis": null,
+      "note": "自己資金",
+      "data_id": "f6c15bed-3331-43bc-b13c-b0091c8b37ec"
+    },
+    {
+      "category": "income",
+      "date": "2025-05-23",
+      "price": 400000,
+      "type": "寄附",
+      "non_monetary_basis": null,
+      "note": "寄附金",
+      "data_id": "a8a6bb5f-edbc-4304-b980-769cf1875a62"
+    },
+    {
+      "category": "income",
+      "date": "2025-05-23",
+      "price": 100000,
+      "type": "寄附",
+      "non_monetary_basis": "選挙活動用事務所の看板\n制作・取付",
+      "note": "金銭以外の寄附",
+      "data_id": "f68ff19d-fbe7-48fa-b425-89b2802e26d6"
+    },
+    {
+      "category": "income",
+      "date": "2025-05-23",
+      "price": 30000,
+      "type": "寄附",
+      "non_monetary_basis": null,
+      "note": "寄附金",
+      "data_id": "df1d63dc-79c5-48b1-8b57-4745550af37b"
+    },
+    {
+      "category": "income",
+      "date": "2025-05-23",
+      "price": 10000,
+      "type": "寄附",
+      "non_monetary_basis": null,
+      "note": "寄附金",
+      "data_id": "d6373a33-5018-469f-a5af-733b3d36cdfb"
+    },
+    {
+      "category": "income",
+      "date": "2025-05-23",
+      "price": 10000,
+      "type": "寄附",
+      "non_monetary_basis": null,
+      "note": "寄附金",
+      "data_id": "d7b06a88-5da5-4336-a253-f4e69a44ebd2"
+    },
+    {
+      "category": "income",
+      "date": "2025-05-23",
+      "price": 5000,
+      "type": "寄附",
+      "non_monetary_basis": null,
+      "note": "寄附金",
+      "data_id": "fe8c60a3-78cb-413d-b38c-fbc78d2d29d9"
+    },
+    {
+      "category": "income",
+      "date": "2025-05-24",
+      "price": 10000,
+      "type": "寄附",
+      "non_monetary_basis": null,
+      "note": "寄附金",
+      "data_id": "3555b2ed-d6eb-4955-a3d7-fb5d4f881f80"
+    },
+    {
+      "category": "income",
+      "date": "2025-05-25",
+      "price": 10000,
+      "type": "寄附",
+      "non_monetary_basis": null,
+      "note": "寄附金",
+      "data_id": "b221ac75-cc97-4939-a1a2-232aad682c52"
+    },
+    {
+      "category": "income",
+      "date": "2025-05-25",
+      "price": 50000,
+      "type": "寄附",
+      "non_monetary_basis": null,
+      "note": "寄附金",
+      "data_id": "5822fe74-74d2-4e38-b8b9-5f109b0ef354"
+    },
+    {
+      "category": "income",
+      "date": "2025-05-27",
+      "price": 20000,
+      "type": "寄附",
+      "non_monetary_basis": null,
+      "note": "寄附金",
+      "data_id": "a9f34635-d09a-4ab1-b823-dcbe78ea0813"
+    },
+    {
+      "category": "income",
+      "date": "2025-05-27",
+      "price": 100000,
+      "type": "寄附",
+      "non_monetary_basis": null,
+      "note": "寄附金",
+      "data_id": "304be8a4-45d7-4040-9081-aee152623e14"
+    },
+    {
+      "category": "income",
+      "date": "2025-05-30",
+      "price": 10000,
+      "type": "寄附",
+      "non_monetary_basis": null,
+      "note": "寄附金",
+      "data_id": "4684cae4-3ea4-4578-a895-5068081cb6b6"
+    },
+    {
+      "category": "communication",
+      "date": "2025-05-13",
+      "price": 31179,
+      "type": "選挙運動",
+      "purpose": "レンタルスマホ借上料",
+      "non_monetary_basis": null,
+      "note": "5月13日〜6月10日",
+      "data_id": "2ac078cd-9ece-4f57-8b0b-68301ad8dd7b"
+    },
+    {
+      "category": "communication",
+      "date": "2025-06-11",
+      "price": 13200,
+      "type": "選挙運動",
+      "purpose": "レンタルスマホ通信料",
+      "non_monetary_basis": null,
+      "note": "5月13日〜6月10日",
+      "data_id": "4aadd44f-4db3-4f10-857c-2fccc6c84573"
+    },
+    {
+      "category": "communication",
+      "date": "2025-06-23",
+      "price": 55323,
+      "type": "選挙運動",
+      "purpose": "電話工事料、電話回線使用料",
+      "non_monetary_basis": null,
+      "note": "5月16日〜5月25日使用",
+      "data_id": "fc1133c1-c840-4fbb-80e3-07653740866d"
+    },
+    {
+      "category": "communication",
+      "date": "2025-06-23",
+      "price": 1874,
+      "type": "選挙運動",
+      "purpose": "電話回線使用料",
+      "non_monetary_basis": null,
+      "note": "5月16日〜5月25日使用",
+      "data_id": "1d5108c0-3880-40d4-ae88-f1b7de702ebb"
+    },
+    {
+      "category": "communication",
+      "date": "2025-06-23",
+      "price": 1874,
+      "type": "選挙運動",
+      "purpose": "電話回線使用料",
+      "non_monetary_basis": null,
+      "note": "5月16日〜5月25日使用",
+      "data_id": "db8c924f-b315-43c8-a69d-cd20f8370b90"
+    },
+    {
+      "category": "personnel",
+      "date": "2025-06-10",
+      "price": 30605,
+      "type": "選挙運動",
+      "purpose": "車上運動員報酬",
+      "non_monetary_basis": null,
+      "note": "5/23~25\n(11,100円/日 - その日の昼食・夕食代)*3",
+      "data_id": "7349dba6-e807-47af-94af-faa16c1d2abc"
+    },
+    {
+      "category": "personnel",
+      "date": "2025-06-10",
+      "price": 20497,
+      "type": "選挙運動",
+      "purpose": "車上運動員報酬",
+      "non_monetary_basis": null,
+      "note": "5/26~27\n(11,100円/日 - その日の昼食・夕食代)*2",
+      "data_id": "58e6eb08-ee10-4fe5-87c6-0901b1b1b6c7"
+    },
+    {
+      "category": "personnel",
+      "date": "2025-06-10",
+      "price": 20226,
+      "type": "選挙運動",
+      "purpose": "車上運動員報酬",
+      "non_monetary_basis": null,
+      "note": "5/28~29\n(11,100円/日 - その日の昼食・夕食代)*2",
+      "data_id": "5bda5a60-3995-4472-ba24-a47a3dcdd569"
+    },
+    {
+      "category": "personnel",
+      "date": "2025-06-10",
+      "price": 20060,
+      "type": "選挙運動",
+      "purpose": "車上運動員報酬",
+      "non_monetary_basis": null,
+      "note": "5/30~31\n(11,100円/日 - その日の昼食・夕食代)*2",
+      "data_id": "dd0a8b98-ca29-4950-8970-1f209d255b25"
+    },
+    {
+      "category": "building",
+      "date": "2025-06-13",
+      "price": 50000,
+      "type": "選挙運動",
+      "purpose": "選挙事務所借り上げ",
+      "non_monetary_basis": null,
+      "note": "5月7日〜6月7日",
+      "data_id": "0166076f-01fd-4714-9263-c028df39601d"
+    },
+    {
+      "category": "building",
+      "date": "2025-05-27",
+      "price": 5500,
+      "type": "選挙運動",
+      "purpose": "演説会場使用料",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "45040b52-d8bc-48ba-9b75-41c702cea7a3"
+    },
+    {
+      "category": "communication",
+      "date": "2025-07-29",
+      "price": 1190,
+      "type": "選挙運動",
+      "purpose": "電話回線使用料",
+      "non_monetary_basis": null,
+      "note": "5月26日〜5月31日使用\n6月10日分までの請求額から日数で按分",
+      "data_id": "b46e2e01-2961-4837-8b0e-09a8837fbb93"
+    },
+    {
+      "category": "communication",
+      "date": "2025-07-29",
+      "price": 1093,
+      "type": "選挙運動",
+      "purpose": "電話回線使用料",
+      "non_monetary_basis": null,
+      "note": "5月26日〜5月31日使用\n6月10日分までの請求額から日数で按分",
+      "data_id": "7dc9efeb-c09b-40da-8904-98ca3ec013db"
+    },
+    {
+      "category": "communication",
+      "date": "2025-07-29",
+      "price": 854,
+      "type": "選挙運動",
+      "purpose": "電話回線使用料",
+      "non_monetary_basis": null,
+      "note": "5月26日〜5月31日使用\n6月10日分までの請求額から日数で按分",
+      "data_id": "19aa578d-cb4d-45a5-a743-64d9645926d7"
+    },
+    {
+      "category": "printing",
+      "date": null,
+      "price": 123680,
+      "type": "立候補準備のための支出",
+      "purpose": "ビラ印刷",
+      "non_monetary_basis": null,
+      "note": "公費負担",
+      "public_expense_amount": 123680,
+      "data_id": "fc48ba1b-e4fa-4b69-a5bb-a3659ab26974"
+    },
+    {
+      "category": "printing",
+      "date": null,
+      "price": 1012176,
+      "type": "立候補準備のための支出",
+      "purpose": "ポスター印刷",
+      "non_monetary_basis": null,
+      "note": "公費負担",
+      "public_expense_amount": 1012176,
+      "data_id": "abda04c1-4b67-43c4-910f-11f6b6c59b5b"
+    },
+    {
+      "category": "printing",
+      "date": "2025-06-14",
+      "price": 8320,
+      "type": "立候補準備のための支出",
+      "purpose": "ビラ印刷",
+      "non_monetary_basis": null,
+      "note": "自費負担",
+      "data_id": "fdfe6ac9-65c1-4ac0-832d-be535d5ab587"
+    },
+    {
+      "category": "advertising",
+      "date": "2025-05-15",
+      "price": 208800,
+      "type": "立候補準備",
+      "purpose": "選挙カー音響・看板・取付",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "7f2523a3-6af3-4128-b746-08e281b043f5"
+    },
+    {
+      "category": "advertising",
+      "date": "2025-05-16",
+      "price": 7480,
+      "type": "選挙運動",
+      "purpose": "タスキ",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "8d2cdf31-1598-459a-b94c-6c9379576e51"
+    },
+    {
+      "category": "advertising",
+      "date": "2025-05-23",
+      "price": 100000,
+      "type": "選挙運動",
+      "purpose": "選挙活動用事務所の看板制作・取付",
+      "non_monetary_basis": "看板1枚",
+      "note": "金銭以外\nの寄附",
+      "data_id": "605de54a-9585-4c57-937e-008c47d8aa99"
+    },
+    {
+      "category": "advertising",
+      "date": "2025-05-23",
+      "price": 32868,
+      "type": "選挙運動",
+      "purpose": "ビラの新聞折込",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "d56c478b-7555-401a-8413-f41dbd25e4b6"
+    },
+    {
+      "category": "advertising",
+      "date": "2025-06-03",
+      "price": 44000,
+      "type": "選挙運動",
+      "purpose": "選挙運動用広告",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "28f56cb2-cf09-4ffe-abce-469462d9df2b"
+    },
+    {
+      "category": "advertising",
+      "date": "2025-06-03",
+      "price": 44000,
+      "type": "選挙運動",
+      "purpose": "選挙広告費",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "3dfb49ee-7daa-402a-b237-abbae34f066a"
+    },
+    {
+      "category": "advertising",
+      "date": "2025-06-03",
+      "price": 18502,
+      "type": "選挙運動",
+      "purpose": "ビラの新聞折込",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "57641c1a-3561-44e6-8e58-15ae6a212a52"
+    },
+    {
+      "category": "advertising",
+      "date": "2025-06-03",
+      "price": 16429,
+      "type": "選挙運動",
+      "purpose": "ビラの新聞折込",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "3a7bf940-4881-4a91-a2a3-d9f9232d5510"
+    },
+    {
+      "category": "advertising",
+      "date": "2025-06-09",
+      "price": 192368,
+      "type": "立候補準備",
+      "purpose": "選挙活動用事務所に掲示する立札、\nのぼりのデザイン、制作\n選挙活動用事務所の看板デザイン\n推薦ハガキ：デザイン・印刷\n新聞広告デザイン\n選挙カー看板デザイン",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "034985ed-3608-4ac5-8b95-83af25be14aa"
+    },
+    {
+      "category": "stationery",
+      "date": "2025-05-22",
+      "price": 1052,
+      "type": "選挙運動",
+      "purpose": "テープ等",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "b6445743-0aac-47aa-bad4-b708f18f80aa"
+    },
+    {
+      "category": "stationery",
+      "date": "2025-05-24",
+      "price": 748,
+      "type": "選挙運動",
+      "purpose": "コピー用紙",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "de64ec0f-339d-4f46-9a12-50e89821f23c"
+    },
+    {
+      "category": "stationery",
+      "date": "2025-05-24",
+      "price": 1372,
+      "type": "選挙運動",
+      "purpose": "紙袋",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "f5571396-bd3d-4f48-b7f8-2782d7d40bbc"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-23",
+      "price": 18400,
+      "type": "選挙運動",
+      "purpose": "弁当代（20個）",
+      "non_monetary_basis": null,
+      "note": "23日昼食",
+      "data_id": "650f0c0d-3f21-46c6-9f12-fa5bb59bfbbe"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-24",
+      "price": 12400,
+      "type": "選挙運動",
+      "purpose": "弁当代（16個）",
+      "non_monetary_basis": null,
+      "note": "24日昼食",
+      "data_id": "862fa9ea-5464-43ab-b122-dfb77e657f3a"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-24",
+      "price": 2819,
+      "type": "選挙運動",
+      "purpose": "お菓子",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "6e8fb55f-2846-4e82-a670-30f5ef234316"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-24",
+      "price": 643,
+      "type": "選挙運動",
+      "purpose": "お菓子",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "f581219b-c68d-46b8-807d-f5b600f01327"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-25",
+      "price": 20000,
+      "type": "選挙運動",
+      "purpose": "弁当代（20個）",
+      "non_monetary_basis": null,
+      "note": "25日昼食",
+      "data_id": "ae3e0c66-7704-4158-ae2f-5ccba0a24d93"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-26",
+      "price": 18000,
+      "type": "選挙運動",
+      "purpose": "弁当代（20個）",
+      "non_monetary_basis": null,
+      "note": "26日昼食",
+      "data_id": "508d5eb3-3bff-4bdc-a0d3-f685d6a90b0d"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-26",
+      "price": 5687,
+      "type": "選挙運動",
+      "purpose": "お菓子・おにぎり代（5個）",
+      "non_monetary_basis": null,
+      "note": "26日夕食",
+      "data_id": "4f0dd289-8687-42c4-800b-b4a492ede5b2"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-27",
+      "price": 13000,
+      "type": "選挙運動",
+      "purpose": "弁当代（20個）",
+      "non_monetary_basis": null,
+      "note": "27日昼食",
+      "data_id": "e66835f0-57f2-4fe3-9ee5-d956b00d1594"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-28",
+      "price": 22500,
+      "type": "選挙運動",
+      "purpose": "弁当代（25個）",
+      "non_monetary_basis": null,
+      "note": "28日昼食",
+      "data_id": "89e4783c-b043-4e19-8413-f2202ceae32c"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-28",
+      "price": 2000,
+      "type": "選挙運動",
+      "purpose": "おにぎり代（5個）・お菓子",
+      "non_monetary_basis": null,
+      "note": "28日夕食",
+      "data_id": "9379aadc-237f-4975-b2df-82c72ff6f772"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-29",
+      "price": 4500,
+      "type": "選挙運動",
+      "purpose": "弁当代（6個）",
+      "non_monetary_basis": null,
+      "note": "29日昼食",
+      "data_id": "8837825f-d74a-44cf-bbb7-f3f4350a2747"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-29",
+      "price": 18000,
+      "type": "選挙運動",
+      "purpose": "弁当代（20個）",
+      "non_monetary_basis": null,
+      "note": "29日昼食",
+      "data_id": "8064001f-e8f8-4a0e-ac85-d610d8e098dc"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-29",
+      "price": 1566,
+      "type": "選挙運動",
+      "purpose": "おにぎり代（5個）・茶菓子",
+      "non_monetary_basis": null,
+      "note": "29日夕食",
+      "data_id": "7c929bcd-41ba-47b1-bb7d-f82479fe2167"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-30",
+      "price": 19000,
+      "type": "選挙運動",
+      "purpose": "弁当代（20個）",
+      "non_monetary_basis": null,
+      "note": "30日昼食",
+      "data_id": "7e1a1df0-abe5-47df-963e-84ab02f7675f"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-30",
+      "price": 4800,
+      "type": "選挙運動",
+      "purpose": "弁当代（5個）・おにぎり代（5個）",
+      "non_monetary_basis": null,
+      "note": "30日夕食",
+      "data_id": "941964f2-e79f-4be6-b7f5-37264e7c4c34"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-31",
+      "price": 22750,
+      "type": "選挙運動",
+      "purpose": "弁当代（25個）",
+      "non_monetary_basis": null,
+      "note": "31日昼食",
+      "data_id": "10f7f4fb-2f3d-4f6c-bb48-3156361d1bed"
+    },
+    {
+      "category": "food",
+      "date": "2025-05-31",
+      "price": 810,
+      "type": "選挙運動",
+      "purpose": "おにぎり代（5個）",
+      "non_monetary_basis": null,
+      "note": "31日夕食",
+      "data_id": "43a0a879-7deb-4606-83af-679d0629763b"
+    },
+    {
+      "category": "miscellaneous",
+      "date": "2025-05-23",
+      "price": 1760,
+      "type": "選挙運動",
+      "purpose": "電池等",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "759b616c-db6a-4286-b948-4fc60774a2f1"
+    },
+    {
+      "category": "miscellaneous",
+      "date": "2025-05-23",
+      "price": 1386,
+      "type": "選挙運動",
+      "purpose": "ワッポン",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "4e11a747-ae66-4b19-af3f-6a6ed7d8783a"
+    },
+    {
+      "category": "miscellaneous",
+      "date": "2025-05-24",
+      "price": 850,
+      "type": "選挙運動",
+      "purpose": "傘",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "8f6604fc-911b-4f8f-b6ef-3ba92b47194d"
+    },
+    {
+      "category": "miscellaneous",
+      "date": "2025-05-24",
+      "price": 569,
+      "type": "選挙運動",
+      "purpose": "電池",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "fda85ffa-c5fd-4d91-93e2-adf21fa3da5a"
+    },
+    {
+      "category": "miscellaneous",
+      "date": "2025-06-03",
+      "price": 52140,
+      "type": "選挙運動",
+      "purpose": "Tシャツ",
+      "non_monetary_basis": null,
+      "note": null,
+      "data_id": "e0009f4a-1ba1-4f82-80ef-3f0201619167"
+    },
+    {
+      "category": "miscellaneous",
+      "date": "2025-06-13",
+      "price": 14000,
+      "type": "選挙運動",
+      "purpose": "選挙事務所\n電気水道代",
+      "non_monetary_basis": null,
+      "note": "5月7日〜6月7日",
+      "data_id": "745c3574-98d9-4768-8fb1-ef38aff587a9"
+    }
+  ]
 }
