@@ -200,7 +200,7 @@ export function TransactionSection({
       <Heading as="h2" size="lg" mb={6}>
         {title}
       </Heading>
-      <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
+      <SimpleGrid columns={{ base: 1, md: 2 }} gap={2}>
         <Box w="100%" aspectRatio={1} overflow="visible">
           <ResponsivePie
             data={chartItems}
@@ -245,23 +245,19 @@ export function TransactionSection({
             )}
           />
         </Box>
-        <Box>
-          <Stack gap={2}>
-            {chartItems.map((item) => (
-              <HStack key={item.id} justify="space-between">
-                <HStack>
-                  <Box w={3} h={3} borderRadius="full" bg={colorMap[item.id]} />
-                  <Text>
-                    {title === '支出' ? `${item.label}費` : item.label}
-                  </Text>
-                </HStack>
-                <Badge variant="outline" colorPalette={badgeColorPalette}>
-                  {formatCurrency(item.value)}
-                </Badge>
+        <Stack gap={2}>
+          {chartItems.map((item) => (
+            <HStack key={item.id} justify="space-between">
+              <HStack>
+                <Box w={3} h={3} borderRadius="full" bg={colorMap[item.id]} />
+                <Text>{item.label}</Text>
               </HStack>
-            ))}
-          </Stack>
-        </Box>
+              <Badge variant="outline" colorPalette={badgeColorPalette}>
+                {formatCurrency(item.value)}
+              </Badge>
+            </HStack>
+          ))}
+        </Stack>
       </SimpleGrid>
       <Accordion.Root collapsible defaultValue={[]} mt={6}>
         <Accordion.Item value="details">
