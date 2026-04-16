@@ -15,7 +15,7 @@ type RouteParams = {
   year: string;
 };
 
-type Props = PageProps<'/[politicianId]/[year]'> & {
+type Props = {
   params: Promise<RouteParams>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };

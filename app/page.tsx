@@ -1,53 +1,8 @@
-import {
-  Badge,
-  Box,
-  Card,
-  HStack,
-  Image,
-  SimpleGrid,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Card, SimpleGrid, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
-import demoComingsoon, {
-  comingSoonId,
-  comingSoonNum,
-} from '@/data/demo-comingsoon';
-import demoExample from '@/data/demo-example';
-import demoKokiFujisaki from '@/data/demo-kokifujisaki';
-import demoRyosukeIdei from '@/data/demo-ryosukeidei';
-import demoTakahiroAnno from '@/data/demo-takahiroanno';
-import type { ProfileList } from '@/models/type';
-
-type Entry = {
-  id: string;
-  latestReportId: string;
-  profile: ProfileList;
-};
-const politicianEntries: Entry[] = [
-  demoTakahiroAnno,
-  demoRyosukeIdei,
-  demoKokiFujisaki,
-  demoExample,
-].map((data) => ({
-  id: data.id,
-  latestReportId: data.latestReportId,
-  profile: data.profile,
-}));
-
-const comingSoonEntries: Entry[] = Array.from(
-  { length: comingSoonNum },
-  (_, i) => ({
-    ...demoComingsoon,
-    id: `${comingSoonId}-${i}`,
-    latestReportId: `${comingSoonId}-${i}`,
-  }),
-);
-
-const entries: Entry[] = [...politicianEntries, ...comingSoonEntries];
 
 export const metadata = {
   title: 'Polimoney - 政治資金の透明性を高める',
@@ -55,61 +10,53 @@ export const metadata = {
     'Polimoneyは、デジタル民主主義2030プロジェクトの一環として、政治資金の透明性を高めるために開発されたオープンソースのプロジェクトです。',
 };
 
+const categories = [
+  {
+    href: '/politicians',
+    title: '政治家詳細',
+    description: '政治家ごとの政治資金収支報告書を確認する',
+  },
+  {
+    href: '/election-finance',
+    title: '選挙資金',
+    description: '選挙ごとの候補者選挙運動費用収支報告書を確認する',
+  },
+];
+
 export default function Page() {
   return (
     <Box>
       <Header />
-      <SimpleGrid columns={{ base: 1, lg: 2 }} gap={5} mb={5} p={2}>
-        {entries.map((entry) => (
-          <Link
-            href={(() => {
-              if (entry.latestReportId.startsWith(comingSoonId)) {
-                return '#';
-              }
-              const id = entry.latestReportId.replace('demo-', '');
-              const lastHyphenIndex = id.lastIndexOf('-');
-              const politicianId = id.substring(0, lastHyphenIndex);
-              const year = id.substring(lastHyphenIndex + 1);
-              return `/${politicianId}/${year}`;
-            })()}
-            key={entry.latestReportId}
-          >
+      <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} p={4} minH="60vh">
+        {categories.map((cat) => (
+          <Link href={cat.href} key={cat.href} style={{ display: 'block' }}>
             <Card.Root
-              flexDirection="row"
-              boxShadow="xs"
-              border="none"
+              h="100%"
+              minH="240px"
+              boxShadow="sm"
+              border="1px solid"
+              borderColor="gray.200"
+              _hover={{ boxShadow: 'md', borderColor: 'gray.400' }}
+              transition="all 0.15s"
+              cursor="pointer"
+              justifyContent="center"
               alignItems="center"
+              textAlign="center"
             >
-              <Image
-                objectFit="cover"
-                maxW="130px"
-                src={entry.profile.image}
-                alt={entry.profile.name}
-                borderTopLeftRadius="md"
-                borderBottomLeftRadius="md"
-              />
-              <Box>
-                <Card.Body>
-                  <Stack gap={0}>
-                    <Text fontSize="xs">{entry.profile.title}</Text>
-                    <Text fontSize="2xl" fontWeight="bold">
-                      {entry.profile.name}
-                    </Text>
-                    <HStack mt={1}>
-                      {entry.profile.party && (
-                        <Badge variant="outline" colorPalette="red">
-                          {entry.profile.party}
-                        </Badge>
-                      )}
-                      {entry.profile.district && (
-                        <Badge variant="outline">
-                          {entry.profile.district}
-                        </Badge>
-                      )}
-                    </HStack>
-                  </Stack>
-                </Card.Body>
-              </Box>
+              <Card.Body
+                display="flex"
+                flexDirection="column"
+                gap={3}
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Text fontSize="2xl" fontWeight="bold">
+                  {cat.title}
+                </Text>
+                <Text fontSize="sm" color="gray.600" maxW="300px">
+                  {cat.description}
+                </Text>
+              </Card.Body>
             </Card.Root>
           </Link>
         ))}

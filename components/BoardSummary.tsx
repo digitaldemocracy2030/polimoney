@@ -105,7 +105,7 @@ export function BoardSummary({
                   (r) => r.id === e.target.value,
                 );
                 if (selectedReport) {
-                  window.location.href = `/${politicianId}/${selectedReport.year}`;
+                  window.location.href = `/politicians/${politicianId}/${selectedReport.year}`;
                 }
               }}
             >
