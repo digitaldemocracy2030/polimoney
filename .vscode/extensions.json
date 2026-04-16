@@ -1,3 +1,6 @@
 {
-  "recommendations": ["biomejs.biome", "charliermarsh.ruff"]
+  "recommendations": [
+    "biomejs.biome",
+    "streetsidesoftware.code-spell-checker-cspell-bundled-dictionaries"
+  ]
 }
