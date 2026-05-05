@@ -25,6 +25,7 @@ type Props = {
   otherReports: Report[];
   flows: Flow[];
   useFixedBoardChart?: boolean;
+  reportPathPrefix?: string;
 };
 
 export function BoardSummary({
@@ -34,6 +35,7 @@ export function BoardSummary({
   otherReports,
   flows,
   useFixedBoardChart = false,
+  reportPathPrefix,
 }: Props) {
   const [copied, setCopied] = useState(false);
 
@@ -105,7 +107,8 @@ export function BoardSummary({
                   (r) => r.id === e.target.value,
                 );
                 if (selectedReport) {
-                  window.location.href = `/politicians/${politicianId}/${selectedReport.year}`;
+                  const prefix = reportPathPrefix ?? `/politicians/${politicianId}/political`;
+                  window.location.href = `${prefix}/${selectedReport.id}`;
                 }
               }}
             >

@@ -4,6 +4,7 @@ import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react';
 import type { BarDatum } from '@nivo/bar';
 import { ResponsiveBar } from '@nivo/bar';
 import { BoardContainer } from '@/components/BoardContainer';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
@@ -19,7 +20,13 @@ function formatCurrency(amount: number): string {
   });
 }
 
-export function ElectionFinanceClient({ data }: { data: EfData }) {
+export function ElectionFinanceContent({
+  data,
+  politicianId,
+}: {
+  data: EfData;
+  politicianId: string;
+}) {
   const metadata = data.metadata;
   const transactions = [...data.transactions].sort((a, b) => {
     if (!a.date) return 1;
@@ -41,14 +48,11 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
     .map((t) => ({ ...t, category: getCategoryJpName(t.category) }));
 
   const totalIncome = incomeTransactions.reduce((acc, t) => acc + t.price, 0);
-
   const totalExpense = expenseTransactions.reduce((acc, t) => acc + t.price, 0);
-
   const totalExpensePublic = expensePublicTransactions.reduce(
     (acc, t) => acc + (t.public_expense_amount || 0),
     0,
   );
-
   const carryover = totalIncome + totalExpensePublic - totalExpense;
 
   const barColorByKey: Record<string, string> = {
@@ -59,21 +63,19 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
   };
 
   const barData: BarDatum[] = [
-    {
-      category: '支出',
-      支出: totalExpense,
-      繰越: carryover,
-    },
-    {
-      category: '収入',
-      収入: totalIncome,
-      公費: totalExpensePublic,
-    },
+    { category: '支出', 支出: totalExpense, 繰越: carryover },
+    { category: '収入', 収入: totalIncome, 公費: totalExpensePublic },
   ];
 
   return (
     <Box>
       <Header />
+      <Breadcrumb
+        items={[
+          { label: metadata.name, href: `/politicians/${politicianId}` },
+          { label: '選挙運動費用収支報告' },
+        ]}
+      />
 
       <VStack gap={6} align="stretch">
         <BoardContainer>
@@ -116,10 +118,7 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
                 colors={({ id }) =>
                   barColorByKey[String(id)] ?? 'var(--chakra-colors-gray-400)'
                 }
-                borderColor={{
-                  from: 'color',
-                  modifiers: [['darker', 1.6]],
-                }}
+                borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
                 enableGridY={false}
                 axisBottom={null}
                 axisLeft={null}

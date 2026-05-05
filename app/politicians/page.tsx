@@ -13,106 +13,79 @@ import Link from 'next/link';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
-import demoComingsoon, {
+import {
   comingSoonId,
-  comingSoonNum,
-} from '@/data/demo-comingsoon';
-import demoExample from '@/data/demo-example';
-import demoKokiFujisaki from '@/data/demo-kokifujisaki';
-import demoRyosukeIdei from '@/data/demo-ryosukeidei';
-import demoTakahiroAnno from '@/data/demo-takahiroanno';
-import type { ProfileList } from '@/models/type';
-
-type Entry = {
-  id: string;
-  latestReportId: string;
-  profile: ProfileList;
-};
-
-const politicianEntries: Entry[] = [
-  demoTakahiroAnno,
-  demoRyosukeIdei,
-  demoKokiFujisaki,
-  demoExample,
-].map((data) => ({
-  id: data.id,
-  latestReportId: data.latestReportId,
-  profile: data.profile,
-}));
-
-const comingSoonEntries: Entry[] = Array.from(
-  { length: comingSoonNum },
-  (_, i) => ({
-    ...demoComingsoon,
-    id: `${comingSoonId}-${i}`,
-    latestReportId: `${comingSoonId}-${i}`,
-  }),
-);
-
-const entries: Entry[] = [...politicianEntries, ...comingSoonEntries];
+  politicianMaster,
+} from '@/data/politician-master';
 
 export const metadata: Metadata = {
-  title: '政治家詳細 | Polimoney (ポリマネー)',
+  title: '政治家一覧 | Polimoney (ポリマネー)',
 };
 
-function entryHref(entry: Entry): string {
-  if (entry.latestReportId.startsWith(comingSoonId)) {
-    return '#';
-  }
-  const id = entry.latestReportId.replace('demo-', '');
-  const lastHyphenIndex = id.lastIndexOf('-');
-  const politicianId = id.substring(0, lastHyphenIndex);
-  const year = id.substring(lastHyphenIndex + 1);
-  return `/politicians/${politicianId}/${year}`;
-}
-
 export default function Page() {
+  const entries = politicianMaster.filter(
+    (e) => !e.id.startsWith(comingSoonId),
+  );
+
   return (
     <Box>
       <Header />
-      <SimpleGrid columns={{ base: 1, lg: 2 }} gap={5} mb={5} p={2}>
-        {entries.map((entry) => (
-          <Link href={entryHref(entry)} key={entry.latestReportId}>
-            <Card.Root
-              flexDirection="row"
-              boxShadow="xs"
-              border="none"
-              alignItems="center"
+      <Box px={4} py={6}>
+        <Text fontSize="2xl" fontWeight="bold" mb={6}>
+          政治家一覧
+        </Text>
+        <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
+          {entries.map((entry) => (
+            <Link
+              href={`/politicians/${entry.id}`}
+              key={entry.id}
             >
-              <Image
-                objectFit="cover"
-                maxW="130px"
-                src={entry.profile.image}
-                alt={entry.profile.name}
-                borderTopLeftRadius="md"
-                borderBottomLeftRadius="md"
-              />
-              <Box>
-                <Card.Body>
+              <Card.Root
+                flexDirection="row"
+                h="90px"
+                boxShadow="xs"
+                border="1px solid"
+                borderColor="gray.200"
+                _hover={{ boxShadow: 'sm', borderColor: 'gray.300' }}
+                transition="all 0.15s"
+                cursor="pointer"
+                overflow="hidden"
+              >
+                <Image
+                  objectFit="cover"
+                  w="90px"
+                  h="90px"
+                  flexShrink={0}
+                  src={entry.profile.image}
+                  alt={entry.profile.name}
+                />
+                <Card.Body px={4} py={3} display="flex" alignItems="center">
                   <Stack gap={0}>
-                    <Text fontSize="xs">{entry.profile.title}</Text>
-                    <Text fontSize="2xl" fontWeight="bold">
+                    <Text fontSize="xs" color="gray.500">
+                      {entry.profile.title}
+                    </Text>
+                    <Text fontSize="xl" fontWeight="bold">
                       {entry.profile.name}
                     </Text>
                     <HStack mt={1}>
                       {entry.profile.party && (
-                        <Badge variant="outline" colorPalette="red">
+                        <Badge variant="outline" colorPalette="red" fontSize="xs">
                           {entry.profile.party}
                         </Badge>
                       )}
                       {entry.profile.district && (
-                        <Badge variant="outline">
+                        <Badge variant="outline" fontSize="xs">
                           {entry.profile.district}
                         </Badge>
                       )}
                     </HStack>
                   </Stack>
                 </Card.Body>
-              </Box>
-            </Card.Root>
-          </Link>
-        ))}
-      </SimpleGrid>
+              </Card.Root>
+            </Link>
+          ))}
+        </SimpleGrid>
+      </Box>
       <Notice />
       <Footer />
     </Box>

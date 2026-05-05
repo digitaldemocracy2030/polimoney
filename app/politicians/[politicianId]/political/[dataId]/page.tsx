@@ -1,6 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { BoardMetadata } from '@/components/BoardMetadata';
 import { BoardSummary } from '@/components/BoardSummary';
 import { BoardTransactions } from '@/components/BoardTransactions';
@@ -12,7 +13,7 @@ import type { AccountingReports, Report, Transaction } from '@/models/type';
 
 type RouteParams = {
   politicianId: string;
-  year: string;
+  dataId: string;
 };
 
 type Props = {
@@ -20,7 +21,7 @@ type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-function getPoliticianData(politicianId: string, year: string) {
+function getPoliticianData(politicianId: string, dataId: string) {
   const dataModule = (
     politicianDataMap as Record<
       string,
@@ -31,42 +32,48 @@ function getPoliticianData(politicianId: string, year: string) {
     >
   )[politicianId];
 
-  if (!dataModule?.getDataByYear) {
+  if (!dataModule) {
     return null;
   }
 
-  const yearData = dataModule.getDataByYear(Number(year));
+  // dataId から year を逆引き（report.id === dataId のエントリを探す）
+  const allData = dataModule.default.data;
+  const matchedEntry = allData.find(
+    (d: { report: Report }) => d.report.id === dataId,
+  );
+  if (!matchedEntry) {
+    return null;
+  }
+
+  const allReports: Report[] = allData.map(
+    (d: { report: Report }) => d.report,
+  );
+
+  // getDataByYear で profile 付きの AccountingReports を取得
+  const yearData = dataModule.getDataByYear(matchedEntry.report.year);
   if (!yearData) {
     return null;
   }
 
-  const allReports: Report[] = dataModule.default.data.map(
-    (d: { report: Report }) => d.report,
-  );
-  return {
-    yearData,
-    allReports,
-  };
+  return { yearData, allReports, report: matchedEntry.report };
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { politicianId, year } = await props.params;
-  const data = getPoliticianData(politicianId, year);
+  const { politicianId, dataId } = await props.params;
+  const data = getPoliticianData(politicianId, dataId);
 
   if (!data) {
-    return {
-      title: 'データが見つかりません | Polimoney (ポリマネー)',
-    };
+    return { title: 'データが見つかりません | Polimoney (ポリマネー)' };
   }
 
   return {
-    title: `${data.yearData.profile.name} (${year}年) | Polimoney (ポリマネー)`,
+    title: `${data.yearData.profile.name} (${data.report.year}年) | Polimoney (ポリマネー)`,
   };
 }
 
 export default async function Page(props: Props) {
-  const { politicianId, year } = await props.params;
-  const data = getPoliticianData(politicianId, year);
+  const { politicianId, dataId } = await props.params;
+  const data = getPoliticianData(politicianId, dataId);
 
   if (!data) {
     notFound();
@@ -77,7 +84,13 @@ export default async function Page(props: Props) {
 
   return (
     <Box>
-      <Header profileName={data.yearData.profile.name} />
+      <Header profileName={yearData.profile.name} />
+      <Breadcrumb
+        items={[
+          { label: yearData.profile.name, href: `/politicians/${politicianId}` },
+          { label: '政治資金収支報告' },
+        ]}
+      />
       <BoardSummary
         politicianId={politicianId}
         profile={yearData.profile}
