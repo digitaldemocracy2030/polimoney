@@ -26,7 +26,8 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
   if (isLoading) {
     return null;
   }
-  if (!isAuthenticated) {
+  // TODO: 暫定対応で岩永さんを公開したので、後ほど整理
+  if (!isAuthenticated && data.metadata.name !== '岩永淳志') {
     notFound();
   }
 

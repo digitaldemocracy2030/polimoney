@@ -26,8 +26,23 @@ type Entry = {
   id: string;
   latestReportId: string;
   profile: ProfileList;
+  href?: string;
 };
+
+// TODO: 暫定対応で岩永さんを公開したので、後ほど整理
 const politicianEntries: Entry[] = [
+  {
+    id: 'election-finance-iwanaga',
+    latestReportId: 'election-finance-iwanaga',
+    href: '/election-finance/iwanaga',
+    profile: {
+      name: '岩永淳志',
+      title: '和歌山県議会議員日高郡選挙区補欠選挙',
+      image: '/demo-atsushiiwanaga.png',
+      party: '無所属',
+      district: '和歌山県日高郡',
+    },
+  },
   demoTakahiroAnno,
   demoRyosukeIdei,
   demoKokiFujisaki,
@@ -36,6 +51,7 @@ const politicianEntries: Entry[] = [
   id: data.id,
   latestReportId: data.latestReportId,
   profile: data.profile,
+  href: 'href' in data ? data.href : undefined,
 }));
 
 const comingSoonEntries: Entry[] = Array.from(
@@ -63,6 +79,9 @@ export default function Page() {
         {entries.map((entry) => (
           <Link
             href={(() => {
+              if (entry.href) {
+                return entry.href;
+              }
               if (entry.latestReportId.startsWith(comingSoonId)) {
                 return '#';
               }
