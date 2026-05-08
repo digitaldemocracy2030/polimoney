@@ -16,6 +16,7 @@ import demoComingsoon, {
   comingSoonId,
   comingSoonNum,
 } from '@/data/demo-comingsoon';
+import { electionFinanceEntries } from '@/data/election-finance-entries';
 import demoExample from '@/data/demo-example';
 import demoKokiFujisaki from '@/data/demo-kokifujisaki';
 import demoRyosukeIdei from '@/data/demo-ryosukeidei';
@@ -26,8 +27,12 @@ type Entry = {
   id: string;
   latestReportId: string;
   profile: ProfileList;
+  href?: string;
 };
+
+// TODO: 暫定対応で岩永さんを公開したので、後ほど整理
 const politicianEntries: Entry[] = [
+  ...electionFinanceEntries,
   demoTakahiroAnno,
   demoRyosukeIdei,
   demoKokiFujisaki,
@@ -36,6 +41,7 @@ const politicianEntries: Entry[] = [
   id: data.id,
   latestReportId: data.latestReportId,
   profile: data.profile,
+  href: 'href' in data ? data.href : undefined,
 }));
 
 const comingSoonEntries: Entry[] = Array.from(
@@ -63,6 +69,9 @@ export default function Page() {
         {entries.map((entry) => (
           <Link
             href={(() => {
+              if (entry.href) {
+                return entry.href;
+              }
               if (entry.latestReportId.startsWith(comingSoonId)) {
                 return '#';
               }
