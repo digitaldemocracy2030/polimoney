@@ -16,6 +16,7 @@ import demoComingsoon, {
   comingSoonId,
   comingSoonNum,
 } from '@/data/demo-comingsoon';
+import { electionFinanceEntries } from '@/data/election-finance-entries';
 import demoExample from '@/data/demo-example';
 import demoKokiFujisaki from '@/data/demo-kokifujisaki';
 import demoRyosukeIdei from '@/data/demo-ryosukeidei';
@@ -31,18 +32,7 @@ type Entry = {
 
 // TODO: 暫定対応で岩永さんを公開したので、後ほど整理
 const politicianEntries: Entry[] = [
-  {
-    id: 'election-finance-iwanaga',
-    latestReportId: 'election-finance-iwanaga',
-    href: '/election-finance/iwanaga',
-    profile: {
-      name: '岩永淳志',
-      title: '和歌山県議会議員日高郡選挙区補欠選挙',
-      image: '/demo-atsushiiwanaga.png',
-      party: '無所属',
-      district: '和歌山県日高郡',
-    },
-  },
+  ...electionFinanceEntries,
   demoTakahiroAnno,
   demoRyosukeIdei,
   demoKokiFujisaki,
