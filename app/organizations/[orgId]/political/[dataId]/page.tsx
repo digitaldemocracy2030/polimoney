@@ -61,8 +61,7 @@ export default async function Page(props: Props) {
   const data = getOrgReportData(orgId, dataId);
   if (!data) notFound();
 
-  const { yearData, allReports } = data;
-  const reportData = yearData.data[0];
+  const { yearData, allReports, report } = data;
 
   return (
     <Box>
@@ -76,30 +75,40 @@ export default async function Page(props: Props) {
       <BoardSummary
         politicianId={orgId}
         profile={yearData.profile}
-        report={reportData.report}
+        report={report}
         otherReports={allReports}
-        flows={reportData.flows}
+        flows={
+          yearData.data.find((d) => d.report.id === report.id)?.flows ?? []
+        }
         reportPathPrefix={`/organizations/${orgId}/political`}
       />
       <BoardTransactions
         direction={'income'}
-        total={reportData.report.totalIncome}
-        transactions={reportData.transactions.filter(
-          (t: Transaction) => t.direction === 'income',
-        )}
+        total={report.totalIncome}
+        transactions={
+          yearData.data
+            .find((d) => d.report.id === report.id)
+            ?.transactions.filter(
+              (t: Transaction) => t.direction === 'income',
+            ) ?? []
+        }
         showPurpose={false}
         showDate={false}
       />
       <BoardTransactions
         direction={'expense'}
-        total={reportData.report.totalExpense}
-        transactions={reportData.transactions.filter(
-          (t: Transaction) => t.direction === 'expense',
-        )}
+        total={report.totalExpense}
+        transactions={
+          yearData.data
+            .find((d) => d.report.id === report.id)
+            ?.transactions.filter(
+              (t: Transaction) => t.direction === 'expense',
+            ) ?? []
+        }
         showPurpose={false}
         showDate={false}
       />
-      <BoardMetadata report={reportData.report} />
+      <BoardMetadata report={report} />
       <Notice />
       <Footer />
     </Box>

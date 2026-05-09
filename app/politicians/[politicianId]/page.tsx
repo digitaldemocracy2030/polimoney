@@ -70,12 +70,14 @@ export default async function Page(props: Props) {
     ? getPoliticalReports(politician.politicalDataId)
     : [];
 
-  const electionItems = await Promise.all(
-    (politician.electionDataIds ?? []).map(async (dataId) => ({
-      dataId,
-      metadata: await getElectionData(dataId),
-    })),
-  );
+  const electionItems = (
+    await Promise.all(
+      (politician.electionDataIds ?? []).map(async (dataId) => ({
+        dataId,
+        metadata: await getElectionData(dataId),
+      })),
+    )
+  ).filter((item) => item.metadata !== null);
 
   return (
     <Box>

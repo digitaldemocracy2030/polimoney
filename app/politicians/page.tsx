@@ -1,15 +1,5 @@
-import {
-  Badge,
-  Box,
-  Card,
-  HStack,
-  Image,
-  SimpleGrid,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Box, SimpleGrid, Text } from '@chakra-ui/react';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';

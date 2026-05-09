@@ -17,7 +17,7 @@ export function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
         py={0}
       >
         {items.map((item, i) => (
-          <HStack key={i} gap={1.5} minW={0}>
+          <HStack key={`${item.label}-${item.href}`} gap={1.5} minW={0}>
             {i > 0 && (
               <Text color="gray.300" fontSize="xs" aria-hidden>
                 /

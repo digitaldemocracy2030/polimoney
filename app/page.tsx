@@ -1,22 +1,9 @@
-import {
-  Badge,
-  Box,
-  Button,
-  Card,
-  HStack,
-  Image,
-  SimpleGrid,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
-import Link from 'next/link';
+import { Box, SimpleGrid } from '@chakra-ui/react';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
 import { PoliticianCard } from '@/components/PoliticianCard';
-import { politicianDataMap } from '@/data/politician-data';
 import { comingSoonId, politicianMaster } from '@/data/politician-master';
-import type { AccountingReports, Report } from '@/models/type';
 
 export const metadata = {
   title: 'Polimoney - 政治資金の透明性を高める',
