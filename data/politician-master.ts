@@ -19,6 +19,17 @@ export const comingSoonId = 'demo-comingsoon';
 export const comingSoonNum = 1;
 
 const politicianEntries: PoliticianMasterEntry[] = [
+  // TODO: 中村幸信のページを再度公開する際に以下を復帰する
+  // {
+  //   id: 'nakamura',
+  //   profile: demoNakamura.profile,
+  //   electionDataIds: ['nakamura'],
+  // },
+  {
+    id: 'iwanaga',
+    profile: demoIwanaga.profile,
+    electionDataIds: ['iwanaga'],
+  },
   {
     id: 'takahiro-anno',
     profile: demoTakahiroAnno.profile,
@@ -39,17 +50,6 @@ const politicianEntries: PoliticianMasterEntry[] = [
     profile: demoExample.profile,
     politicalDataId: 'example',
   },
-  {
-    id: 'iwanaga',
-    profile: demoIwanaga.profile,
-    electionDataIds: ['iwanaga'],
-  },
-  // TODO: 中村幸信のページを再度公開する際に以下を復帰する
-  // {
-  //   id: 'nakamura',
-  //   profile: demoNakamura.profile,
-  //   electionDataIds: ['nakamura'],
-  // },
 ];
 
 const comingSoonEntries: PoliticianMasterEntry[] = Array.from(
