@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
+import { PoliticianCard } from '@/components/PoliticianCard';
 import {
   comingSoonId,
   politicianMaster,
@@ -34,55 +35,9 @@ export default function Page() {
         <Text fontSize="2xl" fontWeight="bold" mb={6}>
           政治家一覧
         </Text>
-        <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={3}>
           {entries.map((entry) => (
-            <Link
-              href={`/politicians/${entry.id}`}
-              key={entry.id}
-            >
-              <Card.Root
-                flexDirection="row"
-                h="90px"
-                boxShadow="xs"
-                border="1px solid"
-                borderColor="gray.200"
-                _hover={{ boxShadow: 'sm', borderColor: 'gray.300' }}
-                transition="all 0.15s"
-                cursor="pointer"
-                overflow="hidden"
-              >
-                <Image
-                  objectFit="cover"
-                  w="90px"
-                  h="90px"
-                  flexShrink={0}
-                  src={entry.profile.image}
-                  alt={entry.profile.name}
-                />
-                <Card.Body px={4} py={3} display="flex" alignItems="center">
-                  <Stack gap={0}>
-                    <Text fontSize="xs" color="gray.500">
-                      {entry.profile.title}
-                    </Text>
-                    <Text fontSize="xl" fontWeight="bold">
-                      {entry.profile.name}
-                    </Text>
-                    <HStack mt={1}>
-                      {entry.profile.party && (
-                        <Badge variant="outline" colorPalette="red" fontSize="xs">
-                          {entry.profile.party}
-                        </Badge>
-                      )}
-                      {entry.profile.district && (
-                        <Badge variant="outline" fontSize="xs">
-                          {entry.profile.district}
-                        </Badge>
-                      )}
-                    </HStack>
-                  </Stack>
-                </Card.Body>
-              </Card.Root>
-            </Link>
+            <PoliticianCard key={entry.id} entry={entry} />
           ))}
         </SimpleGrid>
       </Box>
