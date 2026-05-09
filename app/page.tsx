@@ -72,6 +72,7 @@ export default function Page() {
             <PoliticianCard key={entry.id} entry={entry} />
           ))}
         </SimpleGrid>
+        {/* TODO: データが増えた場合表示上限を設ける
         <Box display="flex" justifyContent="center" mb={8}>
           <Link href="/politicians">
             <Button
@@ -87,6 +88,7 @@ export default function Page() {
             </Button>
           </Link>
         </Box>
+        */}
 
         {/*
         TODO: 政治団体導線を再公開する際にこのセクションを復帰する
