@@ -70,8 +70,6 @@ export const politicianMaster: PoliticianMasterEntry[] = [
   ...comingSoonEntries,
 ];
 
-export function findPolitician(
-  id: string,
-): PoliticianMasterEntry | undefined {
+export function findPolitician(id: string): PoliticianMasterEntry | undefined {
   return politicianMaster.find((e) => e.id === id);
 }

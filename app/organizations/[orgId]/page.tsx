@@ -37,7 +37,8 @@ function getOrgData(orgId: string) {
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { orgId } = await props.params;
   const data = getOrgData(orgId);
-  if (!data) return { title: 'データが見つかりません | Polimoney (ポリマネー)' };
+  if (!data)
+    return { title: 'データが見つかりません | Polimoney (ポリマネー)' };
   return { title: `${data.latest.orgName} | Polimoney (ポリマネー)` };
 }
 

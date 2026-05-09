@@ -1,10 +1,10 @@
 import { Box } from '@chakra-ui/react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Breadcrumb } from '@/components/Breadcrumb';
 import { BoardMetadata } from '@/components/BoardMetadata';
 import { BoardSummary } from '@/components/BoardSummary';
 import { BoardTransactions } from '@/components/BoardTransactions';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
@@ -45,9 +45,7 @@ function getPoliticianData(politicianId: string, dataId: string) {
     return null;
   }
 
-  const allReports: Report[] = allData.map(
-    (d: { report: Report }) => d.report,
-  );
+  const allReports: Report[] = allData.map((d: { report: Report }) => d.report);
 
   // getDataByYear で profile 付きの AccountingReports を取得
   const yearData = dataModule.getDataByYear(matchedEntry.report.year);
@@ -87,7 +85,10 @@ export default async function Page(props: Props) {
       <Header profileName={yearData.profile.name} />
       <Breadcrumb
         items={[
-          { label: yearData.profile.name, href: `/politicians/${politicianId}` },
+          {
+            label: yearData.profile.name,
+            href: `/politicians/${politicianId}`,
+          },
           { label: '政治資金収支報告' },
         ]}
       />

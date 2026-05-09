@@ -38,11 +38,7 @@ export function PoliticianCard({ entry }: Props) {
             </Text>
             <HStack mt={1}>
               {entry.profile.party && (
-                <Badge
-                  variant="outline"
-                  colorPalette="red"
-                  fontSize="xs"
-                >
+                <Badge variant="outline" colorPalette="red" fontSize="xs">
                   {entry.profile.party}
                 </Badge>
               )}

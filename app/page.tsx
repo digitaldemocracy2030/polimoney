@@ -15,10 +15,7 @@ import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
 import { PoliticianCard } from '@/components/PoliticianCard';
 import { politicianDataMap } from '@/data/politician-data';
-import {
-  comingSoonId,
-  politicianMaster,
-} from '@/data/politician-master';
+import { comingSoonId, politicianMaster } from '@/data/politician-master';
 import type { AccountingReports, Report } from '@/models/type';
 
 export const metadata = {

@@ -14,10 +14,7 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
 import { PoliticianCard } from '@/components/PoliticianCard';
-import {
-  comingSoonId,
-  politicianMaster,
-} from '@/data/politician-master';
+import { comingSoonId, politicianMaster } from '@/data/politician-master';
 
 export const metadata: Metadata = {
   title: '政治家一覧 | Polimoney (ポリマネー)',

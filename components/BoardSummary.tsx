@@ -107,7 +107,9 @@ export function BoardSummary({
                   (r) => r.id === e.target.value,
                 );
                 if (selectedReport) {
-                  const prefix = reportPathPrefix ?? `/politicians/${politicianId}/political`;
+                  const prefix =
+                    reportPathPrefix ??
+                    `/politicians/${politicianId}/political`;
                   window.location.href = `${prefix}/${selectedReport.id}`;
                 }
               }}

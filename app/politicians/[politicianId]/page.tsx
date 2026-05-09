@@ -26,18 +26,13 @@ type Props = { params: Promise<RouteParams> };
 
 function getPoliticalReports(politicianId: string): Report[] {
   const dataModule = (
-    politicianDataMap as Record<
-      string,
-      { default: AccountingReports }
-    >
+    politicianDataMap as Record<string, { default: AccountingReports }>
   )[politicianId];
   if (!dataModule) return [];
   return dataModule.default.data.map((d: { report: Report }) => d.report);
 }
 
-async function getElectionData(
-  dataId: string,
-): Promise<EfMetadata | null> {
+async function getElectionData(dataId: string): Promise<EfMetadata | null> {
   const filePath = path.join(
     process.cwd(),
     'data',
@@ -56,7 +51,8 @@ async function getElectionData(
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { politicianId } = await props.params;
   const politician = findPolitician(politicianId);
-  if (!politician) return { title: 'データが見つかりません | Polimoney (ポリマネー)' };
+  if (!politician)
+    return { title: 'データが見つかりません | Polimoney (ポリマネー)' };
   return {
     title: `${politician.profile.name} | Polimoney (ポリマネー)`,
   };
@@ -95,8 +91,12 @@ export default async function Page(props: Props) {
             borderRadius="full"
           />
           <Stack gap={0}>
-            <Text fontSize="xs" color="gray.500">{politician.profile.title}</Text>
-            <Text fontSize="2xl" fontWeight="bold">{politician.profile.name}</Text>
+            <Text fontSize="xs" color="gray.500">
+              {politician.profile.title}
+            </Text>
+            <Text fontSize="2xl" fontWeight="bold">
+              {politician.profile.name}
+            </Text>
             <HStack mt={1}>
               {politician.profile.party && (
                 <Badge variant="outline" colorPalette="red">
@@ -139,7 +139,9 @@ export default async function Page(props: Props) {
                     />
                     <Card.Body px={4} py={3}>
                       <Text fontWeight="bold">{report.year}年</Text>
-                      <Text fontSize="sm" color="gray.600">{report.orgName}</Text>
+                      <Text fontSize="sm" color="gray.600">
+                        {report.orgName}
+                      </Text>
                     </Card.Body>
                   </Card.Root>
                 </Link>
@@ -178,7 +180,9 @@ export default async function Page(props: Props) {
                       />
                       <Card.Body px={4} py={3}>
                         <Text fontWeight="bold">{metadata.title}</Text>
-                        <Text fontSize="sm" color="gray.600">{metadata.date}</Text>
+                        <Text fontSize="sm" color="gray.600">
+                          {metadata.date}
+                        </Text>
                       </Card.Body>
                     </Card.Root>
                   </Link>
