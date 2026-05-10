@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth0 } from '@auth0/auth0-react';
-import { Box, Heading, HStack, Image, Stack, Text, VStack } from '@chakra-ui/react';
+import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react';
 import type { BarDatum } from '@nivo/bar';
 import { ResponsiveBar } from '@nivo/bar';
 import { notFound } from 'next/navigation';
@@ -9,7 +9,6 @@ import { BoardContainer } from '@/components/BoardContainer';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
-import { electionFinanceEntries } from '@/data/election-finance-entries';
 import type { EfData } from '@/models/election-finance';
 import { getCategoryJpName } from '@/utils/election-finance';
 import { TransactionSection } from './TransactionSection';
@@ -22,22 +21,16 @@ function formatCurrency(amount: number): string {
   });
 }
 
-const profileImageByName = Object.fromEntries(
-  electionFinanceEntries.map((entry) => [entry.profile.name, entry.profile.image]),
-) as Record<string, string>;
-
 export function ElectionFinanceClient({ data }: { data: EfData }) {
   const { isAuthenticated, isLoading } = useAuth0();
   if (isLoading) {
     return null;
   }
-  // TODO: 暫定対応で岩永さんを公開したので、後ほど整理
-  if (!isAuthenticated && data.metadata.name !== '岩永淳志') {
+  if (!isAuthenticated) {
     notFound();
   }
 
   const metadata = data.metadata;
-  const profileImage = profileImageByName[metadata.name];
   const transactions = [...data.transactions].sort((a, b) => {
     if (!a.date) return 1;
     if (!b.date) return -1;
@@ -97,39 +90,26 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
           <Heading as="h1" size="2xl" mb={4}>
             選挙運動費用収支報告
           </Heading>
-          <HStack align="start" justify="space-between" mb={4} gap={4}>
-            <Stack gap={2} flex="1">
-              <HStack align="start" gap={2}>
-                <Text fontWeight="bold" color="gray.700" minW="80px">
-                  対象
-                </Text>
-                <Text color="gray.900">{metadata.title}</Text>
-              </HStack>
-              <HStack align="start" gap={2}>
-                <Text fontWeight="bold" color="gray.700" minW="80px">
-                  執行
-                </Text>
-                <Text color="gray.900">{metadata.date}</Text>
-              </HStack>
-              <HStack align="start" gap={2}>
-                <Text fontWeight="bold" color="gray.700" minW="80px">
-                  候補者
-                </Text>
-                <Text color="gray.900">{metadata.name}</Text>
-              </HStack>
-            </Stack>
-            {profileImage && (
-              <Image
-                src={profileImage}
-                alt={`${metadata.name}の写真`}
-                w="200px"
-                h="200px"
-                mt="-60px"
-                objectFit="cover"
-                borderRadius="full"
-              />
-            )}
-          </HStack>
+          <Stack gap={2} mb={4}>
+            <HStack align="start" gap={2}>
+              <Text fontWeight="bold" color="gray.700" minW="80px">
+                対象
+              </Text>
+              <Text color="gray.900">{metadata.title}</Text>
+            </HStack>
+            <HStack align="start" gap={2}>
+              <Text fontWeight="bold" color="gray.700" minW="80px">
+                執行
+              </Text>
+              <Text color="gray.900">{metadata.date}</Text>
+            </HStack>
+            <HStack align="start" gap={2}>
+              <Text fontWeight="bold" color="gray.700" minW="80px">
+                候補者
+              </Text>
+              <Text color="gray.900">{metadata.name}</Text>
+            </HStack>
+          </Stack>
           <Stack
             gap={6}
             align={{ base: 'stretch', md: 'start' }}
