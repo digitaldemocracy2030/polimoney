@@ -1,15 +1,25 @@
 'use client';
 
-import { useAuth0 } from '@auth0/auth0-react';
-import { Box, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react';
+import {
+  Avatar,
+  Badge,
+  Box,
+  Heading,
+  HStack,
+  NativeSelect,
+  Stack,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import type { BarDatum } from '@nivo/bar';
 import { ResponsiveBar } from '@nivo/bar';
-import { notFound } from 'next/navigation';
 import { BoardContainer } from '@/components/BoardContainer';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
 import type { EfData } from '@/models/election-finance';
+import type { ProfileList } from '@/models/type';
 import { getCategoryJpName } from '@/utils/election-finance';
 import { TransactionSection } from './TransactionSection';
 
@@ -21,15 +31,19 @@ function formatCurrency(amount: number): string {
   });
 }
 
-export function ElectionFinanceClient({ data }: { data: EfData }) {
-  const { isAuthenticated, isLoading } = useAuth0();
-  if (isLoading) {
-    return null;
-  }
-  if (!isAuthenticated) {
-    notFound();
-  }
-
+export function ElectionFinanceContent({
+  data,
+  politicianId,
+  profile,
+  allElectionData,
+  currentDataId,
+}: {
+  data: EfData;
+  politicianId: string;
+  profile: ProfileList;
+  allElectionData?: Array<{ dataId: string; data: EfData }>;
+  currentDataId?: string;
+}) {
   const metadata = data.metadata;
   const transactions = [...data.transactions].sort((a, b) => {
     if (!a.date) return 1;
@@ -51,14 +65,11 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
     .map((t) => ({ ...t, category: getCategoryJpName(t.category) }));
 
   const totalIncome = incomeTransactions.reduce((acc, t) => acc + t.price, 0);
-
   const totalExpense = expenseTransactions.reduce((acc, t) => acc + t.price, 0);
-
   const totalExpensePublic = expensePublicTransactions.reduce(
     (acc, t) => acc + (t.public_expense_amount || 0),
     0,
   );
-
   const carryover = totalIncome + totalExpensePublic - totalExpense;
 
   const barColorByKey: Record<string, string> = {
@@ -69,24 +80,72 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
   };
 
   const barData: BarDatum[] = [
-    {
-      category: '支出',
-      支出: totalExpense,
-      繰越: carryover,
-    },
-    {
-      category: '収入',
-      収入: totalIncome,
-      公費: totalExpensePublic,
-    },
+    { category: '支出', 支出: totalExpense, 繰越: carryover },
+    { category: '収入', 収入: totalIncome, 公費: totalExpensePublic },
   ];
 
   return (
     <Box>
-      <Header />
+      <Header profileName={profile.name} />
+      <Breadcrumb
+        items={[
+          { label: profile.name, href: `/politicians/${politicianId}` },
+          { label: '選挙運動費用収支報告' },
+        ]}
+      />
 
       <VStack gap={6} align="stretch">
         <BoardContainer>
+          <Box mb={10}>
+            <Stack
+              direction={{ base: 'column', lg: 'row' }}
+              alignItems="center"
+              justify="space-between"
+              gap={5}
+            >
+              <HStack gap={5} minW="250px">
+                <Avatar.Root w="80px" h="80px">
+                  <Avatar.Fallback name={profile.name} />
+                  <Avatar.Image src={profile.image} />
+                </Avatar.Root>
+                <Stack gap={0}>
+                  <Text>{profile.title}</Text>
+                  <Text fontWeight="bold" fontSize="2xl">
+                    {profile.name}
+                  </Text>
+                  <HStack mt={1}>
+                    {profile.party && (
+                      <Badge variant="outline" colorPalette="red">
+                        {profile.party}
+                      </Badge>
+                    )}
+                    {profile.district && (
+                      <Badge variant="outline">{profile.district}</Badge>
+                    )}
+                  </HStack>
+                </Stack>
+              </HStack>
+              {allElectionData && currentDataId && (
+                <NativeSelect.Root w="300px">
+                  <NativeSelect.Field
+                    value={currentDataId}
+                    onChange={(e) => {
+                      const selectedDataId = e.target.value;
+                      window.location.href = `/politicians/${politicianId}/election/${selectedDataId}`;
+                    }}
+                  >
+                    {allElectionData.map(({ dataId, data: efData }) => (
+                      <option key={dataId} value={dataId}>
+                        {efData.metadata.title}
+                      </option>
+                    ))}
+                  </NativeSelect.Field>
+                  <NativeSelect.Indicator />
+                </NativeSelect.Root>
+              )}
+            </Stack>
+          </Box>
+
           <Heading as="h1" size="2xl" mb={4}>
             選挙運動費用収支報告
           </Heading>
@@ -126,10 +185,7 @@ export function ElectionFinanceClient({ data }: { data: EfData }) {
                 colors={({ id }) =>
                   barColorByKey[String(id)] ?? 'var(--chakra-colors-gray-400)'
                 }
-                borderColor={{
-                  from: 'color',
-                  modifiers: [['darker', 1.6]],
-                }}
+                borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
                 enableGridY={false}
                 axisBottom={null}
                 axisLeft={null}
