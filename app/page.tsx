@@ -20,6 +20,7 @@ import demoExample from '@/data/demo-example';
 import demoKokiFujisaki from '@/data/demo-kokifujisaki';
 import demoRyosukeIdei from '@/data/demo-ryosukeidei';
 import demoTakahiroAnno from '@/data/demo-takahiroanno';
+import demoYukinobuNakamura from '@/data/demo-yukinobunakamura';
 import type { ProfileList } from '@/models/type';
 
 type Entry = {
@@ -31,6 +32,7 @@ const politicianEntries: Entry[] = [
   demoTakahiroAnno,
   demoRyosukeIdei,
   demoKokiFujisaki,
+  demoYukinobuNakamura,
   demoExample,
 ].map((data) => ({
   id: data.id,

@@ -10,6 +10,9 @@ import ryosukeideiDefault, {
 import takahiroannoDefault, {
   getDataByYear as takahiroannoGetDataByYear,
 } from './demo-takahiroanno';
+import yukinobunakamuraDefault, {
+  getDataByYear as yukinobunakamuraGetDataByYear,
+} from './demo-yukinobunakamura';
 
 export const politicianDataMap = {
   'takahiro-anno': {
@@ -23,6 +26,10 @@ export const politicianDataMap = {
   'koki-fujisaki': {
     default: kokifujisakiDefault,
     getDataByYear: kokifujisakiGetDataByYear,
+  },
+  'yukinobu-nakamura': {
+    default: yukinobunakamuraDefault,
+    getDataByYear: yukinobunakamuraGetDataByYear,
   },
   example: {
     default: exampleDefault,
