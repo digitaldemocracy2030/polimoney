@@ -148,6 +148,14 @@ function convert(data: InputData, outputId = 'converted-data'): OutputData {
   if (rootFlow) {
     rootFlow.value /= 2;
   }
+
+  const incomeCategories = data.categories
+    .filter((c: InputCategory) => c.direction === 'income')
+    .map((c: InputCategory) => ({ id: c.id, name: c.name, parent: c.parent ?? undefined }));
+  const expenseCategories = data.categories
+    .filter((c: InputCategory) => c.direction === 'expense')
+    .map((c: InputCategory) => ({ id: c.id, name: c.name, parent: c.parent ?? undefined }));
+  const categories = { income: incomeCategories, expense: expenseCategories };
   const reportId = `${outputId}-${data.year}`;
   const report: Report = {
     id: reportId,
@@ -181,8 +189,8 @@ function convert(data: InputData, outputId = 'converted-data'): OutputData {
     data: [
       {
         report,
-        flows,
         transactions: allTransactions,
+        categories,
       },
     ],
   };

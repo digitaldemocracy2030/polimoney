@@ -1,6 +1,5 @@
 import type {
   AccountingReports,
-  Flow,
   Profile,
   Report,
   Transaction,
@@ -31,7 +30,6 @@ const emptyReport: Report = {
   lastUpdate: '',
 };
 
-const emptyFlows: Flow[] = [];
 const emptyTransactions: Transaction[] = [];
 
 const data = {
@@ -41,7 +39,6 @@ const data = {
   data: [
     {
       report: emptyReport,
-      flows: emptyFlows,
       transactions: emptyTransactions,
     },
   ],
@@ -55,7 +52,6 @@ const _dataByYear: Record<number, AccountingReports> = {
     data: [
       {
         report: emptyReport,
-        flows: emptyFlows,
         transactions: emptyTransactions,
       },
     ],

@@ -56,7 +56,10 @@ export type AccountingReports = {
   profile: Profile;
   data: {
     report: Report;
-    flows: Flow[];
     transactions: Transaction[];
+    categories?: {
+      income: import('@/data/common').Category[];
+      expense: import('@/data/common').Category[];
+    };
   }[];
 };

@@ -34,171 +34,38 @@ const reports: ReportsByYear = {
 };
 
 // =============================================================================
-// 年度別データ（flows と transactions）
+// 年度別データ（categories と transactions）
 // =============================================================================
 const data: DataByYear = {
   2024: {
-    flows: [
-      {
-        id: 'i1',
-        name: '前年からの繰越額',
-        direction: 'income',
-        value: 3406179,
-        parent: '総収入',
-      },
-      {
-        id: 'i2',
-        name: '個人の負担する党費又は会費',
-        direction: 'income',
-        value: 251100,
-        parent: '本年の収入額',
-      },
-      {
-        id: 'i3',
-        name: '個人からの寄附',
-        direction: 'income',
-        value: 14627000,
-        parent: '寄附',
-      },
-      {
-        id: 'i4',
-        name: '法人その他の団体からの寄附',
-        direction: 'income',
-        value: 6530000,
-        parent: '寄附',
-      },
-      {
-        id: 'i5',
-        name: '政治団体からの寄附',
-        direction: 'income',
-        value: 1810000,
-        parent: '寄附',
-      },
-      {
-        id: 'i6',
-        name: '寄附',
-        direction: 'income',
-        value: 22967000,
-        parent: '本年の収入額',
-      },
-      {
-        id: 'i7',
-        name: '本部又は支部から供与された交付金',
-        direction: 'income',
-        value: 1250000,
-        parent: '本年の収入額',
-      },
-      {
-        id: 'i8',
-        name: 'その他の収入',
-        direction: 'income',
-        value: 3000000,
-        parent: '本年の収入額',
-      },
-      {
-        id: 'i9',
-        name: '本年の収入額',
-        direction: 'income',
-        value: 27468100,
-        parent: '総収入',
-      },
-      // 総収入
-      {
-        id: 'i_total',
-        name: '総収入',
-        direction: 'expense',
-        value: 30874279,
-        parent: null,
-      },
-      // 支出
-      {
-        id: 'e1',
-        name: '人件費',
-        direction: 'expense',
-        value: 3600000,
-        parent: '経常経費',
-      },
-      {
-        id: 'e2',
-        name: '光熱水費',
-        direction: 'expense',
-        value: 240000,
-        parent: '経常経費',
-      },
-      {
-        id: 'e3',
-        name: '備品・消耗品費',
-        direction: 'expense',
-        value: 1858006,
-        parent: '経常経費',
-      },
-      {
-        id: 'e4',
-        name: '事務所費',
-        direction: 'expense',
-        value: 9701324,
-        parent: '経常経費',
-      },
-      {
-        id: 'e5',
-        name: '経常経費',
-        direction: 'expense',
-        value: 15399330,
-        parent: '総収入',
-      },
-      {
-        id: 'e6',
-        name: '組織活動費',
-        direction: 'expense',
-        value: 3623335,
-        parent: '政治活動費',
-      },
-      {
-        id: 'e7',
-        name: '選挙関係費',
-        direction: 'expense',
-        value: 4000000,
-        parent: '政治活動費',
-      },
-      {
-        id: 'e8',
-        name: '宣伝事業費',
-        direction: 'expense',
-        value: 6852206,
-        parent: '機関紙誌の発行その他の事業費',
-      },
-      {
-        id: 'e9',
-        name: '機関紙誌の発行その他の事業費',
-        direction: 'expense',
-        value: 6852206,
-        parent: '政治活動費',
-      },
-      // { id: 'e10', name: '調査研究費', direction: 'expense', value: 0, parent: '政治活動費' },
-      {
-        id: 'e11',
-        name: '寄附・交付金',
-        direction: 'expense',
-        value: 100000,
-        parent: '政治活動費',
-      },
-      // { id: 'e12', name: 'その他の経費', direction: 'expense', value: 0, parent: '政治活動費' },
-      {
-        id: 'e13',
-        name: '政治活動費',
-        direction: 'expense',
-        value: 14575541,
-        parent: '総収入',
-      },
-      // 翌年への繰越
-      {
-        id: 'e_next',
-        name: '翌年への繰越',
-        direction: 'expense',
-        value: 899408,
-        parent: '総収入',
-      },
-    ],
+    categories: {
+      income: [
+        { id: 'i01', name: '前年からの繰越額' },
+        { id: 'i02', name: '本年の収入額' },
+        { id: 'i03', name: '個人の負担する党費又は会費', parent: 'i02' },
+        { id: 'i04', name: '寄附', parent: 'i02' },
+        { id: 'i05', name: '本部又は支部から供与された交付金', parent: 'i02' },
+        { id: 'i06', name: 'その他の収入', parent: 'i02' },
+        { id: 'i07', name: '個人からの寄附', parent: 'i04' },
+        { id: 'i08', name: '法人その他の団体からの寄附', parent: 'i04' },
+        { id: 'i09', name: '政治団体からの寄附', parent: 'i04' },
+      ],
+      expense: [
+        { id: 'e01', name: '経常経費' },
+        { id: 'e02', name: '政治活動費' },
+        { id: 'e03', name: '人件費', parent: 'e01' },
+        { id: 'e04', name: '光熱水費', parent: 'e01' },
+        { id: 'e05', name: '備品・消耗品費', parent: 'e01' },
+        { id: 'e06', name: '事務所費', parent: 'e01' },
+        { id: 'e07', name: '組織活動費', parent: 'e02' },
+        { id: 'e08', name: '選挙関係費', parent: 'e02' },
+        { id: 'e09', name: '機関紙誌の発行その他の事業費', parent: 'e02' },
+        { id: 'e10', name: '寄附・交付金', parent: 'e02' },
+        { id: 'e11', name: '宣伝事業費', parent: 'e09' },
+        { id: 'e12', name: '調査研究費', parent: 'e02' },
+        { id: 'e13', name: 'その他の経費', parent: 'e02' },
+      ],
+    },
     transactions: [
       {
         id: 'i1',
@@ -369,8 +236,8 @@ const accountingReports: AccountingReports = {
     .sort((a, b) => a - b) // 昇順
     .map((year) => ({
       report: reports[year],
-      flows: data[year].flows,
       transactions: data[year].transactions,
+      categories: data[year].categories,
     })),
 };
 export default accountingReports;
@@ -397,8 +264,8 @@ export const getDataByYear = (year: number) => {
     data: [
       {
         report: report,
-        flows: yearData.flows,
         transactions: yearData.transactions,
+        categories: yearData.categories,
       },
     ],
   };

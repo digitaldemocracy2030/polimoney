@@ -68,68 +68,18 @@ const reports: ReportsByYear = {
 // =============================================================================
 const data: DataByYear = {
   2022: {
-    flows: [
-      // 収入
-      {
-        id: 'i1',
-        name: '前年からの繰越額',
-        direction: 'income',
-        value: 272300,
-        parent: '総収入',
-      },
-      {
-        id: 'i2',
-        name: '本年の収入額',
-        direction: 'income',
-        value: 222000,
-        parent: '総収入',
-      },
-      {
-        id: 'i3',
-        name: '個人の負担する党費又は会費',
-        direction: 'income',
-        value: 22000,
-        parent: '本年の収入額',
-      },
-      {
-        id: 'i4',
-        name: '本部又は支部から供与された交付金',
-        direction: 'income',
-        value: 200000,
-        parent: '本年の収入額',
-      },
-      // 総収入
-      {
-        id: 'i_total',
-        name: '総収入',
-        direction: 'expense',
-        value: 494300,
-        parent: null,
-      },
-      // 支出
-      {
-        id: 'e2',
-        name: '政治活動費',
-        direction: 'expense',
-        value: 120000,
-        parent: '総収入',
-      },
-      {
-        id: 'e3',
-        name: '組織活動費',
-        direction: 'expense',
-        value: 120000,
-        parent: '政治活動費',
-      },
-      // 翌年への繰越
-      {
-        id: 'e_next',
-        name: '翌年への繰越',
-        direction: 'expense',
-        value: 374300,
-        parent: '総収入',
-      },
-    ],
+    categories: {
+      income: [
+        { id: 'i01', name: '前年からの繰越額' },
+        { id: 'i02', name: '本年の収入額' },
+        { id: 'i03', name: '個人の負担する党費又は会費', parent: 'i02' },
+        { id: 'i04', name: '本部又は支部から供与された交付金', parent: 'i02' },
+      ],
+      expense: [
+        { id: 'e01', name: '政治活動費' },
+        { id: 'e03', name: '組織活動費', parent: 'e01' },
+      ],
+    },
     transactions: [
       // 収入
       {
@@ -172,68 +122,18 @@ const data: DataByYear = {
     ],
   },
   2023: {
-    flows: [
-      // 収入
-      {
-        id: 'i1',
-        name: '前年からの繰越額',
-        direction: 'income',
-        value: 374300,
-        parent: '総収入',
-      },
-      {
-        id: 'i2',
-        name: '本年の収入額',
-        direction: 'income',
-        value: 233200,
-        parent: '総収入',
-      },
-      {
-        id: 'i3',
-        name: '個人の負担する党費又は会費',
-        direction: 'income',
-        value: 33200,
-        parent: '本年の収入額',
-      },
-      {
-        id: 'i4',
-        name: '本部又は支部から供与された交付金',
-        direction: 'income',
-        value: 200000,
-        parent: '本年の収入額',
-      },
-      // 総収入
-      {
-        id: 'i_total',
-        name: '総収入',
-        direction: 'expense',
-        value: 607500,
-        parent: null,
-      },
-      // 支出
-      {
-        id: 'e2',
-        name: '政治活動費',
-        direction: 'expense',
-        value: 250000,
-        parent: '総収入',
-      },
-      {
-        id: 'e3',
-        name: '組織活動費',
-        direction: 'expense',
-        value: 250000,
-        parent: '政治活動費',
-      },
-      // 翌年への繰越
-      {
-        id: 'e_next',
-        name: '翌年への繰越',
-        direction: 'expense',
-        value: 357500,
-        parent: '総収入',
-      },
-    ],
+    categories: {
+      income: [
+        { id: 'i01', name: '前年からの繰越額' },
+        { id: 'i02', name: '本年の収入額' },
+        { id: 'i03', name: '個人の負担する党費又は会費', parent: 'i02' },
+        { id: 'i04', name: '本部又は支部から供与された交付金', parent: 'i02' },
+      ],
+      expense: [
+        { id: 'e01', name: '政治活動費' },
+        { id: 'e03', name: '組織活動費', parent: 'e01' },
+      ],
+    },
     transactions: [
       // 収入
       {
@@ -276,81 +176,20 @@ const data: DataByYear = {
     ],
   },
   2024: {
-    flows: [
-      // 収入
-      {
-        id: 'i1',
-        name: '前年からの繰越額',
-        direction: 'income',
-        value: 357500,
-        parent: '総収入',
-      },
-      {
-        id: 'i2',
-        name: '本年の収入額',
-        direction: 'income',
-        value: 1797320,
-        parent: '総収入',
-      },
-      {
-        id: 'i3',
-        name: '個人の負担する党費又は会費',
-        direction: 'income',
-        value: 28400,
-        parent: '本年の収入額',
-      },
-      {
-        id: 'i4',
-        name: '寄附',
-        direction: 'income',
-        value: 1468920,
-        parent: '本年の収入額',
-      },
-      {
-        id: 'i5',
-        name: '本部又は支部から供与された交付金',
-        direction: 'income',
-        value: 300000,
-        parent: '本年の収入額',
-      },
-      {
-        id: 'i_total',
-        name: '総収入',
-        direction: 'expense',
-        value: 2154820,
-        parent: null,
-      },
-      // 支出
-      {
-        id: 'e2',
-        name: '政治活動費',
-        direction: 'expense',
-        value: 1143920,
-        parent: '総収入',
-      },
-      {
-        id: 'e3',
-        name: '選挙関係費',
-        direction: 'expense',
-        value: 1100000,
-        parent: '政治活動費',
-      },
-      {
-        id: 'e4',
-        name: 'その他の経費',
-        direction: 'expense',
-        value: 43920,
-        parent: '政治活動費',
-      },
-      // 翌年への繰越
-      {
-        id: 'e_next',
-        name: '翌年への繰越',
-        direction: 'expense',
-        value: 1010900,
-        parent: '総収入',
-      },
-    ],
+    categories: {
+      income: [
+        { id: 'i01', name: '前年からの繰越額' },
+        { id: 'i02', name: '本年の収入額' },
+        { id: 'i03', name: '個人の負担する党費又は会費', parent: 'i02' },
+        { id: 'i04', name: '本部又は支部から供与された交付金', parent: 'i02' },
+        { id: 'i06', name: '寄附', parent: 'i02' },
+      ],
+      expense: [
+        { id: 'e01', name: '政治活動費' },
+        { id: 'e05', name: '選挙関係費', parent: 'e01' },
+        { id: 'e06', name: 'その他の経費', parent: 'e01' },
+      ],
+    },
     transactions: [
       // 収入
       {
@@ -424,8 +263,8 @@ const accountingReports: AccountingReports = {
     .sort((a, b) => a - b) // 昇順
     .map((year) => ({
       report: reports[year],
-      flows: data[year].flows,
       transactions: data[year].transactions,
+      categories: data[year].categories,
     })),
 };
 export default accountingReports;
@@ -452,8 +291,8 @@ export const getDataByYear = (year: number) => {
     data: [
       {
         report: report,
-        flows: yearData.flows,
         transactions: yearData.transactions,
+        categories: yearData.categories,
       },
     ],
   };

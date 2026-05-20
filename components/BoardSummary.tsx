@@ -15,7 +15,9 @@ import { LandmarkIcon } from 'lucide-react';
 import { useState } from 'react';
 import { BoardChart } from '@/components/BoardChart';
 import { BoardContainer } from '@/components/BoardContainer';
-import type { Flow, Profile, Report } from '@/models/type';
+import type { Category } from '@/data/common';
+import type { Profile, Report, Transaction } from '@/models/type';
+import { generateFlowsFromTransactions } from '@/utils/flowGenerator';
 import { BoardChartFixed } from './BoardChartFixed';
 
 type Props = {
@@ -23,7 +25,11 @@ type Props = {
   profile: Profile;
   report: Report;
   otherReports: Report[];
-  flows: Flow[];
+  transactions: Transaction[];
+  categories?: {
+    income: Category[];
+    expense: Category[];
+  };
   useFixedBoardChart?: boolean;
   reportPathPrefix?: string;
 };
@@ -33,12 +39,15 @@ export function BoardSummary({
   profile,
   report,
   otherReports,
-  flows,
+  transactions,
+  categories,
   useFixedBoardChart = false,
   reportPathPrefix,
 }: Props) {
   const [copied, setCopied] = useState(false);
-
+  const flows = categories
+    ? generateFlowsFromTransactions(transactions, categories)
+    : [];
   // 現在のパスから現在のレポートIDを取得
   const currentReportId = report.id;
 

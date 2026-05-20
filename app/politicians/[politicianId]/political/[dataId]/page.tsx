@@ -96,8 +96,12 @@ export default async function Page(props: Props) {
         profile={yearData.profile}
         report={report}
         otherReports={allReports}
-        flows={
-          yearData.data.find((d) => d.report.id === report.id)?.flows ?? []
+        transactions={
+          yearData.data.find((d) => d.report.id === report.id)
+            ?.transactions ?? []
+        }
+        categories={
+          yearData.data.find((d) => d.report.id === report.id)?.categories
         }
       />
       <BoardTransactions
