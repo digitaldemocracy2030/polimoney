@@ -34,113 +34,28 @@ const reports: ReportsByYear = {
 };
 
 // =============================================================================
-// 年度別データ（flows と transactions）
+// 年度別データ（categories と transactions）
 // =============================================================================
 const data: DataByYear = {
   2025: {
-    flows: [
-      {
-        id: 'i1',
-        name: '前年からの繰越額',
-        direction: 'income',
-        value: 0,
-        parent: '総収入',
-      },
-      {
-        id: 'i3',
-        name: '個人からの寄附',
-        direction: 'income',
-        value: 2240000,
-        parent: '寄附',
-      },
-      {
-        id: 'i6',
-        name: '寄附',
-        direction: 'income',
-        value: 2240000,
-        parent: '本年の収入額',
-      },
-      {
-        id: 'i9',
-        name: '本年の収入額',
-        direction: 'income',
-        value: 2240000,
-        parent: '総収入',
-      },
-      // 総収入
-      {
-        id: 'i_total',
-        name: '総収入',
-        direction: 'income', // 元のスキーマがexpenseになっていたが論理的にincome
-        value: 2240000,
-        parent: null,
-      },
-      // 支出
-      {
-        id: 'e3',
-        name: '備品・消耗品費',
-        direction: 'expense',
-        value: 250973,
-        parent: '経常経費',
-      },
-      {
-        id: 'e4',
-        name: '事務所費',
-        direction: 'expense',
-        value: 6364,
-        parent: '経常経費',
-      },
-      {
-        id: 'e5',
-        name: '経常経費',
-        direction: 'expense',
-        value: 257337,
-        parent: '総収入',
-      },
-      {
-        id: 'e_a',
-        name: '機関紙誌の発行事業費',
-        direction: 'expense',
-        value: 325792,
-        parent: '機関紙誌の発行その他の事業費',
-      },
-      {
-        id: 'e_b',
-        name: '宣伝事業費',
-        direction: 'expense',
-        value: 614515,
-        parent: '機関紙誌の発行その他の事業費',
-      },
-      {
-        id: 'e9',
-        name: '機関紙誌の発行その他の事業費',
-        direction: 'expense',
-        value: 940307,
-        parent: '政治活動費',
-      },
-      {
-        id: 'e10',
-        name: '調査研究費',
-        direction: 'expense',
-        value: 26284,
-        parent: '政治活動費',
-      },
-      {
-        id: 'e13',
-        name: '政治活動費',
-        direction: 'expense',
-        value: 966591,
-        parent: '総収入',
-      },
-      // 翌年への繰越
-      {
-        id: 'e_next',
-        name: '翌年への繰越',
-        direction: 'expense',
-        value: 1016072,
-        parent: '総収入',
-      },
-    ],
+    categories: {
+      income: [
+        { id: 'i01', name: '前年からの繰越額' },
+        { id: 'i02', name: '本年の収入額' },
+        { id: 'i03', name: '寄附', parent: 'i02' },
+        { id: 'i04', name: '個人からの寄附', parent: 'i03' },
+      ],
+      expense: [
+        { id: 'e01', name: '経常経費' },
+        { id: 'e02', name: '政治活動費' },
+        { id: 'e03', name: '備品・消耗品費', parent: 'e01' },
+        { id: 'e04', name: '事務所費', parent: 'e01' },
+        { id: 'e05', name: '機関紙誌の発行その他の事業費', parent: 'e02' },
+        { id: 'e06', name: '調査研究費', parent: 'e02' },
+        { id: 'e07', name: '機関紙誌の発行事業費', parent: 'e05' },
+        { id: 'e08', name: '宣伝事業費', parent: 'e05' },
+      ],
+    },
     transactions: [
       {
         id: 'i3_1',
@@ -236,7 +151,7 @@ const data: DataByYear = {
         id: 'i3_11',
         direction: 'income',
         category: '寄附',
-        purpose: '個人からの寄附（その他の寄附）',
+        purpose: '個人からの寄附',
         name: '個人からの寄附（その他の寄附）',
         amount: 670000,
         date: '2025/12/31',
@@ -356,8 +271,8 @@ const accountingReports: AccountingReports = {
     .sort((a, b) => a - b) // 昇順
     .map((year) => ({
       report: reports[year],
-      flows: data[year].flows,
       transactions: data[year].transactions,
+      categories: data[year].categories,
     })),
 };
 export default accountingReports;
@@ -384,8 +299,8 @@ export const getDataByYear = (year: number) => {
     data: [
       {
         report: report,
-        flows: yearData.flows,
         transactions: yearData.transactions,
+        categories: yearData.categories,
       },
     ],
   };
