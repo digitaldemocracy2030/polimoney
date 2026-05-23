@@ -59,48 +59,20 @@ const reports: ReportsByYear = {
 };
 
 // =============================================================================
-// 年度別データ（flows と transactions）
+// 年度別データ（categories と transactions）
 // =============================================================================
 
 const data: DataByYear = {
   2023: {
-    flows: [
-      {
-        id: 'i11',
-        name: '個人からの寄附',
-        direction: 'income',
-        value: 111111,
-        parent: '総収入',
-      },
-      {
-        id: 'i99',
-        name: '総収入',
-        direction: 'expense',
-        value: 111111,
-        parent: null,
-      },
-      {
-        id: 'e11',
-        name: '経常経費',
-        direction: 'expense',
-        value: 100000,
-        parent: '総収入',
-      },
-      {
-        id: 'e13',
-        name: '翌年への繰越額',
-        direction: 'expense',
-        value: 11111,
-        parent: '総収入',
-      },
-      {
-        id: 'e21',
-        name: '人件費',
-        direction: 'expense',
-        value: 100000,
-        parent: '経常経費',
-      },
-    ],
+    categories: {
+      income: [
+        { id: 'i01', name: '寄附' },
+      ],
+      expense: [
+        { id: 'e01', name: '経常経費' },
+        { id: 'e02', name: '人件費', parent: 'e01' },
+      ],
+    },
     transactions: [
       {
         id: '7-1-1',
@@ -125,43 +97,15 @@ const data: DataByYear = {
     ],
   },
   2024: {
-    flows: [
-      {
-        id: 'i11',
-        name: '個人からの寄附',
-        direction: 'income',
-        value: 111111,
-        parent: '総収入',
-      },
-      {
-        id: 'i99',
-        name: '総収入',
-        direction: 'expense',
-        value: 111111,
-        parent: null,
-      },
-      {
-        id: 'e11',
-        name: '経常経費',
-        direction: 'expense',
-        value: 100000,
-        parent: '総収入',
-      },
-      {
-        id: 'e13',
-        name: '翌年への繰越額',
-        direction: 'expense',
-        value: 11111,
-        parent: '総収入',
-      },
-      {
-        id: 'e21',
-        name: '人件費',
-        direction: 'expense',
-        value: 100000,
-        parent: '経常経費',
-      },
-    ],
+    categories: {
+      income: [
+        { id: 'i01', name: '寄附' },
+      ],
+      expense: [
+        { id: 'e01', name: '経常経費' },
+        { id: 'e02', name: '人件費', parent: 'e01' },
+      ],
+    },
     transactions: [
       {
         id: '7-1-1',
@@ -199,8 +143,8 @@ const accountingReports: AccountingReports = {
     .sort((a, b) => a - b) // 昇順
     .map((year) => ({
       report: reports[year],
-      flows: data[year].flows,
       transactions: data[year].transactions,
+      categories: data[year].categories,
     })),
 };
 export default accountingReports;
@@ -227,8 +171,8 @@ export const getDataByYear = (year: number) => {
     data: [
       {
         report: report,
-        flows: yearData.flows,
         transactions: yearData.transactions,
+        categories: yearData.categories,
       },
     ],
   };

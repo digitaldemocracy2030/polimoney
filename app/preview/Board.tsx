@@ -22,7 +22,8 @@ export function Board({ data, politicianId }: BoardProps) {
         profile={data.profile}
         report={reportData.report}
         otherReports={data.data.map((d) => d.report)}
-        flows={reportData.flows}
+        transactions={reportData.transactions}
+        categories={reportData.categories}
         useFixedBoardChart={false}
       />
       <BoardTransactions
