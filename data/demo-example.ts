@@ -65,9 +65,7 @@ const reports: ReportsByYear = {
 const data: DataByYear = {
   2023: {
     categories: {
-      income: [
-        { id: 'i01', name: '寄附' },
-      ],
+      income: [{ id: 'i01', name: '寄附' }],
       expense: [
         { id: 'e01', name: '経常経費' },
         { id: 'e02', name: '人件費', parent: 'e01' },
@@ -98,9 +96,7 @@ const data: DataByYear = {
   },
   2024: {
     categories: {
-      income: [
-        { id: 'i01', name: '寄附' },
-      ],
+      income: [{ id: 'i01', name: '寄附' }],
       expense: [
         { id: 'e01', name: '経常経費' },
         { id: 'e02', name: '人件費', parent: 'e01' },

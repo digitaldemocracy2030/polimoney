@@ -78,8 +78,8 @@ export default async function Page(props: Props) {
         report={report}
         otherReports={allReports}
         transactions={
-          yearData.data.find((d) => d.report.id === report.id)
-            ?.transactions ?? []
+          yearData.data.find((d) => d.report.id === report.id)?.transactions ??
+          []
         }
         categories={
           yearData.data.find((d) => d.report.id === report.id)?.categories
