@@ -2,7 +2,7 @@ import type { ProfileList } from '@/models/type';
 import demoExample from './demo-example';
 import demoIwanaga from './demo-iwanaga';
 import demoKokiFujisaki from './demo-kokifujisaki';
-// import demoNakamura from './demo-nakamura'; // TODO: 中村幸信の再公開時に復帰
+import demoNakamura from './demo-nakamura';
 import demoRyosukeIdei from './demo-ryosukeidei';
 import demoTakahiroAnno from './demo-takahiroanno';
 
@@ -19,12 +19,12 @@ export const comingSoonId = 'demo-comingsoon';
 export const comingSoonNum = 1;
 
 const politicianEntries: PoliticianMasterEntry[] = [
-  // TODO: 中村幸信のページを再度公開する際に以下を復帰する
-  // {
-  //   id: 'nakamura',
-  //   profile: demoNakamura.profile,
-  //   electionDataIds: ['nakamura'],
-  // },
+  {
+    id: 'nakamura',
+    profile: demoNakamura.profile,
+    politicalDataId: 'nakamura',
+    electionDataIds: ['nakamura'],
+  },
   {
     id: 'iwanaga',
     profile: demoIwanaga.profile,

@@ -151,10 +151,18 @@ function convert(data: InputData, outputId = 'converted-data'): OutputData {
 
   const incomeCategories = data.categories
     .filter((c: InputCategory) => c.direction === 'income')
-    .map((c: InputCategory) => ({ id: c.id, name: c.name, parent: c.parent ?? undefined }));
+    .map((c: InputCategory) => ({
+      id: c.id,
+      name: c.name,
+      parent: c.parent ?? undefined,
+    }));
   const expenseCategories = data.categories
     .filter((c: InputCategory) => c.direction === 'expense')
-    .map((c: InputCategory) => ({ id: c.id, name: c.name, parent: c.parent ?? undefined }));
+    .map((c: InputCategory) => ({
+      id: c.id,
+      name: c.name,
+      parent: c.parent ?? undefined,
+    }));
   const categories = { income: incomeCategories, expense: expenseCategories };
   const reportId = `${outputId}-${data.year}`;
   const report: Report = {
