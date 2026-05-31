@@ -28,7 +28,7 @@ const reports: ReportsByYear = {
     representative: '中村 幸信',
     fundManagementOrg: '無',
     accountingManager: '中村 幸信',
-    administrativeManager: '中村 洋子',
+    administrativeManager: '',
     lastUpdate: '令和8年3月2日',
   },
 };
