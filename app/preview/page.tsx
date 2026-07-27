@@ -2,7 +2,7 @@ import { Alert, Box } from '@chakra-ui/react';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
-import { PreviewBoard } from '@/components/PreviewBoard';
+import { PreviewBoard } from './PreviewBoard';
 
 export default function Page() {
   return (

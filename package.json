@@ -6,11 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "biome check .",
-    "check": "biome check --write ."
+    "format": "biome format . --write",
+    "check": "biome check .",
+    "fix": "biome check . --write"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^2.8.0",
     "@chakra-ui/react": "^3.20.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -20,7 +20,7 @@
     "framer-motion": "^12.16.0",
     "html2canvas": "^1.4.1",
     "lucide-react": "^0.487.0",
-    "next": "15.5.7",
+    "next": "15.5.18",
     "nextjs-toploader": "^3.9.17",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -31,7 +31,6 @@
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "lefthook": "^1.11.12",
     "puppeteer": "^24.7.2",
     "typescript": "^5"
   }

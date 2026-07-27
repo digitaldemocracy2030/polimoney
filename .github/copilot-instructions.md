@@ -1,91 +1,51 @@
-# Polimoney AI Coding Instructions
+# AI Coding Instructions
 
-政治資金透明化プラットフォームのためのオープンソースプロジェクト。政治資金収支報告書のPDF処理・AI解析・Web可視化を行う。
+政治資金透明化プラットフォームのためのオープンソースプロジェクト。
 
+## 会話ルール
 
-## Project Architecture
+- 特に指示がない場合、日本語でコミュニケーションを行う
+- 作業説明的なコメントを避ける（`// この行を追加` など）
+- シンプルな関数型プログラミングを心掛ける
 
-### Core Data Flow
+## 作業ルール
 
-収支報告書 → 画像変換 → AI解析(Gemini) → JSON統合 → フロントエンド表示
+- コードの変更を行った際、ワークスペース内で検出されている問題を確認（`get_errors`）する
+- エラー発生時は根本原因の特定を行ったうえで修正を行う
 
-実行例：
-```bash
-./scripts/create-json-for-web.sh hoge.pdf ./public/reports/hoge.json
+## プロジェクト構成
+
+### 技術スタック
+
+- Next.js 15
+- Chakra UI v3
+- Nivo charts
+
+### サイト構成
+
+```
+/                                                - トップ（政治家・政治団体の上位数件）
+/politicians                                     - 政治家一覧
+/politicians/{politician_id}                     - 政治家詳細（政治・選挙収支一覧）
+/politicians/{politician_id}/political/{data_id} - 政治資金収支報告
+/politicians/{politician_id}/election/{data_id}  - 選挙運動収支報告
+/organizations                                   - 政治団体一覧
+/organizations/{org_id}                          - 政治団体詳細（政治収支一覧・代表者）
+/organizations/{org_id}/political/{data_id}      - 政治資金収支報告
 ```
 
-### Key Components
+### データ
 
-- **Frontend**: Next.js 15 + React 19 + Chakra UI v3 + Nivo charts
-- **PDF Processing**: Python tools (pdf2image + LangChain + Gemini API)
-- **Data Models**: 厳密なTypeScript型定義 (`models/type.d.ts`)
-- **Build Tools**: Biome (JS/TS)、Ruff+Pyright (Python)
+| ファイル                          | 説明                       | 備考                                                           |
+| --------------------------------- | -------------------------- | -------------------------------------------------------------- |
+| `data/politician-master.ts`       | 政治家エントリの単一ソース | `id`, `profile`, `politicalDataId?`, `electionDataIds?` を持つ |
+| `data/politician-data.ts`         | 政治資金収支データマップ   | キーは政治家IDと同一                                           |
+| `data/demo-*.ts`                  | 各政治家のデモデータ       |                                                                |
+| `data/election-finance/ef-*.json` | 選挙運動収支データ（JSON） |                                                                |
 
+### コンポーネント
 
-## Development Guidelines
-
-### 言語・スタイル
-
-- 日本語でのコミュニケーション
-- 作業説明的なコメントを避ける（`// この行を追加` など）
-- シンプルな関数型プログラミング
-
-
-## Critical Patterns
-
-### TypeScript Model System
-
-厳密型定義: `Profile`、`Report`、`Flow`、`Transaction`、`AccountingReports`
-
-- 政治資金の複式簿記的データ構造
-- direction: 'income' | 'expense'による収支分類
-- 階層的フロー構造（parent-child関係）
-
-### Data Conversion Pipeline
-
-1. `tools/pdf_to_images.py` - PDF→画像変換
-2. `tools/analyze_image.py` - AI解析（Gemini API）
-3. `tools/merge_jsons.py` - JSON統合
-4. `data/converter.ts` - フロントエンド用変換
-
-### Error Handling Pattern
-
-エラー発生時は根本原因特定をし即時解決する
-
-
-## Integration Points
-
-### External APIs
-
-- **Gemini API**: 資料解析
-- **Auth0**: 認証
-
-### Chart Visualization
-
-- `@nivo/pie` - 円グラフ
-- `@nivo/sankey` - サンキー図（資金フロー可視化）
-
-
-## Testing & Quality
-
-### Type Safety
-
-- 厳密TypeScript設定
-- Biome suspicious rules enabled
-- Python Pyright type checking
-
-
-## File Patterns
-
-### Critical Files
-
-- `models/type.d.ts` - 型定義（最重要）
-- `data/converter.ts` - データ変換ロジック
-- `scripts/create-json-for-web.sh` - 全体パイプライン
-- `tools/README.md` - Python環境セットアップ
-
-### Configuration
-
-- `biome.json` - JS/TS linting (tools除外)
-- `lefthook.yml` - Git hooks
-- `tools/pyproject.toml` - Python dependencies
+| ファイル                      | 説明                   | 備考                                                         |
+| ----------------------------- | ---------------------- | ------------------------------------------------------------ |
+| `components/Breadcrumb.tsx`   | パンくずコンポーネント |                                                              |
+| `components/BoardSummary.tsx` | 収支サマリー           | `reportPathPrefix` prop で org/politician 両コンテキスト対応 |

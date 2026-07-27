@@ -1,36 +1,12 @@
 'use client';
 
-import { useAuth0 } from '@auth0/auth0-react';
-import {
-  Avatar,
-  Box,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  Menu,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Flex, Heading, HStack, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
 import SNSSharePanel from './SNSSharePanel';
 
 export function Header({ profileName }: { profileName?: string }) {
   const pathname = usePathname();
-  const { error, logout } = useAuth0();
-
-  // 認証エラーがある場合、ローカルストレージをクリアしてログアウト
-  useEffect(() => {
-    if (error) {
-      Object.keys(localStorage).forEach((key) => {
-        if (key.startsWith('auth0.')) {
-          localStorage.removeItem(key);
-        }
-      });
-      logout({ logoutParams: { returnTo: window.location.origin } });
-    }
-  }, [error, logout]);
 
   return (
     <Box>
@@ -78,7 +54,6 @@ export function Header({ profileName }: { profileName?: string }) {
                 <SNSSharePanel profileName={profileName ?? ''} />
               </>
             )}
-            <AccountControl />
           </HStack>
         </Flex>
       </Box>
@@ -88,48 +63,3 @@ export function Header({ profileName }: { profileName?: string }) {
     </Box>
   );
 }
-
-const AccountControl = () => {
-  const { loginWithRedirect, logout } = useAuth0();
-  const { user, isAuthenticated, isLoading } = useAuth0();
-
-  if (isLoading) {
-    return null;
-  }
-
-  return (
-    <>
-      {isAuthenticated ? (
-        <Menu.Root positioning={{ placement: 'bottom' }}>
-          <Menu.Trigger>
-            <Avatar.Root size="xs">
-              <Avatar.Fallback name={user?.name} />
-              <Avatar.Image src={user?.picture} />
-            </Avatar.Root>
-          </Menu.Trigger>
-          <Menu.Positioner>
-            <Menu.Content>
-              <Menu.Item
-                value="logout"
-                onClick={() =>
-                  logout({ logoutParams: { returnTo: window.location.origin } })
-                }
-              >
-                ログアウト
-              </Menu.Item>
-            </Menu.Content>
-          </Menu.Positioner>
-        </Menu.Root>
-      ) : (
-        <Button
-          variant="ghost"
-          color="white"
-          onClick={() => loginWithRedirect()}
-          px={0}
-        >
-          ログイン
-        </Button>
-      )}
-    </>
-  );
-};

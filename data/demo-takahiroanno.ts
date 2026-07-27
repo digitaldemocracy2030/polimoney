@@ -34,86 +34,24 @@ const reports: ReportsByYear = {
 };
 
 // =============================================================================
-// 年度別データ（flows と transactions）
+// 年度別データ（categories と transactions）
 // =============================================================================
 const data: DataByYear = {
   2024: {
-    flows: [
-      // 収入
-      {
-        id: 'i3',
-        name: '個人からの寄附',
-        direction: 'income',
-        value: 16416736,
-        parent: '総収入',
-      },
-      {
-        id: 'i8',
-        name: '借入金',
-        direction: 'income',
-        value: 2000000,
-        parent: '総収入',
-      },
-      {
-        id: 'i_total',
-        name: '総収入',
-        direction: 'expense',
-        value: 18416736,
-        parent: null,
-      },
-
-      // 支出
-      {
-        id: 'e4',
-        name: '事務所費',
-        direction: 'expense',
-        value: 1173737,
-        parent: '経常経費',
-      },
-      {
-        id: 'e5',
-        name: '経常経費',
-        direction: 'expense',
-        value: 1173737,
-        parent: '総収入',
-      },
-      {
-        id: 'e7',
-        name: '選挙関係費',
-        direction: 'expense',
-        value: 2500000,
-        parent: '政治活動費',
-      },
-      {
-        id: 'e12',
-        name: '宣伝事業費',
-        direction: 'expense',
-        value: 1906328,
-        parent: '政治活動費',
-      },
-      {
-        id: 'e15',
-        name: 'その他の経費',
-        direction: 'expense',
-        value: 2000000,
-        parent: '政治活動費',
-      },
-      {
-        id: 'e16',
-        name: '政治活動費',
-        direction: 'expense',
-        value: 6406328,
-        parent: '総収入',
-      },
-      // 翌年への繰越
-      {
-        id: 'e_next',
-        name: '翌年への繰越額',
-        direction: 'expense',
-        value: 10836671,
-        parent: '総収入',
-      },
-    ],
+    categories: {
+      income: [
+        { id: 'i01', name: '個人からの寄附' },
+        { id: 'i02', name: '借入金' },
+      ],
+      expense: [
+        { id: 'e01', name: '経常経費' },
+        { id: 'e02', name: '政治活動費' },
+        { id: 'e03', name: '事務所費', parent: 'e01' },
+        { id: 'e04', name: '選挙関係費', parent: 'e02' },
+        { id: 'e06', name: '宣伝事業費', parent: 'e02' },
+        { id: 'e07', name: 'その他の経費', parent: 'e02' },
+      ],
+    },
     transactions: [
       {
         id: '4-1',
@@ -136,7 +74,7 @@ const data: DataByYear = {
       {
         id: '14-1',
         direction: 'expense',
-        category: '経常経費',
+        category: '事務所費',
         purpose: 'コミュニケーションツール費用(slack)',
         name: 'コミュニケーションツール費用(slack)',
         amount: 107265 + 152845 + 80552 + 63525 + 62818 + 66105,
@@ -145,7 +83,7 @@ const data: DataByYear = {
       {
         id: '14-2',
         direction: 'expense',
-        category: '経常経費',
+        category: '事務所費',
         purpose: '献金システム手数料(ボネクタ)',
         name: '献金システム手数料(ボネクタ)',
         amount: 300575 + 130680,
@@ -154,7 +92,7 @@ const data: DataByYear = {
       {
         id: '14-3',
         direction: 'expense',
-        category: '経常経費',
+        category: '事務所費',
         purpose: 'その他の経常経費',
         name: 'その他の経常経費',
         amount: 209372,
@@ -174,7 +112,7 @@ const data: DataByYear = {
       {
         id: '15-2',
         direction: 'expense',
-        category: '組織活動費',
+        category: '宣伝事業費',
         purpose: 'ブロードリスニングAPI利用料(X)',
         name: 'ブロードリスニングAPI利用料(X)',
         amount: 801378,
@@ -183,7 +121,7 @@ const data: DataByYear = {
       {
         id: '15-3',
         direction: 'expense',
-        category: '組織活動費',
+        category: '宣伝事業費',
         purpose: 'ブロードリスニングAPI利用料(OpenAI)',
         name: 'ブロードリスニングAPI利用料(OpenAI)',
         amount: 163808 + 166257 + 166257,
@@ -192,7 +130,7 @@ const data: DataByYear = {
       {
         id: '15-4',
         direction: 'expense',
-        category: '組織活動費',
+        category: '宣伝事業費',
         purpose: '政策広報用音声コンテンツ作成API利用料(ElevenLabs)',
         name: '政策広報用音声コンテンツ作成API利用料(ElevenLabs)',
         amount: 53832 + 112135 + 110797 + 110267 + 110389 + 67069,
@@ -201,7 +139,7 @@ const data: DataByYear = {
       {
         id: '15-5',
         direction: 'expense',
-        category: '組織活動費',
+        category: '宣伝事業費',
         purpose: 'その他の組織活動費',
         name: 'その他の組織活動費',
         amount: 44139,
@@ -232,8 +170,8 @@ const accountingReports: AccountingReports = {
     .sort((a, b) => a - b) // 昇順
     .map((year) => ({
       report: reports[year],
-      flows: data[year].flows,
       transactions: data[year].transactions,
+      categories: data[year].categories,
     })),
 };
 export default accountingReports;
@@ -260,8 +198,8 @@ export const getDataByYear = (year: number) => {
     data: [
       {
         report: report,
-        flows: yearData.flows,
         transactions: yearData.transactions,
+        categories: yearData.categories,
       },
     ],
   };

@@ -1,10 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'export',
-  assetPrefix: '',
-  basePath: '',
-  trailingSlash: true,
+  reactStrictMode: true,
   experimental: {
     optimizePackageImports: ['@chakra-ui/react'],
   },

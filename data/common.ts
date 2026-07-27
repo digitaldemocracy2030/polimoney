@@ -4,7 +4,7 @@
  * 全てのdemo-*.tsファイルで共通で使用される型定義のみを定義します。
  */
 
-import type { Flow, Report, Transaction } from '@/models/type';
+import type { Report, Transaction } from '@/models/type';
 
 // =============================================================================
 // 型定義
@@ -23,7 +23,10 @@ export type Category = {
  * 年度別データの型定義
  */
 export interface YearlyData {
-  flows: Flow[];
+  categories?: {
+    income: Category[];
+    expense: Category[];
+  };
   transactions: Transaction[];
 }
 

@@ -1,53 +1,9 @@
-import {
-  Badge,
-  Box,
-  Card,
-  HStack,
-  Image,
-  SimpleGrid,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
-import Link from 'next/link';
+import { Box, SimpleGrid } from '@chakra-ui/react';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Notice } from '@/components/Notice';
-import demoComingsoon, {
-  comingSoonId,
-  comingSoonNum,
-} from '@/data/demo-comingsoon';
-import demoExample from '@/data/demo-example';
-import demoKokiFujisaki from '@/data/demo-kokifujisaki';
-import demoRyosukeIdei from '@/data/demo-ryosukeidei';
-import demoTakahiroAnno from '@/data/demo-takahiroanno';
-import type { ProfileList } from '@/models/type';
-
-type Entry = {
-  id: string;
-  latestReportId: string;
-  profile: ProfileList;
-};
-const politicianEntries: Entry[] = [
-  demoTakahiroAnno,
-  demoRyosukeIdei,
-  demoKokiFujisaki,
-  demoExample,
-].map((data) => ({
-  id: data.id,
-  latestReportId: data.latestReportId,
-  profile: data.profile,
-}));
-
-const comingSoonEntries: Entry[] = Array.from(
-  { length: comingSoonNum },
-  (_, i) => ({
-    ...demoComingsoon,
-    id: `${comingSoonId}-${i}`,
-    latestReportId: `${comingSoonId}-${i}`,
-  }),
-);
-
-const entries: Entry[] = [...politicianEntries, ...comingSoonEntries];
+import { PoliticianCard } from '@/components/PoliticianCard';
+import { comingSoonId, politicianMaster } from '@/data/politician-master';
 
 export const metadata = {
   title: 'Polimoney - 政治資金の透明性を高める',
@@ -55,65 +11,116 @@ export const metadata = {
     'Polimoneyは、デジタル民主主義2030プロジェクトの一環として、政治資金の透明性を高めるために開発されたオープンソースのプロジェクトです。',
 };
 
+const TOP_COUNT = 9;
+
+// type OrgEntry = {
+//   orgName: string;
+//   orgId: string;
+//   latestReport: Report;
+// };
+
+// function getOrgEntries(): OrgEntry[] {
+//   const entries: OrgEntry[] = [];
+//   for (const [politicianId, dataModule] of Object.entries(
+//     politicianDataMap as Record<string, { default: AccountingReports }>,
+//   )) {
+//     const reports = dataModule.default.data.map(
+//       (d: { report: Report }) => d.report,
+//     );
+//     if (reports.length === 0) continue;
+//     const latest = reports.reduce((a, b) => (a.year > b.year ? a : b));
+//     if (!latest.orgName) continue;
+//     entries.push({
+//       orgName: latest.orgName,
+//       orgId: politicianId,
+//       latestReport: latest,
+//     });
+//   }
+//   return entries.sort((a, b) => a.orgName.localeCompare(b.orgName, 'ja'));
+// }
+
 export default function Page() {
+  const topPoliticians = politicianMaster
+    .filter((e) => !e.id.startsWith(comingSoonId))
+    .slice(0, TOP_COUNT);
+
+  // const topOrgs = getOrgEntries().slice(0, TOP_COUNT);
+
   return (
     <Box>
       <Header />
-      <SimpleGrid columns={{ base: 1, lg: 2 }} gap={5} mb={5} p={2}>
-        {entries.map((entry) => (
-          <Link
-            href={(() => {
-              if (entry.latestReportId.startsWith(comingSoonId)) {
-                return '#';
-              }
-              const id = entry.latestReportId.replace('demo-', '');
-              const lastHyphenIndex = id.lastIndexOf('-');
-              const politicianId = id.substring(0, lastHyphenIndex);
-              const year = id.substring(lastHyphenIndex + 1);
-              return `/${politicianId}/${year}`;
-            })()}
-            key={entry.latestReportId}
-          >
-            <Card.Root
-              flexDirection="row"
-              boxShadow="xs"
-              border="none"
-              alignItems="center"
+      <Box px={4} py={6}>
+        {/* TODO: セクションが増えるまで「政治家」見出しは非表示 */}
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={3} mb={4}>
+          {topPoliticians.map((entry) => (
+            <PoliticianCard key={entry.id} entry={entry} />
+          ))}
+        </SimpleGrid>
+        {/* TODO: データが増えた場合表示上限を設ける
+        <Box display="flex" justifyContent="center" mb={8}>
+          <Link href="/politicians">
+            <Button
+              size="sm"
+              bg="linear-gradient(90deg, #FDD2F8 0%, #A6D1FF 100%)"
+              color="white"
+              textShadow="0 0 3px #00000077"
+              borderRadius="full"
+              px={6}
+              _hover={{ filter: 'brightness(0.97)' }}
             >
-              <Image
-                objectFit="cover"
-                maxW="130px"
-                src={entry.profile.image}
-                alt={entry.profile.name}
-                borderTopLeftRadius="md"
-                borderBottomLeftRadius="md"
-              />
-              <Box>
-                <Card.Body>
-                  <Stack gap={0}>
-                    <Text fontSize="xs">{entry.profile.title}</Text>
-                    <Text fontSize="2xl" fontWeight="bold">
-                      {entry.profile.name}
-                    </Text>
-                    <HStack mt={1}>
-                      {entry.profile.party && (
-                        <Badge variant="outline" colorPalette="red">
-                          {entry.profile.party}
-                        </Badge>
-                      )}
-                      {entry.profile.district && (
-                        <Badge variant="outline">
-                          {entry.profile.district}
-                        </Badge>
-                      )}
-                    </HStack>
-                  </Stack>
-                </Card.Body>
-              </Box>
-            </Card.Root>
+              政治家一覧をもっと見る
+            </Button>
           </Link>
-        ))}
-      </SimpleGrid>
+        </Box>
+        */}
+
+        {/*
+        TODO: 政治団体導線を再公開する際にこのセクションを復帰する
+        <HStack justify="space-between" align="baseline" mb={3}>
+          <Text fontSize="lg" fontWeight="bold">
+            政治団体
+          </Text>
+          <Link href="/organizations">
+            <Text fontSize="sm" color="blue.500">
+              もっと見る →
+            </Text>
+          </Link>
+        </HStack>
+        <SimpleGrid columns={{ base: 1, lg: 2 }} gap={4}>
+          {topOrgs.map((org) => (
+            <Link href={`/organizations/${org.orgId}`} key={org.orgId}>
+              <Card.Root
+                flexDirection="row"
+                boxShadow="xs"
+                border="1px solid"
+                borderColor="gray.200"
+                _hover={{ boxShadow: 'sm', borderColor: 'gray.300' }}
+                transition="all 0.15s"
+                cursor="pointer"
+                overflow="hidden"
+              >
+                <Box
+                  w="6px"
+                  flexShrink={0}
+                  background="linear-gradient(180deg, #FDD2F8 0%, #A6D1FF 100%)"
+                />
+                <Card.Body px={4} py={3}>
+                  <Text fontWeight="bold">{org.orgName}</Text>
+                  <HStack mt={1}>
+                    <Badge variant="outline" fontSize="xs">
+                      代表: {org.latestReport.representative}
+                    </Badge>
+                    <Badge variant="outline" fontSize="xs">
+                      {org.latestReport.activityArea}
+                    </Badge>
+                  </HStack>
+                </Card.Body>
+              </Card.Root>
+            </Link>
+          ))}
+        </SimpleGrid>
+        */}
+      </Box>
       <Notice />
       <Footer />
     </Box>
