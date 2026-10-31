@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Paper } from '@mantine/core';
 
 type Props = {
   id?: string;
@@ -7,8 +7,8 @@ type Props = {
 
 export function BoardContainer({ id, children }: Props) {
   return (
-    <Box id={id} bgColor={'#ffffff'} borderRadius={'xl'} p={6} mb={4}>
+    <Paper id={id} p="lg" mb="md">
       {children}
-    </Box>
+    </Paper>
   );
 }

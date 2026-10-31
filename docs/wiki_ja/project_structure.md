@@ -1,165 +1,103 @@
 # プロジェクト構成
 
-Polimoneyプロジェクトは、複数のコアシステムと関連ファイルで構成されています。このドキュメントでは、プロジェクトの構造と主要なファイル・ディレクトリについて詳しく説明します。
+Polimoney は、リポジトリ直下に配置された Next.js アプリケーションです。過去のドキュメントにある `frontend/` 配下の構成は現在の構成ではありません。
 
-## コアシステム
+## コア領域
 
-プロジェクトは主に4つのシステムで構成されています：
+1. **Next.js ウェブアプリケーション**
+   - `app/` に App Router のページを配置
+   - `components/` に再利用可能な UI コンポーネントを配置
+   - Chakra UI と Nivo を使って画面と可視化を構築
 
-1. **Next.jsウェブアプリケーション**
+2. **データ**
+   - `data/` に政治家マスター、政治資金収支報告、選挙運動費用収支報告を配置
+   - `models/` に TypeScript 型定義を配置
+   - `utils/` にデータ変換・集計ロジックを配置
 
-- 政治資金データを表示するフロントエンドアプリケーション
-- React、TypeScriptを使用した最新のウェブ技術で構築
-- Next.js の標準ビルド（SSG + サーバーランタイム）で柔軟に配信
+3. **静的アセット**
+   - `public/` にプロフィール画像、背景画像、OGP 画像などを配置
 
-2. **データ処理ツール**
-   - 政治資金報告書を処理するPythonスクリプト
-   - PDF変換、画像分析、データ抽出の自動化ワークフロー
-   - vLLMを活用したAI画像解析
+4. **開発・品質管理**
+   - `package.json` に開発、ビルド、チェック、フォーマット用 npm scripts を定義
+   - `biome.json` で lint / format の設定を管理
+   - `.github/workflows/nextjs-check.yml` で CI チェックを実行
 
-3. **データモデル**
-   - コアデータ構造のTypeScript定義
-   - 一貫したデータ形式の保証
-   - 型安全なデータ操作
+## ディレクトリ構成
 
-4. **デプロイメントインフラ**
-
-- Vercelでのホスティングを制御する`vercel.json`
-- Next.js のサーバーレス実行を前提としたデプロイ手順
-- 必要に応じた手動デプロイ／プレビュー運用
-
-## プロジェクト構造図
-
-> フロントエンドの Next.js ソースは `frontend/` ディレクトリ以下に集約されている。
-
-```
+```text
 polimoney/
-├── frontend/
-│   ├── app/                  # Next.jsアプリケーション
-│   ├── components/           # Reactコンポーネント群
-│   ├── data/                 # データファイル
-│   ├── models/               # TypeScript型定義
-│   ├── public/               # 静的アセット
-│   ├── utils/                # 共通ユーティリティ
-│   ├── next.config.ts        # Next.js設定
-│   └── tsconfig.json         # TypeScript設定
-├── backend/                  # FastAPIバックエンド
-├── tools/                    # データ処理ツール
-├── scripts/                  # 補助スクリプト
-└── docs/                     # ドキュメント
+├── app/
+│   ├── page.tsx
+│   ├── layout.tsx
+│   ├── politicians/
+│   ├── organizations/
+│   └── preview/
+├── components/
+├── data/
+│   ├── election-finance/
+│   ├── politician-master.ts
+│   └── politician-data.ts
+├── models/
+├── public/
+│   └── ogp/
+├── utils/
+├── docs/
+├── next.config.ts
+├── tsconfig.json
+├── biome.json
+└── package.json
 ```
 
-## 主要なファイルとディレクトリ
+## 主要ページ
 
-### ウェブアプリケーション（`frontend/app/` と `frontend/components/`）
+### `app/page.tsx`
 
-#### `app/page.tsx`
+トップページです。`data/politician-master.ts` の政治家マスターから、表示対象の政治家カードを並べます。
 
-メインランディングページで、政治家カードのグリッドを表示します。ユーザーはここから特定の政治家の詳細ページに移動できます。
+### `app/politicians/page.tsx`
 
-```typescript
-// frontend/app/page.tsx の主要部分（概念的な例）
-export default function Home() {
-  return (
-    <main>
-      <h1>Polimoney - 政治資金透明化プロジェクト</h1>
-      <div className="grid">
-        {politicians.map(politician => (
-          <PoliticianCard
-            key={politician.id}
-            name={politician.name}
-            party={politician.party}
-            slug={politician.slug}
-          />
-        ))}
-      </div>
-    </main>
-  );
-}
-```
+政治家一覧ページです。Coming Soon 用のエントリを除外し、登録済み政治家を一覧表示します。
 
-#### `app/[slug]/page.tsx`
+### `app/politicians/[politicianId]/page.tsx`
 
-特定の政治家の詳細情報を表示する動的ページです。URLパラメータ（slug）に基づいて政治家データを取得し、複数のボードコンポーネントを表示します。
+政治家詳細ページです。政治資金収支報告と選挙運動費用収支報告への導線を表示します。
 
-```typescript
-// frontend/app/[slug]/page.tsx の主要部分（概念的な例）
-export default function PoliticianPage({ params }: { params: { slug: string } }) {
-  const data = getData(params.slug);
+### `app/politicians/[politicianId]/political/[dataId]/page.tsx`
 
-  return (
-    <div>
-      <BoardSummary profile={data.profile} summary={data.summary} />
-      <BoardChart flows={data.flows} />
-      <BoardTransactions transactions={data.transactions} />
-      <BoardMetadata metadata={data.metadata} />
-    </div>
-  );
-}
-```
+政治資金収支報告ページです。政治家IDとレポートIDから `AccountingReports` を特定し、概要、サンキー図、収入・支出明細、メタデータを表示します。
 
-#### `app/layout.tsx`
+### `app/politicians/[politicianId]/election/[dataId]/page.tsx`
 
-アプリケーションシェルを定義するルートレイアウトコンポーネントです。ヘッダー、フッター、メタデータなどの共通要素を含みます。
+選挙運動費用収支報告ページです。`data/election-finance/ef-*.json` を読み込み、収入、支出、公費、繰越、明細を表示します。
 
-#### `frontend/components/BoardChart.tsx`
+### `app/organizations/*`
 
-資金の流れを視覚化するサンキー図コンポーネントです。収入源から支出先までの資金フローを直感的に表示します。
+政治団体ページです。政治資金収支報告の団体軸表示に使います。
 
-#### `frontend/components/BoardSummary.tsx`
+### `app/preview/page.tsx`
 
-政治家のプロフィールと財務情報を表示する概要コンポーネントです。基本情報と財務サマリーを含みます。
+表示確認用のプレビューページです。
 
-#### `frontend/components/BoardTransactions.tsx`
+## 主要データファイル
 
-収入/支出取引のテーブル表示コンポーネントです。フィルタリングとページネーション機能を備えています。
+### `data/politician-master.ts`
 
-#### `frontend/components/BoardMetadata.tsx`
+政治家一覧の基点です。政治家ID、プロフィール、政治資金収支報告のデータID、選挙収支JSONのデータIDを紐づけます。
 
-資金報告書に関するメタデータを表示するコンポーネントです。データソースの情報を提供します。
+### `data/politician-data.ts`
 
-#### `frontend/components/Header.tsx`と`frontend/components/Footer.tsx`
+政治資金収支報告の TypeScript データモジュールを政治家IDごとに登録します。
 
-ナビゲーションと帰属情報を表示するコンポーネントです。
+### `data/demo-*.ts`
 
-### データファイル（`frontend/data/`）
+政治資金収支報告のサンプルまたは実データです。`AccountingReports` 型に沿って、プロフィール、レポート、取引、カテゴリを持ちます。
 
-#### `frontend/data/demo-takahiroanno.ts`と`frontend/data/demo-ryosukeidei.ts`
+### `data/election-finance/ef-*.json`
 
-政治家データの例を含むファイルです。実際のデータ構造と形式を示しています。
+選挙運動費用収支報告の JSON データです。ファイル名の `ef-` 以降が `politician-master.ts` の `electionDataIds` と対応します。
 
-#### `frontend/data/example.ts`
+## デプロイ設定
 
-テンプレートデータ構造を定義するファイルです。新しい政治家データを追加する際の参考になります。
+このリポジトリでは Next.js アプリケーションがリポジトリ直下にあるため、通常の Vercel 配信では `vercel.json` は不要です。Vercel 側で Project Root をリポジトリ直下にし、Framework Preset を Next.js として扱います。
 
-#### `frontend/data/converter.ts`
-
-データ形式間の変換ユーティリティを提供するファイルです。外部データソースからのデータをアプリケーション形式に変換します。
-
-### データ処理ツール（`tools/`）
-
-#### `tools/pdf_to_images.py`
-
-PDF報告書をPNG画像に変換するPythonスクリプトです。データ抽出プロセスの最初のステップを担当します。
-
-#### `tools/analyze_image.py`
-
-vLLMを使用して画像からテキストを抽出するPythonスクリプトです。OCRとAI解析を組み合わせています。
-
-#### `tools/merge_jsons.py`
-
-個別のJSON出力を統合データセットに結合するPythonスクリプトです。複数の政治家データを一つのデータセットにまとめます。
-
-#### `tools/generate-og-images.js`
-
-ソーシャルシェア用のOpen Graphプレビュー画像を作成するJavaScriptスクリプトです。
-
-### デプロイ設定
-
-#### `vercel.json`
-
-Vercelがどのディレクトリを Next.js プロジェクトとしてビルドするかを指定する設定ファイルです。
-
-#### `frontend/next.config.ts`
-
-Next.jsのランタイム設定ファイルです。React Strict Mode や最適化オプションを定義します。
+カスタムルーティング、特殊なビルド出力、monorepo のサブディレクトリ指定などが必要になった場合にのみ、`vercel.json` の追加を検討します。

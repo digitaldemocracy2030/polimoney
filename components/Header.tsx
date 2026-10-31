@@ -1,65 +1,114 @@
 'use client';
 
-import { Box, Flex, Heading, HStack, Text } from '@chakra-ui/react';
+import {
+  Anchor,
+  Burger,
+  Divider,
+  Group,
+  Menu,
+  Stack,
+  Switch,
+  Title,
+  useComputedColorScheme,
+  useMantineColorScheme,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { MoonIcon, SunIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import SNSSharePanel from './SNSSharePanel';
+
+const POLITICAL_NAV_LINKS = [
+  { href: '#summary', label: '収支の流れ' },
+  { href: '#income', label: '収入の一覧' },
+  { href: '#expense', label: '支出の一覧' },
+] as const;
+
+const ELECTION_NAV_LINKS = [
+  { href: '#expense', label: '支出目的で見る' },
+  { href: '#income', label: '収入で見る' },
+  { href: '#public', label: '公費で見る' },
+] as const;
 
 export function Header({ profileName }: { profileName?: string }) {
   const pathname = usePathname();
+  const { toggleColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme('light');
+  const [mounted, setMounted] = useState(false);
+  const [menuOpened, { toggle: toggleMenu, close: closeMenu }] =
+    useDisclosure(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isPoliticalPage =
+    /^\/(politicians|organizations)\/[^/]+\/political\//.test(pathname);
+  const isElectionPage = /^\/politicians\/[^/]+\/election\//.test(pathname);
+  const showNav = isPoliticalPage || isElectionPage;
+  const navLinks = isElectionPage ? ELECTION_NAV_LINKS : POLITICAL_NAV_LINKS;
 
   return (
-    <Box>
-      <Box w="full" position="relative">
-        <Flex
-          justify="space-between"
-          alignItems="center"
-          w="full"
-          h="60px"
-          px={8}
-          py={5}
-          background={'linear-gradient(90deg, #FDD2F8 0%, #A6D1FF 100%)'}
-          borderRadius={'full'}
-          color={'#ffffff'}
-          textShadow={'0 0 1px #00000077'}
-        >
-          {/* タイトル */}
-          <Box>
-            <Link href={'/'}>
-              <Heading as="h1" size="2xl">
-                Polimoney
-              </Heading>
-            </Link>
-          </Box>
+    <Stack component="header" gap="md">
+      <Group justify="space-between" wrap="nowrap">
+        <Anchor component={Link} href="/" underline="never" c="inherit">
+          <Title order={1}>Polimoney</Title>
+        </Anchor>
 
-          {/* ナビゲーションボタン */}
-          <HStack
-            gap={{ base: 4, lg: 6 }}
-            align="center"
-            position={{ base: 'absolute', lg: 'static' }}
-            right={{ base: 6, lg: 'auto' }}
-          >
-            {pathname !== '/' && (
-              <>
-                <HStack
-                  display={{ base: 'none', lg: 'flex' }}
-                  fontSize={'sm'}
-                  fontWeight={'bold'}
-                  gap={6}
-                >
-                  <Link href={'#summary'}>収支の流れ</Link>
-                  <Link href={'#income'}>収入の一覧</Link>
-                  <Link href={'#expense'}>支出の一覧</Link>
-                </HStack>
-                <SNSSharePanel profileName={profileName ?? ''} />
-              </>
-            )}
-          </HStack>
-        </Flex>
-      </Box>
-      <Text fontSize={'xs'} textAlign={'center'} my={6}>
-        政治資金の流れを見える化するプラットフォームです。透明性の高い政治実現を目指して、オープンソースで開発されています。
-      </Text>
-    </Box>
+        <Group gap="sm" wrap="nowrap">
+          {showNav && (
+            <>
+              <Group gap="md" visibleFrom="sm">
+                {navLinks.map((link) => (
+                  <Anchor key={link.href} href={link.href} size="sm">
+                    {link.label}
+                  </Anchor>
+                ))}
+              </Group>
+
+              <Menu
+                opened={menuOpened}
+                onClose={closeMenu}
+                position="bottom-end"
+              >
+                <Menu.Target>
+                  <Burger
+                    opened={menuOpened}
+                    onClick={toggleMenu}
+                    hiddenFrom="sm"
+                    size="sm"
+                    aria-label="メニュー"
+                  />
+                </Menu.Target>
+                <Menu.Dropdown hiddenFrom="sm">
+                  {navLinks.map((link) => (
+                    <Menu.Item
+                      key={link.href}
+                      component="a"
+                      href={link.href}
+                      onClick={closeMenu}
+                    >
+                      {link.label}
+                    </Menu.Item>
+                  ))}
+                </Menu.Dropdown>
+              </Menu>
+
+              <SNSSharePanel profileName={profileName ?? ''} />
+            </>
+          )}
+          <Switch
+            size="md"
+            checked={mounted && computedColorScheme === 'dark'}
+            onChange={() => toggleColorScheme()}
+            onLabel={<MoonIcon size={14} />}
+            offLabel={<SunIcon size={14} />}
+            aria-label="テーマ切り替え"
+          />
+        </Group>
+      </Group>
+      <Divider />
+    </Stack>
   );
 }

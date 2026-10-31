@@ -1,4 +1,4 @@
-import { HStack, SimpleGrid, Text } from '@chakra-ui/react';
+import { Group, SimpleGrid, Text } from '@mantine/core';
 import { BoardContainer } from '@/components/BoardContainer';
 import type { Report } from '@/models/type';
 
@@ -6,49 +6,41 @@ type Props = {
   report: Report;
 };
 
+function MetadataItem({ label, value }: { label: string; value?: string }) {
+  return (
+    <Group gap="xs" wrap="nowrap" align="flex-start">
+      <Text size="xs" c="dimmed" w={130} style={{ flexShrink: 0 }}>
+        {label}
+      </Text>
+      <Text size="xs" fw={700} style={{ whiteSpace: 'pre-wrap' }}>
+        {value}
+      </Text>
+    </Group>
+  );
+}
+
 export function BoardMetadata({ report }: Props) {
+  const items: [string, string | undefined][] = [
+    ['データ引用元', `${report.year}年収支報告書`],
+    ['政治団体の区分', report.orgType],
+    ['政治団体の名称', report.orgName],
+    ['活動区域の区分', report.activityArea],
+    ['代表者', report.representative],
+    ['資金管理団体の指定', report.fundManagementOrg],
+    ['会計責任者', report.accountingManager],
+    ['最終更新日', report.lastUpdate],
+    ['事務担当者', report.administrativeManager],
+  ];
+
   return (
     <BoardContainer>
-      <Text fontSize={'sm'} fontWeight={'bold'} mb={4}>
+      <Text size="sm" fw={700} mb="sm">
         本収支報告に関する情報開示
       </Text>
-      <SimpleGrid columns={{ base: 1, lg: 2 }} gap={2}>
-        <HStack>
-          <dt>データ引用元</dt>
-          <dd>{report.year}年収支報告書</dd>
-        </HStack>
-        <HStack>
-          <dt>政治団体の区分</dt>
-          <dd>{report.orgType}</dd>
-        </HStack>
-        <HStack>
-          <dt>政治団体の名称</dt>
-          <dd>{report.orgName}</dd>
-        </HStack>
-        <HStack>
-          <dt>活動区域の区分</dt>
-          <dd>{report.activityArea}</dd>
-        </HStack>
-        <HStack>
-          <dt>代表者</dt>
-          <dd>{report.representative}</dd>
-        </HStack>
-        <HStack>
-          <dt>資金管理団体の指定</dt>
-          <dd>{report.fundManagementOrg}</dd>
-        </HStack>
-        <HStack>
-          <dt>会計責任者</dt>
-          <dd>{report.accountingManager}</dd>
-        </HStack>
-        <HStack>
-          <dt>最終更新日</dt>
-          <dd>{report.lastUpdate}</dd>
-        </HStack>
-        <HStack>
-          <dt>事務担当者</dt>
-          <dd>{report.administrativeManager}</dd>
-        </HStack>
+      <SimpleGrid cols={{ base: 1, lg: 2 }} spacing="xs">
+        {items.map(([label, value]) => (
+          <MetadataItem key={label} label={label} value={value} />
+        ))}
       </SimpleGrid>
     </BoardContainer>
   );

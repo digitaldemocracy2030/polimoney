@@ -1,16 +1,18 @@
+'use client';
+
 import {
   Accordion,
   Badge,
   Box,
-  type BoxProps,
-  Heading,
-  HStack,
+  ColorSwatch,
+  Group,
+  Paper,
   SimpleGrid,
   Stack,
   Text,
-  useBreakpointValue,
-  VStack,
-} from '@chakra-ui/react';
+  Title,
+} from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import { ResponsivePie } from '@nivo/pie';
 import {
   type ReactNode,
@@ -21,6 +23,7 @@ import {
   useState,
 } from 'react';
 import { BoardContainer } from '@/components/BoardContainer';
+import { formatCurrency } from '@/utils/format';
 import { colorSchemeDefault } from '@/utils/nivoColorScheme';
 
 type Transaction = {
@@ -41,27 +44,21 @@ export type ChartData = {
 };
 
 interface TransactionSectionProps {
+  id?: string;
   title: string;
   transactions: Transaction[];
-  badgeColorPalette: 'green' | 'red' | 'blue';
+  badgeColor: 'green' | 'red' | 'blue';
   showType?: boolean;
   usePublicExpenseAmount?: boolean;
 }
 
-type ScrollShadowBoxProps = BoxProps & {
+function ScrollShadowBox({
+  children,
+  watch,
+}: {
   children: ReactNode;
   watch?: number;
-};
-
-function formatCurrency(amount: number): string {
-  return amount.toLocaleString('ja-JP', {
-    style: 'currency',
-    currency: 'JPY',
-    minimumFractionDigits: 0,
-  });
-}
-
-function ScrollShadowBox({ children, watch, ...props }: ScrollShadowBoxProps) {
+}) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [hasTopShadow, setHasTopShadow] = useState(false);
   const [hasBottomShadow, setHasBottomShadow] = useState(false);
@@ -79,6 +76,8 @@ function ScrollShadowBox({ children, watch, ...props }: ScrollShadowBoxProps) {
   }, []);
 
   useEffect(() => {
+    // watch の変化でスクロール状態を再計算する
+    void watch;
     update();
     const el = ref.current;
     if (!el) return;
@@ -93,9 +92,9 @@ function ScrollShadowBox({ children, watch, ...props }: ScrollShadowBoxProps) {
       el.removeEventListener('scroll', onScroll);
       resizeObserver.disconnect();
     };
-  }, [update]);
+  }, [update, watch]);
 
-  const shadowColor = 'var(--chakra-colors-blackAlpha-300)';
+  const shadowColor = 'rgba(0, 0, 0, 0.25)';
   const boxShadow = [
     hasTopShadow ? `inset 0 10px 10px -10px ${shadowColor}` : '',
     hasBottomShadow ? `inset 0 -10px 10px -10px ${shadowColor}` : '',
@@ -104,16 +103,25 @@ function ScrollShadowBox({ children, watch, ...props }: ScrollShadowBoxProps) {
     .join(', ');
 
   return (
-    <Box ref={ref} boxShadow={boxShadow} {...props}>
+    <Paper
+      ref={ref}
+      p="xs"
+      style={{
+        boxShadow,
+        maxHeight: 'calc(100vh - 100px)',
+        overflowY: 'auto',
+      }}
+    >
       {children}
-    </Box>
+    </Paper>
   );
 }
 
 export function TransactionSection({
+  id,
   title,
   transactions,
-  badgeColorPalette,
+  badgeColor,
   showType = false,
   usePublicExpenseAmount = false,
 }: TransactionSectionProps) {
@@ -182,20 +190,18 @@ export function TransactionSection({
     [chartItems],
   );
 
-  const pieChartMargin = useBreakpointValue({
-    base: { top: 10, right: 10, bottom: 10, left: 10 },
-    md: { top: 40, right: 80, bottom: 80, left: 80 },
-  });
-
-  const enableArcLinkLabels = useBreakpointValue({ base: false, md: true });
+  const isDesktop = useMediaQuery('(min-width: 62em)');
+  const pieChartMargin = isDesktop
+    ? { top: 40, right: 80, bottom: 80, left: 80 }
+    : { top: 10, right: 10, bottom: 10, left: 10 };
 
   return (
-    <BoardContainer>
-      <Heading as="h2" size="lg" mb={6}>
+    <BoardContainer id={id}>
+      <Title order={2} size="h4" mb="md">
         {title}
-      </Heading>
-      <SimpleGrid columns={{ base: 1, md: 2 }} gap={2}>
-        <Box w="100%" aspectRatio={1} overflow="visible">
+      </Title>
+      <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xs">
+        <Box w="100%" style={{ aspectRatio: 1, overflow: 'visible' }}>
           <ResponsivePie
             data={chartItems}
             margin={pieChartMargin}
@@ -208,7 +214,7 @@ export function TransactionSection({
             arcLabel={(datum) => `¥${datum.value.toLocaleString('ja-JP')}`}
             arcLabelsTextColor="#ffffff"
             arcLabelsSkipAngle={15}
-            enableArcLinkLabels={enableArcLinkLabels}
+            enableArcLinkLabels={!!isDesktop}
             arcLinkLabelsSkipAngle={10}
             activeOuterRadiusOffset={10}
             layers={[
@@ -230,48 +236,35 @@ export function TransactionSection({
               'legends',
             ]}
             tooltip={({ datum: { id, value } }) => (
-              <Box bg="white" p={2} borderRadius="md" boxShadow="md">
-                <Text fontSize="sm" fontWeight="bold">
+              <Paper p="xs" shadow="md">
+                <Text size="sm" fw={700}>
                   {id}
                 </Text>
-                <Text fontSize="sm">{formatCurrency(value)}</Text>
-              </Box>
+                <Text size="sm">{formatCurrency(value)}</Text>
+              </Paper>
             )}
           />
         </Box>
-        <Stack gap={2}>
+        <Stack gap="xs">
           {chartItems.map((item) => (
-            <HStack key={item.id} justify="space-between">
-              <HStack>
-                <Box w={3} h={3} borderRadius="full" bg={colorMap[item.id]} />
+            <Group key={item.id} justify="space-between">
+              <Group gap="xs">
+                <ColorSwatch color={colorMap[item.id]} size={12} />
                 <Text>{item.label}</Text>
-              </HStack>
-              <Badge variant="outline" colorPalette={badgeColorPalette}>
+              </Group>
+              <Badge variant="outline" color={badgeColor}>
                 {formatCurrency(item.value)}
               </Badge>
-            </HStack>
+            </Group>
           ))}
         </Stack>
       </SimpleGrid>
-      <Accordion.Root collapsible defaultValue={[]} mt={6}>
+
+      <Accordion variant="contained" mt="lg">
         <Accordion.Item value="details">
-          <Accordion.ItemTrigger
-            bg="#7C3AED"
-            color="white"
-            px={6}
-            py={2}
-            borderRadius="full"
-            _hover={{ bg: '#6D28D9' }}
-          >
-            <HStack justify="space-between" width="full">
-              <Heading as="h3" size="sm">
-                詳しく見る
-              </Heading>
-              <Accordion.ItemIndicator />
-            </HStack>
-          </Accordion.ItemTrigger>
-          <Accordion.ItemContent bg="purple.50" mt={2} p={2} borderRadius="lg">
-            <Box p={2} spaceY={4}>
+          <Accordion.Control>詳しく見る</Accordion.Control>
+          <Accordion.Panel>
+            <Stack gap="md">
               {chartItems.map((chartItem) => {
                 const cat = chartItem.id;
                 const records = groupedTransactions[cat] || [];
@@ -279,63 +272,44 @@ export function TransactionSection({
 
                 return (
                   <Box key={cat}>
-                    <HStack
-                      mb={2}
-                      pl={2}
-                      pr={4}
-                      gap={2}
-                      alignContent="space-between"
-                      justify="space-between"
-                    >
-                      <Box display="flex" alignItems="center" gap={2}>
-                        <Box
-                          w={3}
-                          h={3}
-                          borderRadius="full"
-                          bg={colorMap[cat]}
-                        />
-                        <Text fontWeight="bold">
+                    <Group justify="space-between" mb="xs">
+                      <Group gap="xs">
+                        <ColorSwatch color={colorMap[cat]} size={12} />
+                        <Text fw={700}>
                           {title.includes('支出') ? `${cat}費` : cat}
                         </Text>
-                      </Box>
-                      <Text fontWeight="bold" color="gray.700">
+                      </Group>
+                      <Text fw={700} c="dimmed">
                         {formatCurrency(total)}
                       </Text>
-                    </HStack>
-                    <ScrollShadowBox
-                      watch={records.length}
-                      bg="white"
-                      borderRadius="lg"
-                      maxH={{ base: 'calc(100vh - 100px)', md: 'none' }}
-                      overflowY="scroll"
-                      scrollbar="hidden"
-                      p={2}
-                    >
+                    </Group>
+                    <ScrollShadowBox watch={records.length}>
                       {records.map((transaction, index) => (
                         <Box
                           key={transaction.data_id}
-                          p={2}
-                          borderBottomWidth={
-                            index === records.length - 1 ? 0 : 1
+                          p="xs"
+                          style={
+                            index === records.length - 1
+                              ? undefined
+                              : {
+                                  borderBottom:
+                                    '1px solid var(--mantine-color-gray-2)',
+                                }
                           }
                         >
-                          <VStack gap={1} align="start">
-                            <Text
-                              fontSize="sm"
-                              color="gray.600"
-                              display={{ base: 'none', md: 'block' }}
-                            >
+                          <Stack gap={2} align="stretch">
+                            <Text size="sm" c="dimmed" visibleFrom="md">
                               {transaction.date || '-'}
                             </Text>
-                            <HStack
+                            <Group
                               justify="space-between"
-                              w="full"
-                              alignItems="flex-start"
+                              align="flex-start"
+                              wrap="nowrap"
                             >
-                              <Text fontSize="sm">
+                              <Text size="sm">
                                 {transaction.purpose || '-'}
                               </Text>
-                              <Text fontWeight="bold" fontSize="sm">
+                              <Text size="sm" fw={700}>
                                 {formatCurrency(
                                   usePublicExpenseAmount
                                     ? cat === '公費'
@@ -349,23 +323,23 @@ export function TransactionSection({
                                     : transaction.price,
                                 )}
                               </Text>
-                            </HStack>
+                            </Group>
                             {transaction.note && (
-                              <Text fontSize="xs" color="gray.500">
+                              <Text size="xs" c="dimmed">
                                 【備考】{transaction.note}
                               </Text>
                             )}
-                          </VStack>
+                          </Stack>
                         </Box>
                       ))}
                     </ScrollShadowBox>
                   </Box>
                 );
               })}
-            </Box>
-          </Accordion.ItemContent>
+            </Stack>
+          </Accordion.Panel>
         </Accordion.Item>
-      </Accordion.Root>
+      </Accordion>
     </BoardContainer>
   );
 }

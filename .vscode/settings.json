@@ -1,5 +1,4 @@
 {
-  "cSpell.words": ["bradlc", "venv"],
   "[json]": {
     "editor.defaultFormatter": "biomejs.biome"
   },

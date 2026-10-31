@@ -15,7 +15,7 @@ Polimoney の改善にご協力いただきありがとうございます！🎉
 - 開発に参加する方は、GitHub からリポジトリをクローンして作業してください。
 - プロジェクトについてのやりとりは、原則 Slack の [#開発\_Polimoney](https://dd2030.slack.com/archives/C08FL5L6GSH) までお願いします。
 - コントリビュートにあたっては、本リポジトリの CLA.md（コントリビューターライセンス）への同意が必要です。
-- タスク管理は Github Issues を使用しています。詳細は [こちら](./PROJECTS.md) を参照してください。
+- タスク管理は GitHub Issues を使用しています。必要に応じて GitHub Projects と組み合わせて運用します。
 
 ### Issue の作成
 

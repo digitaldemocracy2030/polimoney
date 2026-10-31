@@ -1,19 +1,9 @@
-import {
-  Badge,
-  Box,
-  Card,
-  HStack,
-  Image,
-  SimpleGrid,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Badge, Box, Group, SimpleGrid, Stack, Title } from '@mantine/core';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Footer } from '@/components/Footer';
-import { Header } from '@/components/Header';
-import { Notice } from '@/components/Notice';
+import { LinkCard } from '@/components/LinkCard';
+import { PageLayout } from '@/components/PageLayout';
+import { SectionHeading } from '@/components/SectionHeading';
 import { politicianDataMap } from '@/data/politician-data';
 import { findPolitician } from '@/data/politician-master';
 import type { AccountingReports, Report } from '@/models/type';
@@ -51,112 +41,50 @@ export default async function Page(props: Props) {
   const sortedReports = [...data.reports].sort((a, b) => b.year - a.year);
 
   return (
-    <Box>
-      <Header />
-      <Box px={4} py={6}>
-        {/* 団体情報 */}
-        <Box mb={8}>
-          <Text fontSize="2xl" fontWeight="bold">
-            {data.latest.orgName}
-          </Text>
-          <HStack mt={2}>
-            <Badge variant="outline">{data.latest.orgType}</Badge>
-            <Badge variant="outline">{data.latest.activityArea}</Badge>
-          </HStack>
+    <PageLayout>
+      <Stack gap="xl">
+        <Box>
+          <Title order={2}>{data.latest.orgName}</Title>
+          <Group gap="xs" mt={4}>
+            <Badge variant="light">{data.latest.orgType}</Badge>
+            <Badge variant="light">{data.latest.activityArea}</Badge>
+          </Group>
         </Box>
 
-        {/* 政治資金収支報告 */}
-        <Box mb={8}>
-          <Text fontSize="lg" fontWeight="bold" mb={3}>
-            政治資金収支報告
-          </Text>
-          <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+        <Box>
+          <SectionHeading>政治資金収支報告</SectionHeading>
+          <SimpleGrid cols={{ base: 1, md: 2 }}>
             {sortedReports.map((report) => (
-              <Link
+              <LinkCard
                 key={report.id}
                 href={`/organizations/${orgId}/political/${report.id}`}
-              >
-                <Card.Root
-                  flexDirection="row"
-                  boxShadow="xs"
-                  border="1px solid"
-                  borderColor="gray.200"
-                  _hover={{ boxShadow: 'sm', borderColor: 'gray.300' }}
-                  transition="all 0.15s"
-                  cursor="pointer"
-                  overflow="hidden"
-                >
-                  <Box
-                    w="6px"
-                    flexShrink={0}
-                    background="linear-gradient(180deg, #FDD2F8 0%, #A6D1FF 100%)"
-                  />
-                  <Card.Body px={4} py={3}>
-                    <Text fontWeight="bold">{report.year}年</Text>
-                    <Text fontSize="sm" color="gray.600">
-                      {report.orgName}
-                    </Text>
-                  </Card.Body>
-                </Card.Root>
-              </Link>
+                title={`${report.year}年`}
+                subtitle={report.orgName}
+              />
             ))}
           </SimpleGrid>
         </Box>
 
-        {/* 代表者（政治家リンク） */}
         {politician && (
-          <Box mb={8}>
-            <Text fontSize="lg" fontWeight="bold" mb={3}>
-              代表者
-            </Text>
-            <Link href={`/politicians/${orgId}`}>
-              <Card.Root
-                flexDirection="row"
-                h="90px"
-                boxShadow="xs"
-                border="1px solid"
-                borderColor="gray.200"
-                _hover={{ boxShadow: 'sm', borderColor: 'gray.300' }}
-                transition="all 0.15s"
-                cursor="pointer"
-                overflow="hidden"
-              >
-                <Image
-                  objectFit="cover"
-                  w="90px"
-                  h="90px"
-                  flexShrink={0}
-                  src={politician.profile.image}
-                  alt={politician.profile.name}
-                />
-                <Card.Body px={4} py={3} display="flex" alignItems="center">
-                  <Stack gap={0}>
-                    <Text fontSize="xs" color="gray.500">
-                      {data.latest.representative}
-                    </Text>
-                    <Text fontSize="xl" fontWeight="bold">
-                      {politician.profile.name}
-                    </Text>
-                    <HStack mt={1}>
-                      {politician.profile.party && (
-                        <Badge
-                          variant="outline"
-                          colorPalette="red"
-                          fontSize="xs"
-                        >
-                          {politician.profile.party}
-                        </Badge>
-                      )}
-                    </HStack>
-                  </Stack>
-                </Card.Body>
-              </Card.Root>
-            </Link>
+          <Box>
+            <SectionHeading>代表者</SectionHeading>
+            <SimpleGrid cols={{ base: 1, md: 2 }}>
+              <LinkCard
+                href={`/politicians/${orgId}`}
+                image={{
+                  src: politician.profile.image,
+                  alt: politician.profile.name,
+                }}
+                overline={data.latest.representative}
+                title={politician.profile.name}
+                badges={[politician.profile.party].filter((v): v is string =>
+                  Boolean(v),
+                )}
+              />
+            </SimpleGrid>
           </Box>
         )}
-      </Box>
-      <Notice />
-      <Footer />
-    </Box>
+      </Stack>
+    </PageLayout>
   );
 }

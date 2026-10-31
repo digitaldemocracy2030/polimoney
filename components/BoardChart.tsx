@@ -1,6 +1,6 @@
 'use client';
 
-import { Box } from '@chakra-ui/react';
+import { Box } from '@mantine/core';
 import {
   ResponsiveSankey,
   type SankeyLayerId,
@@ -56,12 +56,13 @@ export function BoardChart({ flows }: Props) {
   };
 
   return (
-    <Box w={'full'} overflowX={'auto'}>
-      <Box w={'940px'} h={'600px'} className="sankey-chart">
+    <Box w="100%" style={{ overflowX: 'auto' }}>
+      <Box w={940} h={600} className="sankey-chart">
         <ResponsiveSankey
           data={data}
           colors={(node) =>
-            node.direction === 'income' ? '#00BCD4' : '#E91E63'
+            // Mantine の cyan.6 / pink.6 と同じ値（SVG 属性のため hex 直書き）
+            node.direction === 'income' ? '#15aabf' : '#e64980'
           }
           label={(node) => `${node.id}: ${node.value.toLocaleString()}`}
           margin={{ top: 20, right: 20, bottom: 20, left: 20 }}

@@ -1,25 +1,20 @@
 'use client';
 
 import {
+  ActionIcon,
   Badge,
   Box,
-  ButtonGroup,
-  Dialog,
-  HStack,
-  IconButton,
+  Divider,
+  Group,
+  Modal,
   Pagination,
   Progress,
+  Stack,
   Table,
   Text,
-  VStack,
-} from '@chakra-ui/react';
-import {
-  BanknoteArrowDownIcon,
-  BanknoteArrowUpIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  Info,
-} from 'lucide-react';
+  Title,
+} from '@mantine/core';
+import { BanknoteArrowDownIcon, BanknoteArrowUpIcon, Info } from 'lucide-react';
 import { useState } from 'react';
 import { BoardContainer } from '@/components/BoardContainer';
 import type { Transaction } from '@/models/type';
@@ -39,263 +34,159 @@ export function BoardTransactions({
   showPurpose,
   showDate,
 }: Props) {
-  // const [selectedTab, setSelectedTab] = useState('name')
   const [page, setPage] = useState(1);
   const pageSize = 10;
   const [selectedTooltip, setSelectedTooltip] = useState<string | null>(null);
 
-  // 現在のページに表示する transactions を計算
-  const sorted = transactions.sort((a, b) => b.amount - a.amount);
+  const sorted = [...transactions].sort((a, b) => b.amount - a.amount);
   const paginated = sorted.slice((page - 1) * pageSize, page * pageSize);
+  const progressColor = direction === 'income' ? 'cyan' : 'pink';
 
   const renderTooltipIcon = (item: Transaction) => {
     if (!item.tooltip) return null;
     return (
-      <IconButton
-        variant="ghost"
-        size="xs"
-        ml={1}
-        onClick={() => {
-          setSelectedTooltip(item.tooltip || null);
-        }}
+      <ActionIcon
+        variant="subtle"
+        color="gray"
+        size="sm"
+        onClick={() => setSelectedTooltip(item.tooltip ?? null)}
+        aria-label="詳細説明"
       >
         <Info size={14} />
-      </IconButton>
+      </ActionIcon>
     );
   };
 
+  const renderProgress = (amount: number) => (
+    <Group gap="xs" wrap="nowrap">
+      <Progress
+        value={(amount / total) * 100}
+        size="xs"
+        color={progressColor}
+        flex={1}
+      />
+      <Text size="xs" w={44} ta="end">
+        {((amount / total) * 100).toFixed(1)}%
+      </Text>
+    </Group>
+  );
+
+  const categoryBadge = (item: Transaction) => (
+    <Badge variant="light" color="gray">
+      {item.category}
+      {item.subCategory && <span>：{item.subCategory}</span>}
+    </Badge>
+  );
+
   return (
     <BoardContainer id={direction}>
-      {/* タイトル */}
-      <Box mb={5}>
-        <HStack mb={2}>
-          <HStack fontSize={'xl'} fontWeight={'bold'}>
-            {direction === 'income' ? (
-              <BanknoteArrowUpIcon size={28} className={direction} />
-            ) : (
-              <BanknoteArrowDownIcon size={28} className={direction} />
-            )}
-            <Text>{direction === 'income' ? '収入' : '支出'}の一覧</Text>
-          </HStack>
-        </HStack>
-        <Text fontSize={'sm'} color={'#858585'}>
-          {direction === 'income'
-            ? 'どうやって政治資金を得ているか'
-            : '政治資金を何に使っているか'}
-        </Text>
-      </Box>
-      {/* タブ */}
-      {/*<Box mb={5}>*/}
-      {/*  <Tabs.Root*/}
-      {/*    value={selectedTab}*/}
-      {/*    onValueChange={(e) => setSelectedTab(e.value)}*/}
-      {/*  >*/}
-      {/*    <Tabs.List>*/}
-      {/*      <Tabs.Trigger*/}
-      {/*        value="name"*/}
-      {/*        fontWeight={'bold'}*/}
-      {/*        className={selectedTab === 'name' ? direction : ''}*/}
-      {/*      >*/}
-      {/*        {direction === 'income' ? '収入元' : '支出先'}別*/}
-      {/*      </Tabs.Trigger>*/}
-      {/*      <Tabs.Trigger*/}
-      {/*        value="category"*/}
-      {/*        fontWeight={'bold'}*/}
-      {/*        className={selectedTab === 'category' ? direction : ''}*/}
-      {/*      >*/}
-      {/*        カテゴリー別*/}
-      {/*      </Tabs.Trigger>*/}
-      {/*      {direction === 'expense' && (*/}
-      {/*        <Tabs.Trigger*/}
-      {/*          value="purpose"*/}
-      {/*          fontWeight={'bold'}*/}
-      {/*          className={selectedTab === 'purpose' ? direction : ''}*/}
-      {/*        >*/}
-      {/*          目的別*/}
-      {/*        </Tabs.Trigger>*/}
-      {/*      )}*/}
-      {/*    </Tabs.List>*/}
-      {/*  </Tabs.Root>*/}
-      {/*</Box>*/}
-      {/* テーブル (smartphone) */}
-      <Box display={{ base: 'block', lg: 'none' }} mb={5}>
-        {paginated.map((item) => (
-          <HStack key={item.id} borderBottom={'1px solid #E2E8F0'} py={4}>
-            <Box w={'full'}>
-              <HStack mb={2}>
-                <Badge>
-                  {item.category}
-                  {item.subCategory && <span>：{item.subCategory}</span>}
-                </Badge>
-                <Text fontSize={'xs'}>{item.date}</Text>
-              </HStack>
-              {direction === 'expense' && showPurpose && (
-                <Text fontSize={'xs'} fontWeight={'bold'}>
-                  {item.purpose}
-                </Text>
-              )}
-              <HStack justifyContent={'space-between'} mb={1}>
-                <HStack>
-                  <Text fontWeight={'bold'}>{item.name}</Text>
-                  {renderTooltipIcon(item)}
-                </HStack>
-                <Text fontWeight={'bold'}>{item.amount.toLocaleString()}</Text>
-              </HStack>
-              <Progress.Root
-                defaultValue={(item.amount / total) * 100}
-                size={'xs'}
-                colorPalette={direction === 'income' ? 'cyan' : 'pink'}
-              >
-                <HStack gap="5">
-                  <Progress.Track flex="1">
-                    <Progress.Range />
-                  </Progress.Track>
-                  <Progress.ValueText w={'40px'}>
-                    {((item.amount / total) * 100).toFixed(1)}%
-                  </Progress.ValueText>
-                </HStack>
-              </Progress.Root>
-            </Box>
-            {/*<IconButton variant={'ghost'} size={'xs'}>*/}
-            {/*  <CircleChevronDownIcon className={direction} />*/}
-            {/*</IconButton>*/}
-          </HStack>
-        ))}
-      </Box>
-      {/* テーブル (laptop) */}
-      <Box display={{ base: 'none', lg: 'block' }} mb={5}>
-        <Table.Root size={'lg'}>
-          <Table.Header>
-            <Table.Row fontSize={'sm'}>
-              {direction === 'expense' && showPurpose && (
-                <Table.ColumnHeader fontWeight={'bold'}>
-                  目的
-                </Table.ColumnHeader>
-              )}
-              <Table.ColumnHeader fontWeight={'bold'}>
-                {direction === 'income' ? '収入元' : '支出先'}
-              </Table.ColumnHeader>
-              <Table.ColumnHeader fontWeight={'bold'}>
-                カテゴリー
-              </Table.ColumnHeader>
-              <Table.ColumnHeader fontWeight={'bold'} textAlign="end">
-                金額
-              </Table.ColumnHeader>
-              <Table.ColumnHeader fontWeight={'bold'}>割合</Table.ColumnHeader>
-              {showDate && (
-                <Table.ColumnHeader fontWeight={'bold'}>
-                  日付
-                </Table.ColumnHeader>
-              )}
-              {/*<Table.ColumnHeader w={'32px'} />*/}
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {paginated.map((item) => (
-              <Table.Row key={item.id} fontSize={'sm'}>
-                {direction === 'expense' && showPurpose && (
-                  <Table.Cell fontWeight={'bold'}>{item.purpose}</Table.Cell>
-                )}
-                <Table.Cell fontWeight={'bold'}>
-                  <HStack>
-                    <Text>{item.name}</Text>
-                    {renderTooltipIcon(item)}
-                  </HStack>
-                </Table.Cell>
-                <Table.Cell>
-                  <Badge>
-                    {item.category}
-                    {item.subCategory && <span>：{item.subCategory}</span>}
-                  </Badge>
-                </Table.Cell>
-                <Table.Cell fontWeight={'bold'} textAlign="end">
-                  {item.amount.toLocaleString()}
-                </Table.Cell>
-                <Table.Cell minW={'150px'}>
-                  <Progress.Root
-                    defaultValue={(item.amount / total) * 100}
-                    size={'xs'}
-                    colorPalette={direction === 'income' ? 'cyan' : 'pink'}
-                  >
-                    <HStack gap="5">
-                      <Progress.Track flex="1">
-                        <Progress.Range />
-                      </Progress.Track>
-                      <Progress.ValueText>
-                        {((item.amount / total) * 100).toFixed(1)}%
-                      </Progress.ValueText>
-                    </HStack>
-                  </Progress.Root>
-                </Table.Cell>
-                {showDate && <Table.Cell>{item.date}</Table.Cell>}
-                {/*<Table.Cell>*/}
-                {/*  <IconButton variant={'ghost'} size={'xs'}>*/}
-                {/*    <CircleChevronDownIcon className={direction} />*/}
-                {/*  </IconButton>*/}
-                {/*</Table.Cell>*/}
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Root>
-      </Box>
-      {/* ページネーション */}
-      <VStack mt={5}>
-        <Pagination.Root
-          count={transactions.length}
-          pageSize={pageSize}
-          page={page}
-          onPageChange={(e) => setPage(e.page)}
-        >
-          <ButtonGroup variant="ghost" size="sm">
-            <Pagination.PrevTrigger asChild>
-              <IconButton>
-                <ChevronLeftIcon />
-              </IconButton>
-            </Pagination.PrevTrigger>
-            <Pagination.Items
-              render={(page) => (
-                <IconButton variant={{ base: 'ghost', _selected: 'outline' }}>
-                  {page.value}
-                </IconButton>
-              )}
-            />
-            <Pagination.NextTrigger asChild>
-              <IconButton>
-                <ChevronRightIcon />
-              </IconButton>
-            </Pagination.NextTrigger>
-          </ButtonGroup>
-        </Pagination.Root>
-      </VStack>
+      <Group gap="xs" mb={4}>
+        {direction === 'income' ? (
+          <BanknoteArrowUpIcon size={24} color="var(--mantine-color-cyan-7)" />
+        ) : (
+          <BanknoteArrowDownIcon
+            size={24}
+            color="var(--mantine-color-pink-7)"
+          />
+        )}
+        <Title order={2} size="h4">
+          {direction === 'income' ? '収入' : '支出'}の一覧
+        </Title>
+      </Group>
+      <Text size="sm" c="dimmed" mb="md">
+        {direction === 'income'
+          ? 'どうやって政治資金を得ているか'
+          : '政治資金を何に使っているか'}
+      </Text>
 
-      {/* Tooltip Dialog */}
-      <Dialog.Root
-        open={selectedTooltip !== null}
-        onOpenChange={(e) =>
-          setSelectedTooltip(e.open ? selectedTooltip : null)
-        }
-      >
-        <Dialog.Backdrop />
-        <Dialog.Positioner>
-          <Dialog.Content maxW="90vw" p={4}>
-            <Dialog.Header>
-              <Dialog.Title fontSize="lg" fontWeight="bold">
-                詳細説明
-              </Dialog.Title>
-            </Dialog.Header>
-            <Dialog.Body>
-              <Text fontSize="sm" whiteSpace="pre-line">
-                {selectedTooltip}
+      {/* 一覧 (smartphone) */}
+      <Stack gap={0} hiddenFrom="lg" mb="md">
+        {paginated.map((item) => (
+          <Box key={item.id} py="sm">
+            <Divider mb="sm" />
+            <Group gap="xs" mb={4}>
+              {categoryBadge(item)}
+              <Text size="xs" c="dimmed">
+                {item.date}
               </Text>
-            </Dialog.Body>
-            <Dialog.Footer>
-              <Dialog.CloseTrigger asChild>
-                <IconButton variant="outline">閉じる</IconButton>
-              </Dialog.CloseTrigger>
-            </Dialog.Footer>
-          </Dialog.Content>
-        </Dialog.Positioner>
-      </Dialog.Root>
+            </Group>
+            {direction === 'expense' && showPurpose && (
+              <Text size="xs" fw={700}>
+                {item.purpose}
+              </Text>
+            )}
+            <Group justify="space-between" mb={4}>
+              <Group gap={4}>
+                <Text fw={700}>{item.name}</Text>
+                {renderTooltipIcon(item)}
+              </Group>
+              <Text fw={700}>{item.amount.toLocaleString()}</Text>
+            </Group>
+            {renderProgress(item.amount)}
+          </Box>
+        ))}
+      </Stack>
+
+      {/* 一覧 (laptop) */}
+      <Box visibleFrom="lg" mb="md">
+        <Table verticalSpacing="sm">
+          <Table.Thead>
+            <Table.Tr>
+              {direction === 'expense' && showPurpose && (
+                <Table.Th>目的</Table.Th>
+              )}
+              <Table.Th>
+                {direction === 'income' ? '収入元' : '支出先'}
+              </Table.Th>
+              <Table.Th>カテゴリー</Table.Th>
+              <Table.Th ta="end">金額</Table.Th>
+              <Table.Th miw={150}>割合</Table.Th>
+              {showDate && <Table.Th>日付</Table.Th>}
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>
+            {paginated.map((item) => (
+              <Table.Tr key={item.id}>
+                {direction === 'expense' && showPurpose && (
+                  <Table.Td fw={700}>{item.purpose}</Table.Td>
+                )}
+                <Table.Td fw={700}>
+                  <Group gap={4} wrap="nowrap">
+                    <Text size="sm" fw={700}>
+                      {item.name}
+                    </Text>
+                    {renderTooltipIcon(item)}
+                  </Group>
+                </Table.Td>
+                <Table.Td>{categoryBadge(item)}</Table.Td>
+                <Table.Td fw={700} ta="end">
+                  {item.amount.toLocaleString()}
+                </Table.Td>
+                <Table.Td>{renderProgress(item.amount)}</Table.Td>
+                {showDate && <Table.Td>{item.date}</Table.Td>}
+              </Table.Tr>
+            ))}
+          </Table.Tbody>
+        </Table>
+      </Box>
+
+      <Group justify="center">
+        <Pagination
+          total={Math.ceil(transactions.length / pageSize)}
+          value={page}
+          onChange={setPage}
+        />
+      </Group>
+
+      <Modal
+        opened={selectedTooltip !== null}
+        onClose={() => setSelectedTooltip(null)}
+        title="詳細説明"
+      >
+        <Text size="sm" style={{ whiteSpace: 'pre-line' }}>
+          {selectedTooltip}
+        </Text>
+      </Modal>
     </BoardContainer>
   );
 }

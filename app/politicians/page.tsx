@@ -1,8 +1,6 @@
-import { Box, SimpleGrid, Text } from '@chakra-ui/react';
+import { SimpleGrid, Title } from '@mantine/core';
 import type { Metadata } from 'next';
-import { Footer } from '@/components/Footer';
-import { Header } from '@/components/Header';
-import { Notice } from '@/components/Notice';
+import { PageLayout } from '@/components/PageLayout';
 import { PoliticianCard } from '@/components/PoliticianCard';
 import { comingSoonId, politicianMaster } from '@/data/politician-master';
 
@@ -16,20 +14,15 @@ export default function Page() {
   );
 
   return (
-    <Box>
-      <Header />
-      <Box px={4} py={6}>
-        <Text fontSize="2xl" fontWeight="bold" mb={6}>
-          政治家一覧
-        </Text>
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={3}>
-          {entries.map((entry) => (
-            <PoliticianCard key={entry.id} entry={entry} />
-          ))}
-        </SimpleGrid>
-      </Box>
-      <Notice />
-      <Footer />
-    </Box>
+    <PageLayout>
+      <Title order={2} mb="md">
+        政治家一覧
+      </Title>
+      <SimpleGrid cols={{ base: 1, md: 2, lg: 3 }}>
+        {entries.map((entry) => (
+          <PoliticianCard key={entry.id} entry={entry} />
+        ))}
+      </SimpleGrid>
+    </PageLayout>
   );
 }

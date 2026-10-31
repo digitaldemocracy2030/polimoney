@@ -1,7 +1,6 @@
-import { Box } from '@chakra-ui/react';
+import '@mantine/core/styles.css';
+import { ColorSchemeScript, Container, MantineProvider } from '@mantine/core';
 import type { Metadata } from 'next';
-import { Provider } from '@/components/ui/provider';
-import './global.css';
 import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
@@ -68,14 +67,15 @@ export default function RootLayout({
             __html: JSON.stringify(structuredDataOrganization),
           }}
         />
+        <ColorSchemeScript defaultColorScheme="auto" />
       </head>
       <body>
         <NextTopLoader showSpinner={false} />
-        <Provider>
-          <Box maxW="1200px" mx="auto" p={{ base: 5, lg: 10 }}>
+        <MantineProvider defaultColorScheme="auto">
+          <Container size="lg" py="md">
             {children}
-          </Box>
-        </Provider>
+          </Container>
+        </MantineProvider>
       </body>
     </html>
   );

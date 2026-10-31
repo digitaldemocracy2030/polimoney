@@ -18,7 +18,7 @@
 ### 技術スタック
 
 - Next.js 15
-- Chakra UI v3
+- Mantine 8（デフォルトデザインに全乗せ・追加装飾はしない方針。Mantine 9 は Next 15.5 同梱の React と非互換）
 - Nivo charts
 
 ### サイト構成

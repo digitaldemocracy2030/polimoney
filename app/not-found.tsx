@@ -1,52 +1,24 @@
-import { Box, Button, Card, Heading, Stack, Text } from '@chakra-ui/react';
+import { Button, Stack, Text, Title } from '@mantine/core';
 import Link from 'next/link';
-import { Footer } from '@/components/Footer';
-import { Header } from '@/components/Header';
-import { Notice } from '@/components/Notice';
+import { PageLayout } from '@/components/PageLayout';
 
 export default function NotFound() {
   return (
-    <Box>
-      <Header />
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        minH="60vh"
-        p={8}
-      >
-        <Card.Root maxW="md" textAlign="center" boxShadow="lg">
-          <Card.Body>
-            <Stack gap={6}>
-              <Box>
-                <Text fontSize="6xl" fontWeight="bold" color="red.500">
-                  404
-                </Text>
-                <Heading size="lg" color="gray.700">
-                  ページが見つかりません
-                </Heading>
-              </Box>
-              <Text color="gray.600" fontSize="md">
-                お探しのページは存在しません。
-                <br />
-                URLをご確認いただくか、トップページからお探しください。
-              </Text>
-              <Link href="/">
-                <Button
-                  colorPalette="blue"
-                  size="lg"
-                  width="full"
-                  variant="solid"
-                >
-                  トップページへ戻る
-                </Button>
-              </Link>
-            </Stack>
-          </Card.Body>
-        </Card.Root>
-      </Box>
-      <Notice />
-      <Footer />
-    </Box>
+    <PageLayout>
+      <Stack align="center" py="xl">
+        <Title order={1}>404</Title>
+        <Title order={2} size="h4">
+          ページが見つかりません
+        </Title>
+        <Text c="dimmed" ta="center">
+          お探しのページは存在しません。
+          <br />
+          URLをご確認いただくか、トップページからお探しください。
+        </Text>
+        <Button component={Link} href="/">
+          トップページへ戻る
+        </Button>
+      </Stack>
+    </PageLayout>
   );
 }

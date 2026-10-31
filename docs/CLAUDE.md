@@ -34,7 +34,6 @@ docs/
 プロジェクトルートの重要ドキュメント:
 
 - **[CONTRIBUTING.md](../CONTRIBUTING.md)**: 貢献ガイドライン
-- **[PROJECTS.md](../PROJECTS.md)**: プロジェクト管理ワークフロー
 - **[CODE_REVIEW_GUIDELINES.md](../CODE_REVIEW_GUIDELINES.md)**: コードレビュー基準
 - **[CLA.md](../CLA.md)**: Contributor License Agreement
 

@@ -28,17 +28,17 @@ Polimoneyは、市民、ジャーナリスト、研究者に政治資金デー�
 
 ## 技術的アプローチ
 
-このプロジェクトは、公式の政治資金報告書からのデータ抽出と直感的なウェブインターフェースを組み合わせています：
+このプロジェクトは、構造化された政治資金データと直感的なウェブインターフェースを組み合わせています：
 
-1. **データ抽出プロセス**
-   - PDF形式の政治資金報告書をPNG画像に変換
-   - langchainを使用した画像からのテキスト抽出
-   - 構造化データへの変換と統合
+1. **データ管理**
+   - 政治家マスターを `data/politician-master.ts` で管理
+   - 政治資金収支報告を `data/demo-*.ts` と `data/politician-data.ts` で管理
+   - 選挙運動費用収支報告を `data/election-finance/ef-*.json` で管理
 
 2. **ウェブインターフェース**
-   - Next.jsを使用したモダンなフロントエンド
-   - インタラクティブな視覚化コンポーネント
-   - レスポンシブデザインによる様々なデバイスでのアクセシビリティ
+   - Next.js App Router を使用したフロントエンド
+   - Chakra UI によるレスポンシブな画面構築
+   - Nivo によるサンキー図・棒グラフの可視化
 
 ## プロジェクトの意義
 
@@ -49,4 +49,4 @@ Polimoneyは、通常は不透明な政治資金情報を一般に公開する�
 - **ジャーナリズムのサポート**: 調査報道のためのデータ分析ツールとして機能します
 - **研究活動への貢献**: 政治資金に関する学術研究のためのデータソースを提供します
 
-![Polimoneyの概要図](https://raw.githubusercontent.com/digitaldemocracy2030/polimoney/main/frontend/public/ogp.png)
+![Polimoneyの概要図](https://raw.githubusercontent.com/digitaldemocracy2030/polimoney/main/public/ogp/polimoney.png)

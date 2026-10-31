@@ -1,15 +1,9 @@
-import { Box } from '@chakra-ui/react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { BoardMetadata } from '@/components/BoardMetadata';
-import { BoardSummary } from '@/components/BoardSummary';
-import { BoardTransactions } from '@/components/BoardTransactions';
-import { Breadcrumb } from '@/components/Breadcrumb';
-import { Footer } from '@/components/Footer';
-import { Header } from '@/components/Header';
-import { Notice } from '@/components/Notice';
+import { PageLayout } from '@/components/PageLayout';
+import { ReportBoard } from '@/components/ReportBoard';
 import { politicianDataMap } from '@/data/politician-data';
-import type { AccountingReports, Report, Transaction } from '@/models/type';
+import type { AccountingReports, Report } from '@/models/type';
 
 type RouteParams = {
   orgId: string;
@@ -62,59 +56,24 @@ export default async function Page(props: Props) {
   if (!data) notFound();
 
   const { yearData, allReports, report } = data;
+  const entry = yearData.data.find((d) => d.report.id === report.id);
 
   return (
-    <Box>
-      <Header profileName={yearData.profile.name} />
-      <Breadcrumb
-        items={[
-          { label: data.report.orgName, href: `/organizations/${orgId}` },
-          { label: '政治資金収支報告' },
-        ]}
-      />
-      <BoardSummary
-        politicianId={orgId}
+    <PageLayout
+      profileName={yearData.profile.name}
+      breadcrumb={[
+        { label: report.orgName, href: `/organizations/${orgId}` },
+        { label: '政治資金収支報告' },
+      ]}
+    >
+      <ReportBoard
         profile={yearData.profile}
         report={report}
         otherReports={allReports}
-        transactions={
-          yearData.data.find((d) => d.report.id === report.id)?.transactions ??
-          []
-        }
-        categories={
-          yearData.data.find((d) => d.report.id === report.id)?.categories
-        }
+        transactions={entry?.transactions ?? []}
+        categories={entry?.categories}
         reportPathPrefix={`/organizations/${orgId}/political`}
       />
-      <BoardTransactions
-        direction={'income'}
-        total={report.totalIncome}
-        transactions={
-          yearData.data
-            .find((d) => d.report.id === report.id)
-            ?.transactions.filter(
-              (t: Transaction) => t.direction === 'income',
-            ) ?? []
-        }
-        showPurpose={false}
-        showDate={false}
-      />
-      <BoardTransactions
-        direction={'expense'}
-        total={report.totalExpense}
-        transactions={
-          yearData.data
-            .find((d) => d.report.id === report.id)
-            ?.transactions.filter(
-              (t: Transaction) => t.direction === 'expense',
-            ) ?? []
-        }
-        showPurpose={false}
-        showDate={false}
-      />
-      <BoardMetadata report={report} />
-      <Notice />
-      <Footer />
-    </Box>
+    </PageLayout>
   );
 }
