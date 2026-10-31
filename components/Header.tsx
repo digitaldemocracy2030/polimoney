@@ -8,7 +8,6 @@ import {
   Menu,
   Stack,
   Switch,
-  Text,
   Title,
   useComputedColorScheme,
   useMantineColorScheme,
@@ -44,9 +43,8 @@ export function Header({ profileName }: { profileName?: string }) {
     setMounted(true);
   }, []);
 
-  const isPoliticalPage = /^\/(politicians|organizations)\/[^/]+\/political\//.test(
-    pathname,
-  );
+  const isPoliticalPage =
+    /^\/(politicians|organizations)\/[^/]+\/political\//.test(pathname);
   const isElectionPage = /^\/politicians\/[^/]+\/election\//.test(pathname);
   const showNav = isPoliticalPage || isElectionPage;
   const navLinks = isElectionPage ? ELECTION_NAV_LINKS : POLITICAL_NAV_LINKS;
