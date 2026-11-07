@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polimoney やることリスト</title>
+<style>
+  :root {
+    --bg: #0f1117; --surface: #1a1d27; --surface2: #242733;
+    --border: #2e3140; --text: #e4e6ed; --muted: #8b8fa3;
+    --accent: #6c8cff; --green: #34d399; --yellow: #fbbf24;
+    --orange: #fb923c; --red: #f87171; --pink: #f472b6; --cyan: #22d3ee;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI','Hiragino Sans','Meiryo',sans-serif; background:var(--bg); color:var(--text); line-height:1.5; padding:16px; }
+  h1 { font-size:1.4em; margin-bottom:2px; }
+  .sub { color:var(--muted); font-size:.85em; margin-bottom:16px; }
+  .filters {
+    display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;
+    align-items:center; background:var(--surface); padding:10px 14px;
+    border-radius:10px; border:1px solid var(--border);
+  }
+  .filters label { font-size:.8em; color:var(--muted); }
+  select,input[type=text] {
+    background:var(--surface2); border:1px solid var(--border); color:var(--text);
+    padding:5px 10px; border-radius:6px; font-size:.85em;
+  }
+  select:focus,input:focus { outline:none; border-color:var(--accent); }
+  .count { margin-left:auto; font-size:.8em; color:var(--muted); }
+
+  table { width:100%; border-collapse:collapse; background:var(--surface); border-radius:10px; overflow:hidden; }
+  thead th {
+    background:var(--surface2); padding:8px 10px; font-size:.75em; font-weight:600;
+    color:var(--muted); text-align:left; cursor:pointer; user-select:none;
+    white-space:nowrap; border-bottom:1px solid var(--border);
+    position:sticky; top:0; z-index:1;
+  }
+  thead th:hover { color:var(--accent); }
+  thead th.asc::after { content:' ▲'; color:var(--accent); font-size:.7em; }
+  thead th.desc::after { content:' ▼'; color:var(--accent); font-size:.7em; }
+  tbody tr { transition:background .1s; }
+  tbody tr:hover { background:var(--surface2); }
+  tbody td { padding:7px 10px; font-size:.82em; border-bottom:1px solid var(--border); vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+
+  .pri { display:inline-block; min-width:20px; text-align:center; font-weight:700; border-radius:4px; padding:1px 6px; font-size:.8em; }
+  .pri-1 { background:#dc2626; color:#fff; }
+  .pri-2 { background:#d97706; color:#fff; }
+  .pri-3 { background:var(--surface2); color:var(--muted); border:1px solid var(--border); }
+
+  .cat { display:inline-block; padding:1px 7px; border-radius:5px; font-size:.72em; font-weight:600; }
+  .cat-開発 { background:#1e3a5f; color:#60a5fa; }
+  .cat-コンテンツ { background:#3b2f1e; color:#fbbf24; }
+  .cat-SNS { background:#1e3b3b; color:#22d3ee; }
+  .cat-アウトリーチ { background:#3b1e3b; color:#f472b6; }
+  .cat-コミュニティ { background:#1e3b2b; color:#34d399; }
+
+  .tgt { display:inline-block; padding:0 5px; border-radius:3px; font-size:.7em; margin:1px 1px; }
+  .tgt-ライト { background:#1e3a5f; color:#93c5fd; }
+  .tgt-ヘビー { background:#312e81; color:#a5b4fc; }
+  .tgt-政治家 { background:#4c1d95; color:#c4b5fd; }
+  .tgt-開発者 { background:#064e3b; color:#6ee7b7; }
+  .tgt-メディア { background:#4a1d2e; color:#fda4af; }
+  .tgt-内部 { background:#27272a; color:#a1a1aa; }
+
+  .bar { display:inline-block; height:5px; border-radius:3px; vertical-align:middle; margin-right:3px; }
+  .sv { font-size:.82em; font-weight:600; }
+
+  .note { font-size:.76em; color:var(--muted); max-width:220px; }
+  .problems { font-size:.72em; color:var(--muted); }
+
+  .footer { text-align:center; color:var(--muted); font-size:.75em; padding:16px; }
+</style>
+</head>
+<body>
+
+<h1>🏛️ Polimoney やることリスト</h1>
+<p class="sub">統一地方選 2027/4 に向けた全アクション｜パートタイム2名体制｜Ledger=寄付モデル｜全47都道府県対象</p>
+
+<div class="filters">
+  <label>カテゴリ
+    <select id="fCat" onchange="render()">
+      <option value="">すべて</option>
+      <option value="開発">開発</option>
+      <option value="コンテンツ">コンテンツ</option>
+      <option value="SNS">SNS</option>
+      <option value="アウトリーチ">アウトリーチ</option>
+      <option value="コミュニティ">コミュニティ</option>
+    </select>
+  </label>
+  <label>優先度
+    <select id="fPri" onchange="render()">
+      <option value="">すべて</option>
+      <option value="1">🔴 最優先</option>
+      <option value="2">🟡 優先</option>
+      <option value="3">⚪ 検討</option>
+    </select>
+  </label>
+  <label>ターゲット
+    <select id="fTgt" onchange="render()">
+      <option value="">すべて</option>
+      <option value="ライト">ライト層</option>
+      <option value="政治家">政治家</option>
+      <option value="ヘビー">ヘビー層</option>
+      <option value="メディア">メディア</option>
+      <option value="開発者">開発者</option>
+    </select>
+  </label>
+  <label>担当
+    <select id="fProd" onchange="render()">
+      <option value="">すべて</option>
+      <option value="Polimoney">Polimoney</option>
+      <option value="Hub">Hub</option>
+      <option value="Ledger">Ledger</option>
+      <option value="note">note</option>
+      <option value="X">X (SNS)</option>
+      <option value="直接">直接</option>
+    </select>
+  </label>
+  <label>時期
+    <select id="fMonth" onchange="render()">
+      <option value="">すべて</option>
+      <option value="2026-11">'26/11</option>
+      <option value="2026-12">'26/12</option>
+      <option value="2027-01">'27/1</option>
+      <option value="2027-02">'27/2</option>
+      <option value="2027-03">'27/3 告示前</option>
+      <option value="2027-04">'27/4 選挙</option>
+      <option value="2027-05">'27/5 選挙後</option>
+    </select>
+  </label>
+  <label>検索
+    <input type="text" id="fSearch" placeholder="キーワード..." oninput="render()" style="width:130px">
+  </label>
+  <span class="count" id="rowCount"></span>
+</div>
+
+<table>
+  <thead><tr>
+    <th data-k="order">#</th>
+    <th data-k="id">ID</th>
+    <th data-k="name">アクション</th>
+    <th data-k="category">種別</th>
+    <th data-k="product">担当</th>
+    <th data-k="targets">ターゲット</th>
+    <th data-k="polImpact">🏛政治家</th>
+    <th data-k="lightImpact">👤ライト</th>
+    <th data-k="score">総合</th>
+    <th data-k="pri">優先度</th>
+    <th data-k="month">時期</th>
+    <th data-k="note">備考</th>
+  </tr></thead>
+  <tbody id="tb"></tbody>
+</table>
+
+<p class="footer">Polimoney Priority List v2 — 2026-11-07 — ローカル表示用（データはJSON直置き）</p>
+
+<script>
+const D = [
+  // ---- 開発 ----
+  {id:"F-14",name:"地方選管PDFクローラー",category:"開発",product:"Hub",targets:["内部"],polImpact:3,lightImpact:5,score:8.2,pri:1,month:"2026-11",problems:"A-1,A-2,A-7",note:"コア基盤。全47都道府県対象。選管ごとにパーサー開発"},
+  {id:"F-11",name:"会計ソフト（Ledger）",category:"開発",product:"Ledger",targets:["政治家"],polImpact:10,lightImpact:2,score:7.8,pri:1,month:"2026-11",problems:"B-1,B-2",note:"寄付モデルで運用。地方議員の最大の痛みを解決"},
+  {id:"F-01",name:"選挙区検索（全レベル対応）",category:"開発",product:"Polimoney",targets:["ライト"],polImpact:5,lightImpact:10,score:8.5,pri:1,month:"2027-01",problems:"D-1",note:"郵便番号→国/県/市議を一覧表示。唯一無二の機能"},
+  {id:"F-02",name:"収支サマリー（可視化）",category:"開発",product:"Polimoney",targets:["ライト"],polImpact:4,lightImpact:9,score:8.0,pri:1,month:"2027-01",problems:"D-2,A-5",note:"サンキー図・円グラフで収支を直感表示"},
+  {id:"F-04",name:"候補者比較",category:"開発",product:"Polimoney",targets:["ライト","ヘビー"],polImpact:6,lightImpact:10,score:8.4,pri:1,month:"2027-02",problems:"D-2,D-3",note:"★選挙キラー機能。地方議員同士の比較は他にない"},
+  {id:"F-06",name:"SNSシェアカード(OGP)",category:"開発",product:"Polimoney",targets:["ライト"],polImpact:4,lightImpact:9,score:7.8,pri:1,month:"2027-02",problems:"D-1",note:"OGP画像自動生成→バイラル施策の鍵"},
+  {id:"F-03",name:"平易な用語説明",category:"開発",product:"Polimoney",targets:["ライト"],polImpact:2,lightImpact:8,score:7.2,pri:2,month:"2027-01",problems:"A-5",note:"ツールチップ追加。低コストで効果大"},
+  {id:"F-05",name:"自動テキスト要約",category:"開発",product:"Polimoney",targets:["ライト"],polImpact:3,lightImpact:8,score:7.0,pri:2,month:"2027-02",problems:"D-2",note:"LLMで「〇〇議員の資金の特徴」を自然文生成"},
+  {id:"F-13",name:"透明度スコア",category:"開発",product:"Polimoney",targets:["ライト","政治家"],polImpact:7,lightImpact:7,score:6.8,pri:2,month:"2027-03",problems:"B-5,D-1",note:"公開項目数・頻度から算出。選挙前に注目される"},
+  {id:"F-12",name:"公認バッジ",category:"開発",product:"Hub+Polimoney",targets:["政治家","ライト"],polImpact:8,lightImpact:5,score:6.6,pri:2,month:"2027-03",problems:"B-5",note:"Ledger経由データ公開の議員にバッジ付与"},
+  {id:"F-08",name:"横断検索（国政+地方統合）",category:"開発",product:"Polimoney+Hub",targets:["ヘビー","メディア"],polImpact:3,lightImpact:5,score:6.5,pri:2,month:"2027-03",problems:"A-2,A-7",note:"全国の政治家を費目・金額・地域で絞り込み"},
+  {id:"F-15",name:"国政DB連携",category:"開発",product:"Hub",targets:["内部"],polImpact:2,lightImpact:4,score:5.6,pri:3,month:"2027-02",problems:"A-1,A-2",note:"2027/1施行の総務省DB。API活用で地方と統合"},
+  {id:"F-07",name:"政治家・団体名寄せ",category:"開発",product:"Hub",targets:["ヘビー"],polImpact:3,lightImpact:4,score:5.4,pri:3,month:"2027-03",problems:"A-6",note:"段階的に精度向上。選挙DBとの突合"},
+  {id:"F-09",name:"データダウンロード(CSV/JSON)",category:"開発",product:"Polimoney+Hub",targets:["ヘビー","メディア"],polImpact:2,lightImpact:2,score:5.2,pri:3,month:"2027-03",problems:"A-2",note:"ヘビー向け。API前の暫定措置"},
+  {id:"F-11b",name:"政務活動費の分離管理",category:"開発",product:"Ledger",targets:["政治家"],polImpact:8,lightImpact:2,score:5.5,pri:2,month:"2027-03",problems:"B-2",note:"⚠️チームへの解説が必要。スコープに含める決定"},
+  {id:"F-10",name:"公開API",category:"開発",product:"Hub",targets:["ヘビー","開発者"],polImpact:2,lightImpact:2,score:4.8,pri:3,month:"2027-04",problems:"A-2",note:"外部連携用。後半フェーズ"},
+
+  // ---- コンテンツ ----
+  {id:"C-03",name:"選挙前「候補者の資金比較」記事",category:"コンテンツ",product:"note",targets:["ライト"],polImpact:7,lightImpact:10,score:8.8,pri:1,month:"2027-03",problems:"D-1,D-3",note:"★選挙フック本命。F-04のデータで記事化→バイラル"},
+  {id:"C-01",name:"「うちの市議のお金」シリーズ",category:"コンテンツ",product:"note",targets:["ライト"],polImpact:5,lightImpact:10,score:8.2,pri:1,month:"2027-01",problems:"D-1,D-2",note:"身近な金額比較で「自分ごと化」。継続連載"},
+  {id:"C-02",name:"政治資金の基礎知識記事",category:"コンテンツ",product:"note",targets:["ライト","ヘビー"],polImpact:3,lightImpact:7,score:6.8,pri:2,month:"2026-12",problems:"A-5,E-1",note:"3種の収支報告書の違いなど。選挙前の教養記事"},
+  {id:"C-05",name:"データ分析レポート",category:"コンテンツ",product:"note",targets:["ヘビー","メディア"],polImpact:4,lightImpact:4,score:5.6,pri:3,month:"2027-03",problems:"D-2",note:"「〇〇県の政治資金の傾向」等。データ揃ってから"},
+  {id:"C-04",name:"開発ドキュメンタリー",category:"コンテンツ",product:"note",targets:["開発者"],polImpact:1,lightImpact:3,score:4.0,pri:3,month:"2027-01",problems:"E-3",note:"月1。コントリビュータ獲得目的。余裕があれば"},
+
+  // ---- SNS ----
+  {id:"S-03",name:"統一地方選カウントダウン投稿",category:"SNS",product:"X",targets:["ライト"],polImpact:5,lightImpact:10,score:8.6,pri:1,month:"2027-01",problems:"D-1",note:"★選挙フック最大のSNS施策。100日前から開始"},
+  {id:"S-01",name:"定期データハイライト投稿",category:"SNS",product:"X",targets:["ライト"],polImpact:4,lightImpact:8,score:7.2,pri:2,month:"2026-12",problems:"D-1",note:"週1〜2回。フォロワー育成。低コスト"},
+  {id:"S-02",name:"OGP画像付きシェア投稿",category:"SNS",product:"X",targets:["ライト"],polImpact:4,lightImpact:9,score:7.4,pri:2,month:"2027-03",problems:"D-1",note:"F-06完成後にスタート。デモを兼ねる"},
+  {id:"S-04",name:"リリースノート / 新機能告知",category:"SNS",product:"X",targets:["ライト","開発者"],polImpact:2,lightImpact:3,score:3.5,pri:3,month:"",problems:"",note:"リリース時に自動発生。計画不要"},
+
+  // ---- アウトリーチ ----
+  {id:"O-01",name:"改革派議員ネットワーク接触",category:"アウトリーチ",product:"直接",targets:["政治家"],polImpact:9,lightImpact:3,score:7.0,pri:1,month:"2027-01",problems:"B-5,E-3",note:"透明化を掲げる議員グループに Ledger 紹介"},
+  {id:"O-02",name:"議員研修会での Ledger デモ",category:"アウトリーチ",product:"直接",targets:["政治家"],polImpact:9,lightImpact:2,score:6.8,pri:2,month:"2027-02",problems:"B-1,E-3",note:"告示前に完了。実機デモが効果的"},
+  {id:"O-06",name:"メディア・ジャーナリスト紹介",category:"アウトリーチ",product:"直接",targets:["メディア"],polImpact:4,lightImpact:7,score:6.6,pri:2,month:"2027-03",problems:"D-1",note:"認知拡大の最大レバレッジ。データ準備後"},
+  {id:"O-04",name:"議員インタビュー / ヒアリング",category:"アウトリーチ",product:"note",targets:["政治家","ライト"],polImpact:7,lightImpact:5,score:5.8,pri:3,month:"2027-01",problems:"B-1,B-2",note:"C-04と連動。議員の声を記事化"},
+  {id:"O-03",name:"無所属議員への個別コンタクト",category:"アウトリーチ",product:"直接",targets:["政治家"],polImpact:8,lightImpact:1,score:5.4,pri:3,month:"2027-02",problems:"B-1",note:"約19,500人。2名体制では個別は厳しい→一括案内"},
+  {id:"O-05",name:"選管職員へのヒアリング",category:"アウトリーチ",product:"直接",targets:["内部"],polImpact:2,lightImpact:1,score:4.0,pri:3,month:"2027-01",problems:"A-7,B-6",note:"データ公開実態の調査。余裕があれば"},
+
+  // ---- コミュニティ ----
+  {id:"E-02",name:"シビックテック勉強会発表",category:"コミュニティ",product:"直接",targets:["開発者","ライト"],polImpact:2,lightImpact:4,score:5.0,pri:3,month:"2027-02",problems:"E-3",note:"Code for Japan等で発表。認知拡大"},
+  {id:"E-01",name:"コントリビュータ募集",category:"コミュニティ",product:"GitHub",targets:["開発者"],polImpact:1,lightImpact:1,score:4.6,pri:3,month:"2027-01",problems:"A-7",note:"47選管パーサーの分担開発"},
+  {id:"E-03",name:"大学・研究機関との連携",category:"コミュニティ",product:"直接",targets:["ヘビー"],polImpact:1,lightImpact:1,score:4.2,pri:3,month:"2027-04",problems:"D-2",note:"長期的。データ揃ってから"},
+];
+
+// Assign execution order (month → score desc)
+const MO = ["2026-11","2026-12","2027-01","2027-02","2027-03","2027-04","2027-05",""];
+D.sort((a,b) => {
+  const ma = MO.indexOf(a.month), mb = MO.indexOf(b.month);
+  if (ma !== mb) return ma - mb;
+  return b.score - a.score;
+});
+D.forEach((t,i) => t.order = i+1);
+
+let sortKey = "order", sortAsc = true;
+
+function render() {
+  const fCat = document.getElementById("fCat").value;
+  const fPri = document.getElementById("fPri").value;
+  const fTgt = document.getElementById("fTgt").value;
+  const fProd = document.getElementById("fProd").value;
+  const fMonth = document.getElementById("fMonth").value;
+  const fSearch = document.getElementById("fSearch").value.toLowerCase();
+
+  let rows = D.filter(t => {
+    if (fCat && t.category !== fCat) return false;
+    if (fPri && t.pri !== +fPri) return false;
+    if (fTgt && !t.targets.includes(fTgt)) return false;
+    if (fProd && !t.product.includes(fProd)) return false;
+    if (fMonth && t.month !== fMonth) return false;
+    if (fSearch && !(t.id+t.name+t.note+t.problems+t.product).toLowerCase().includes(fSearch)) return false;
+    return true;
+  });
+
+  rows.sort((a,b) => {
+    let va = a[sortKey], vb = b[sortKey];
+    if (typeof va === "number") return sortAsc ? va-vb : vb-va;
+    return sortAsc ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
+  });
+
+  document.getElementById("rowCount").textContent = rows.length + " / " + D.length + " 件";
+
+  const ml = m => m ? m.replace("2026-","'26/").replace("2027-","'27/") : "—";
+  const sc = (v,max) => {
+    const w = Math.round(v/max*50);
+    const c = v>=8?"var(--green)":v>=6?"var(--yellow)":v>=4?"var(--orange)":"var(--red)";
+    return `<span class="bar" style="width:${w}px;background:${c}"></span><span class="sv" style="color:${c}">${v}</span>`;
+  };
+
+  document.getElementById("tb").innerHTML = rows.map(t => `<tr>
+    <td style="text-align:center;font-weight:700;color:var(--accent)">${t.order}</td>
+    <td><b>${t.id}</b></td>
+    <td>${t.name}</td>
+    <td><span class="cat cat-${t.category}">${t.category}</span></td>
+    <td style="font-size:.78em;color:var(--muted)">${t.product}</td>
+    <td>${t.targets.map(x=>`<span class="tgt tgt-${x}">${x}</span>`).join("")}</td>
+    <td>${sc(t.polImpact,10)}</td>
+    <td>${sc(t.lightImpact,10)}</td>
+    <td>${sc(t.score,10)}</td>
+    <td><span class="pri pri-${t.pri}">${t.pri===1?"🔴":t.pri===2?"🟡":"⚪"}</span></td>
+    <td style="white-space:nowrap">${ml(t.month)}</td>
+    <td class="note">${t.note}</td>
+  </tr>`).join("");
+}
+
+document.querySelectorAll("thead th").forEach(th => {
+  th.addEventListener("click", () => {
+    const k = th.dataset.k; if (!k) return;
+    if (sortKey === k) sortAsc = !sortAsc;
+    else { sortKey = k; sortAsc = ["order","id","name","category","product","month","targets"].includes(k); }
+    document.querySelectorAll("thead th").forEach(h => h.classList.remove("asc","desc"));
+    th.classList.add(sortAsc ? "asc" : "desc");
+    render();
+  });
+});
+
+document.querySelector('[data-k="order"]').classList.add("asc");
+render();
+</script>
+</body>
+</html>
