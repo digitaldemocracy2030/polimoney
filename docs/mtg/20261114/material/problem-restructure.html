@@ -189,10 +189,17 @@
     .hero h1 { color: #0f172a; }
     .hero h1 span { color: #0369a1; }
     .card, .product-card, .diagram { background: #f8fafc; border-color: #cbd5e1; }
+    .card td strong, .product-card .name { color: #1e293b; }
+    .diagram { color: #1e293b; }
+    .key-statement, .note-box, .tip-box { color: #1e293b; }
+    .layer-label { color: #1e293b; }
     .toc { display: none; }
     section > h2 { color: #0369a1; }
     thead th { position: static; }
   }
+
+  /* Scroll margin for sticky nav */
+  section[id] { scroll-margin-top: 60px; }
 </style>
 </head>
 <body>
@@ -213,7 +220,7 @@
   </div>
 </header>
 
-<div class="container">
+<main class="container">
 
   <!-- ===== 第1層 ===== -->
   <section id="layer1">
@@ -241,7 +248,7 @@
           <tr>
             <td>P-3</td>
             <td><strong>政策活動費（旧・使途不明金）</strong></td>
-            <td>政党から政治家への支出で使途が公開されない。何に使われたか追跡できない（旧 C-3）</td>
+            <td>2025年以前、政党から政治家への支出で使途が公開されなかった。2026年1月の法改正で廃止されたが、過去の支出の使途は依然として追跡困難（旧 C-3）</td>
           </tr>
           <tr>
             <td>P-4</td>
@@ -431,7 +438,7 @@
 │                                                        │
 │  P-1 企業献金の不透明さ                                │
 │  P-2 パーティー券の実態                                │
-│  P-3 使途不明な政策活動費        ← 市民が自ら          │
+│  P-3 使途不明な政策活動費（廃止済・過去分） ← 市民が自ら          │
 │  P-4 監視機関の不在                見て、              │
 │  P-5 個人献金文化の未成熟          気づいて、          │
 │  P-6 3つの財布の混同               考えることが        │
@@ -591,7 +598,7 @@
    └──────────┴──────────┴──────────┴──────────┘</div>
   </section>
 
-</div>
+</main>
 
 <script>
 // Smooth scroll & active nav
