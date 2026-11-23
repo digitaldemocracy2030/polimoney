@@ -127,6 +127,5 @@ Hub の公開データは、Polimoney 以外にも市民の分析・独自サイ
 
 - **Hub API が不足している。** Hub API は Deno 版から FastAPI 版に移行したが、FastAPI 版には公開データと同期の API しか無い。Ledger が使うマスタ参照・本人確認・各種申請・勘定科目の API と、Hub Admin が使う管理 API が未実装。一覧は Ledger の `docs/HUB_API_GAP.md`。
 - **紐付け ID を取得する API が無い。** Ledger が台帳に保存すべき 政治家×団体 / 政治家×選挙 の ID を取得できないため、同期ができない。
-- **同期 API のキー認証は未マージ。** Hub のブランチ `feat/sync-api-key-auth` で実装済み。
 - **Polimoney は Hub API 未接続。** 静的データから Hub の公開 API への切り替えが必要。
-- **ローカルでの Hub API のポートを 3722 に揃える変更は未マージ。** Hub のブランチ `chore/local-port-3722`。
+- **ローカルでの Hub API のポートを 3722 に揃える変更はレビュー待ち。** Hub #64。
