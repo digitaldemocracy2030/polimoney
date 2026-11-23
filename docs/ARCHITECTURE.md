@@ -96,6 +96,7 @@ Polimoney は、政治資金の透明化を目的とした 3 つのプロダク�
 | Ledger API → Hub API | `X-API-Key` | Ledger 専用キー。本番用と開発用の 2 本（下記） |
 | Hub Admin → Hub API | Supabase B の管理者ログイン | |
 | Polimoney・外部 → Hub 公開 API | なし（計画: 利用キーとレート制限） | 読み取り専用 |
+| Ledger API → Hub マスタ API（`/api/v1/master/*`） | `X-API-Key`（Ledger 専用キー） | 一般公開するまでは Ledger 専用 |
 
 **Ledger 専用キー**
 
@@ -125,7 +126,7 @@ Hub の公開データは、Polimoney 以外にも市民の分析・独自サイ
 
 ## 9. 現状の課題（2026-11-23 時点）
 
-- **Hub API が不足している。** Hub API は Deno 版から FastAPI 版に移行したが、FastAPI 版には公開データと同期の API しか無い。Ledger が使うマスタ参照・本人確認・各種申請・勘定科目の API と、Hub Admin が使う管理 API が未実装。一覧は Ledger の `docs/HUB_API_GAP.md`。
+- **Hub API が不足している。** Hub API は Deno 版から FastAPI 版に移行したが、FastAPI 版には公開データと同期の API しか無い。Ledger が使うマスタ参照・本人確認・各種申請の API と、Hub Admin が使う管理 API が未実装（勘定科目 API は追加済み）。一覧は Ledger の `docs/HUB_API_GAP.md`。
 - **紐付け ID を取得する API が無い。** Ledger が台帳に保存すべき 政治家×団体 / 政治家×選挙 の ID を取得できないため、同期ができない。
 - **Polimoney は Hub API 未接続。** 静的データから Hub の公開 API への切り替えが必要。
 - **ローカルでの Hub API のポートを 3722 に揃える変更はレビュー待ち。** Hub #64。
