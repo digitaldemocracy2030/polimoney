@@ -8,6 +8,7 @@
 
 ```
 docs/
+├── ARCHITECTURE.md        # システム全体（Polimoney / Hub / Ledger）のアーキテクチャ
 ├── adr/                    # Architecture Decision Records
 ├── wiki_ja/               # 日本語Wiki
 ├── DEVIN_COLLABORATION.md # Devin連携ガイド
@@ -15,6 +16,11 @@ docs/
 ```
 
 ### 重要なドキュメント
+
+#### システム全体のアーキテクチャ
+
+- **場所**: `ARCHITECTURE.md`
+- **用途**: 3 プロダクトの関係・データの流れ・認証・ホスティング。プロダクト間の連携を変えたら更新する
 
 #### Architecture Decision Records (ADR)
 
