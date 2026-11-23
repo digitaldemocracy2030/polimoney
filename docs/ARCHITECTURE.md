@@ -51,9 +51,9 @@ Polimoney は、政治資金の透明化を目的とした 3 つのプロダク�
 | --- | --- | --- | --- | --- | --- |
 | ディレクトリ | リポジトリ直下 | `polimoney_hub/backend` | `polimoney_hub/admin` | `polimoney_ledger/apps/web` | `polimoney_ledger/apps/api` |
 | 技術 | Next.js 15 / Mantine 8 / Nivo | Python / FastAPI | Deno / Fresh | Next.js 16 / Mantine 9 | Deno / Hono |
-| ホスティング | Vercel | Azure Container Apps（GitHub Actions で `main` から自動デプロイ） | 未確定 | Deno Deploy | Deno Deploy |
+| ホスティング | Vercel | Azure Container Apps（GitHub Actions で `main` から自動デプロイ） | Deno Deploy | Deno Deploy | Deno Deploy |
 | DB / 認証 | なし | Supabase B | Supabase B の Auth（管理者） | Supabase A の Auth（認証のみ） | Supabase A |
-| ローカルのポート | 3000 | 8000 | 3002 | 3721 | 3723 |
+| ローカルのポート | 3000 | 3722（コンテナ内は 8000） | 3002 | 3721 | 3723 |
 
 - Ledger は「フロントエンドと API を分離」した構成。将来のネイティブアプリも同じ Ledger API を使う想定。
 - Hub Admin は将来 Next.js + Mantine に移行する予定（Ledger と構成を揃える）。
@@ -129,4 +129,4 @@ Hub の公開データは、Polimoney 以外にも市民の分析・独自サイ
 - **紐付け ID を取得する API が無い。** Ledger が台帳に保存すべき 政治家×団体 / 政治家×選挙 の ID を取得できないため、同期ができない。
 - **同期 API のキー認証は未マージ。** Hub のブランチ `feat/sync-api-key-auth` で実装済み。
 - **Polimoney は Hub API 未接続。** 静的データから Hub の公開 API への切り替えが必要。
-- **Hub Admin のホスティング先と、ローカルでの Hub API のポートの扱いが未整理。** Ledger のドキュメントは旧 Deno 版の 3722 を前提にしている。
+- **ローカルでの Hub API のポートを 3722 に揃える変更は未マージ。** Hub のブランチ `chore/local-port-3722`。
