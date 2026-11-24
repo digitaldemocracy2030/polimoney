@@ -102,7 +102,7 @@ Polimoney は、政治資金の透明化を目的とした 3 つのプロダク�
 | Ledger API の環境変数 | Hub API の環境変数 | 用途 |
 | --- | --- | --- |
 | `HUB_API_KEY_PROD` | `LEDGER_SYNC_API_KEY_PROD` | 本番データ |
-| `HUB_API_KEY_DEV` | `LEDGER_SYNC_API_KEY_DEV` | テストデータ。このキーで同期した台帳・仕訳は常に `is_test=true` になり、本番データの台帳・仕訳・変更ログは書き換えられない。関係者（`public_contacts`）は今は保護されておらず、テストデータの公開台帳の関係者だけに限定する修正は Hub #71（レビュー待ち） |
+| `HUB_API_KEY_DEV` | `LEDGER_SYNC_API_KEY_DEV` | テストデータ。このキーで同期した台帳・仕訳は常に `is_test=true` になり、本番データの台帳・仕訳・変更ログは書き換えられない。関係者（`public_contacts`）は `is_test` を持たないため、紐付く公開台帳がテストデータの関係者だけを作成・更新できる |
 
 - 両側に同じ値を設定する。Hub 側が未設定なら同期 API は 503 を返す。
 - Ledger のテストユーザー（`00000000-0000-0000-0000-000000000001`）は常に開発用キーで Hub に接続する。
