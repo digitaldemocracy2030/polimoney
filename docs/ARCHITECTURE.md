@@ -53,7 +53,7 @@ Polimoney は、政治資金の透明化を目的とした 3 つのプロダク�
 | 技術 | Next.js 15 / Mantine 8 / Nivo | Python / FastAPI | Deno / Fresh | Next.js 16 / Mantine 9 | Deno / Hono |
 | ホスティング | Vercel | Azure Container Apps（GitHub Actions で `main` から自動デプロイ） | Deno Deploy | Deno Deploy | Deno Deploy |
 | DB / 認証 | なし | Supabase B | Supabase B の Auth（管理者） | Supabase A の Auth（認証のみ） | Supabase A |
-| ローカルのポート | 3000 | 8000（Hub #64 のマージ後は 3722。コンテナ内は 8000 のまま） | 3002 | 3721 | 3723 |
+| ローカルのポート | 3000 | 3722（コンテナ内は 8000） | 3002 | 3721 | 3723 |
 
 - Ledger は「フロントエンドと API を分離」した構成。将来のネイティブアプリも同じ Ledger API を使う想定。
 - Hub Admin は将来 Next.js + Mantine に移行する予定（Ledger と構成を揃える）。
@@ -128,4 +128,3 @@ Hub の公開データは、Polimoney 以外にも市民の分析・独自サイ
 - **Hub API が一部不足している。** 勘定科目・政治家・政治団体・選挙・紐付け・同期の API は揃った（2026-11-24）。本人確認・各種申請・政治家と団体の情報の更新の API と、Hub Admin が使う管理 API が未実装。一覧は Ledger の `docs/HUB_API_GAP.md`。
 - **公開データ API は現在 Ledger 専用。** 一般公開用の利用キーの仕組みができるまで、Hub の API と Hub DB の直接読み取りはどちらも閉じている。Polimoney が Hub API を使うには、この仕組みが必要。
 - **Polimoney は Hub API 未接続。** 静的データから Hub の公開 API への切り替えが必要。
-- **ローカルでの Hub API のポートを 3722 に揃える変更はレビュー待ち。** Hub #64。
