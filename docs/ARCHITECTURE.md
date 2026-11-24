@@ -53,7 +53,7 @@ Polimoney は、政治資金の透明化を目的とした 3 つのプロダク�
 | 技術 | Next.js 15 / Mantine 8 / Nivo | Python / FastAPI | Deno / Fresh | Next.js 16 / Mantine 9 | Deno / Hono |
 | ホスティング | Vercel | Azure Container Apps（GitHub Actions で `main` から自動デプロイ） | Deno Deploy | Deno Deploy | Deno Deploy |
 | DB / 認証 | なし | Supabase B | Supabase B の Auth（管理者） | Supabase A の Auth（認証のみ） | Supabase A |
-| ローカルのポート | 3000 | 3722（コンテナ内は 8000） | 3002 | 3721 | 3723 |
+| ローカルのポート | 3000 | 8000（Hub #64 のマージ後は 3722。コンテナ内は 8000 のまま） | 3002 | 3721 | 3723 |
 
 - Ledger は「フロントエンドと API を分離」した構成。将来のネイティブアプリも同じ Ledger API を使う想定。
 - Hub Admin は将来 Next.js + Mantine に移行する予定（Ledger と構成を揃える）。
