@@ -3,7 +3,7 @@
 Polimoney は、政治資金の透明化を目的とした 3 つのプロダクトで構成されます。
 この文書はプロダクト間の関係・データの流れ・責任範囲をまとめたものです。各プロダクトの内部構成は各リポジトリのドキュメントを参照してください。
 
-> 2026-11-23 時点の各リポジトリの実装に基づきます。「計画」「未実装」と書いた箇所は現状と異なります。
+> 2026-11-24 時点の各リポジトリの実装（`main`）に基づきます。「計画」「未実装」と書いた箇所は現状と異なります。
 
 ## 1. プロダクト一覧
 
@@ -74,13 +74,13 @@ Polimoney は、政治資金の透明化を目的とした 3 つのプロダク�
 ### 5.1 本人確認と台帳の作成
 
 1. 政治家（または団体の管理者）が Ledger に登録し、Ledger から Hub に本人確認を申請する（公式メールのドメイン確認・DNS TXT 確認など）。
-2. Hub 管理者が Hub Admin で審査・承認する。
+2. Hub 管理者が審査・承認する。審査は Hub API の管理者 API（`/api/admin/*`）で行い、承認すると政治家（または団体と管理者）が認証済みになる。今の Hub Admin（Fresh）は旧 API に合わせて作られており、管理者 API に合わせた画面は Next.js への移行で作る（計画）。
 3. 認証済みになると、Ledger で政治団体・選挙の台帳を作れるようになる。台帳は Hub の政治団体 / 選挙と、政治家×団体 / 政治家×選挙 の紐付け ID を保持する。
 
 ### 5.2 公開データの同期（Ledger → Hub）
 
 1. Ledger で仕訳が承認されると、Ledger API が公開用に変換する（非公開項目を除外・匿名化）。
-2. `POST /api/v1/sync/contacts` → `/sync/journals` → `/sync/ledger` の順に Hub に送る。キーは Ledger の ID（`*_source_id`）で、Hub 側は upsert。
+2. `POST /api/v1/sync/ledger` → `/sync/contacts` → `/sync/journals` の順に Hub に送る（関係者と仕訳は公開台帳に紐付くため、台帳が先）。キーは Ledger の ID（`*_source_id`）で、Hub 側は upsert。
 3. 仕訳は内容のハッシュで差分を判定し、変わっていなければ更新しない。
 
 ### 5.3 公開（Hub → Polimoney・外部利用者）
@@ -94,7 +94,7 @@ Polimoney は、政治資金の透明化を目的とした 3 つのプロダク�
 | --- | --- | --- |
 | Ledger Web → Ledger API | `Authorization: Bearer <Supabase A のアクセストークン>` | API は JWT を検証し、ユーザーの JWT のまま DB にアクセスする（RLS で台帳メンバー・ロールごとに制御） |
 | Ledger API → Hub API | `X-API-Key` | Ledger 専用キー。本番用と開発用の 2 本（下記） |
-| Hub Admin → Hub API | Supabase B の管理者ログイン | |
+| Hub Admin → Hub API（`/api/admin/*`） | `Authorization: Bearer <Supabase B のアクセストークン>` | Hub API がトークンを検証し、`admin_users` に登録された有効な管理者だけを通す |
 | Polimoney・外部 → Hub 公開データ API | 現在は Ledger 専用キーが必要（計画: 一般公開用の利用キーとレート制限） | 一般公開するまでは `/health` 以外のすべての API が Ledger 専用 |
 
 **Ledger 専用キー**
@@ -102,7 +102,7 @@ Polimoney は、政治資金の透明化を目的とした 3 つのプロダク�
 | Ledger API の環境変数 | Hub API の環境変数 | 用途 |
 | --- | --- | --- |
 | `HUB_API_KEY_PROD` | `LEDGER_SYNC_API_KEY_PROD` | 本番データ |
-| `HUB_API_KEY_DEV` | `LEDGER_SYNC_API_KEY_DEV` | テストデータ。このキーで同期したデータは常に `is_test=true` になり、本番データは上書きできない |
+| `HUB_API_KEY_DEV` | `LEDGER_SYNC_API_KEY_DEV` | テストデータ。このキーで同期した台帳・仕訳は常に `is_test=true` になり、本番データの台帳・仕訳・変更ログは書き換えられない。関係者（`public_contacts`）は今は保護されておらず、テストデータの公開台帳の関係者だけに限定する修正は Hub #71（レビュー待ち） |
 
 - 両側に同じ値を設定する。Hub 側が未設定なら同期 API は 503 を返す。
 - Ledger のテストユーザー（`00000000-0000-0000-0000-000000000001`）は常に開発用キーで Hub に接続する。
@@ -123,8 +123,10 @@ Hub の公開データは、Polimoney 以外にも市民の分析・独自サイ
 - 寄附者などの個人情報は、法令上の公開範囲より狭く返すことを検討する（機械的な名寄せを防ぐため）。
 - API はバージョン（`/api/v1`）を付け、互換性を壊す変更は新しいバージョンで行う。
 
-## 9. 現状の課題（2026-11-23 時点）
+## 9. 現状の課題（2026-11-24 時点）
 
-- **Hub API が一部不足している。** 勘定科目・政治家・政治団体・選挙・紐付け・同期の API は揃った（2026-11-24）。本人確認・各種申請・政治家と団体の情報の更新の API と、Hub Admin が使う管理 API が未実装。一覧は Ledger の `docs/HUB_API_GAP.md`。
+- **Hub API が一部不足している。** 勘定科目・政治家・政治団体・選挙・紐付け・同期・本人確認（申請と管理者の審査）の API は揃った。各種申請（選挙・団体の登録、年度ロック解除）と、政治家・団体の情報の更新の API が未実装。一覧は Ledger の `docs/HUB_API_GAP.md`。
+- **本人確認のメール送信が未設定。** 確認コードのメールは Resend で送る。送信元ドメインの認証と、Hub の環境変数（`RESEND_API_KEY` / `MAIL_FROM`）の設定が済むまで、本番の lg.jp のメール確認は使えない（DNS TXT での確認とテストデータは使える）。
+- **Hub Admin が管理者 API に未対応。** 審査は今は API でだけ行える。Next.js + Mantine への移行で画面を作る。
 - **公開データ API は現在 Ledger 専用。** 一般公開用の利用キーの仕組みができるまで、Hub の API と Hub DB の直接読み取りはどちらも閉じている。Polimoney が Hub API を使うには、この仕組みが必要。
 - **Polimoney は Hub API 未接続。** 静的データから Hub の公開 API への切り替えが必要。
